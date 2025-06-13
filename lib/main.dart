@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yndx_homework/presentation/pages/home_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -9,13 +10,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      title: 'Finance Tracker',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(),
+      home: const HomePage(),
     );
   }
 }
-
