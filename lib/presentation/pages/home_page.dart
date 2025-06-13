@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+class _NavigationItem {
+  final String iconAsset;
+  final String label;
+
+  const _NavigationItem({required this.iconAsset, required this.label});
+}
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -23,6 +30,14 @@ class _HomePageState extends State<HomePage> {
     Center(child: Text('Настройки')),
   ];
 
+  static const List<_NavigationItem> _navItems = [
+    _NavigationItem(iconAsset: 'assets/icons/expenses.svg', label: 'Расходы'),
+    _NavigationItem(iconAsset: 'assets/icons/incomes.svg', label: 'Доходы'),
+    _NavigationItem(iconAsset: 'assets/icons/account.svg', label: 'Счет'),
+    _NavigationItem(iconAsset: 'assets/icons/articles.svg', label: 'Статьи'),
+    _NavigationItem(iconAsset: 'assets/icons/settings.svg', label: 'Настройки'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -38,53 +53,27 @@ class _HomePageState extends State<HomePage> {
           onDestinationSelected: _onItemTapped,
           selectedIndex: _selectedIndex,
           indicatorColor: _indicatorBackgroundColor,
-          destinations: [
-            NavigationDestination(
-              icon: SvgPicture.asset(
-                'assets/icons/expenses.svg',
-                width: 24,
-                height: 24,
-                colorFilter: _selectedIndex == 0 ? null : ColorFilter.mode(_inactiveColor, BlendMode.srcIn),
-              ),
-              label: 'Расходы',
-            ),
-            NavigationDestination(
-              icon: SvgPicture.asset(
-                'assets/icons/incomes.svg',
-                width: 24,
-                height: 24,
-                colorFilter: _selectedIndex == 1 ? null : ColorFilter.mode(_inactiveColor, BlendMode.srcIn),
-              ),
-              label: 'Доходы',
-            ),
-            NavigationDestination(
-              icon: SvgPicture.asset(
-                'assets/icons/account.svg',
-                width: 24,
-                height: 24,
-                colorFilter: _selectedIndex == 2 ? null : ColorFilter.mode(_inactiveColor, BlendMode.srcIn),
-              ),
-              label: 'Счет',
-            ),
-            NavigationDestination(
-              icon: SvgPicture.asset(
-                'assets/icons/articles.svg',
-                width: 24,
-                height: 24,
-                colorFilter: _selectedIndex == 3 ? null : ColorFilter.mode(_inactiveColor, BlendMode.srcIn),
-              ),
-              label: 'Статьи',
-            ),
-            NavigationDestination(
-              icon: SvgPicture.asset(
-                'assets/icons/settings.svg',
-                width: 24,
-                height: 24,
-                colorFilter: _selectedIndex == 4 ? null : ColorFilter.mode(_inactiveColor, BlendMode.srcIn),
-              ),
-              label: 'Настройки',
-            ),
-          ],
+          destinations:
+              _navItems.asMap().entries.map((entry) {
+                final int index = entry.key;
+                final _NavigationItem item = entry.value;
+
+                return NavigationDestination(
+                  icon: SvgPicture.asset(
+                    item.iconAsset,
+                    width: 24,
+                    height: 24,
+                    colorFilter:
+                        _selectedIndex == index
+                            ? null
+                            : const ColorFilter.mode(
+                              _inactiveColor,
+                              BlendMode.srcIn,
+                            ),
+                  ),
+                  label: item.label,
+                );
+              }).toList(),
         ),
       ),
     );
