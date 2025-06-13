@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:yndx_homework/data/models/dto/converters/change_type_converters.dart';
+import 'package:yndx_homework/domain/models/change_type.dart';
 import 'account_state_dto.dart';
 
 part 'account_history_dto.freezed.dart';
@@ -9,12 +11,13 @@ abstract class AccountHistoryDto with _$AccountHistoryDto {
   const factory AccountHistoryDto({
     required int id,
     required int accountId,
-    required String changeType,
+    @ChangeTypeConverter() required ChangeType changeType,
     AccountStateDto? previousState,
     required AccountStateDto newState,
     required DateTime changeTimestamp,
     required DateTime createdAt,
   }) = _AccountHistoryDto;
 
-  factory AccountHistoryDto.fromJson(Map<String, dynamic> json) => _$AccountHistoryDtoFromJson(json);
+  factory AccountHistoryDto.fromJson(Map<String, dynamic> json) =>
+      _$AccountHistoryDtoFromJson(json);
 }

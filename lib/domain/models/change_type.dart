@@ -1,12 +1,18 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+enum ChangeType {
+  creation('CREATION'),
+  modification('MODIFICATION'),
 
-part 'change_type.freezed.dart';
+  /// Default value for unknown types for client.
+  $unknown(null);
 
-@freezed
-sealed class ChangeType with _$ChangeType {
-  // Represents "CREATION" state from the API
-  const factory ChangeType.creation() = Creation;
+  final String? jsonValue;
 
-  // Represents "MODIDICATION" state from the API
-  const factory ChangeType.modification() = Modification;
+  const ChangeType(this.jsonValue);
+
+  factory ChangeType.fromJson(String json) => values.firstWhere(
+    (e) => e.jsonValue == json,
+    orElse: () => ChangeType.$unknown,
+  );
+
+  String? toJson() => jsonValue;
 }

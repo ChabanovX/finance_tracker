@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AccountHistoryDto {
 
- int get id; int get accountId; String get changeType; AccountStateDto? get previousState; AccountStateDto get newState; DateTime get changeTimestamp; DateTime get createdAt;
+ int get id; int get accountId;@ChangeTypeConverter() ChangeType get changeType; AccountStateDto? get previousState; AccountStateDto get newState; DateTime get changeTimestamp; DateTime get createdAt;
 /// Create a copy of AccountHistoryDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $AccountHistoryDtoCopyWith<$Res>  {
   factory $AccountHistoryDtoCopyWith(AccountHistoryDto value, $Res Function(AccountHistoryDto) _then) = _$AccountHistoryDtoCopyWithImpl;
 @useResult
 $Res call({
- int id, int accountId, String changeType, AccountStateDto? previousState, AccountStateDto newState, DateTime changeTimestamp, DateTime createdAt
+ int id, int accountId,@ChangeTypeConverter() ChangeType changeType, AccountStateDto? previousState, AccountStateDto newState, DateTime changeTimestamp, DateTime createdAt
 });
 
 
@@ -71,7 +71,7 @@ class _$AccountHistoryDtoCopyWithImpl<$Res>
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,accountId: null == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
 as int,changeType: null == changeType ? _self.changeType : changeType // ignore: cast_nullable_to_non_nullable
-as String,previousState: freezed == previousState ? _self.previousState : previousState // ignore: cast_nullable_to_non_nullable
+as ChangeType,previousState: freezed == previousState ? _self.previousState : previousState // ignore: cast_nullable_to_non_nullable
 as AccountStateDto?,newState: null == newState ? _self.newState : newState // ignore: cast_nullable_to_non_nullable
 as AccountStateDto,changeTimestamp: null == changeTimestamp ? _self.changeTimestamp : changeTimestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
@@ -107,12 +107,12 @@ $AccountStateDtoCopyWith<$Res> get newState {
 @JsonSerializable()
 
 class _AccountHistoryDto implements AccountHistoryDto {
-  const _AccountHistoryDto({required this.id, required this.accountId, required this.changeType, this.previousState, required this.newState, required this.changeTimestamp, required this.createdAt});
+  const _AccountHistoryDto({required this.id, required this.accountId, @ChangeTypeConverter() required this.changeType, this.previousState, required this.newState, required this.changeTimestamp, required this.createdAt});
   factory _AccountHistoryDto.fromJson(Map<String, dynamic> json) => _$AccountHistoryDtoFromJson(json);
 
 @override final  int id;
 @override final  int accountId;
-@override final  String changeType;
+@override@ChangeTypeConverter() final  ChangeType changeType;
 @override final  AccountStateDto? previousState;
 @override final  AccountStateDto newState;
 @override final  DateTime changeTimestamp;
@@ -151,7 +151,7 @@ abstract mixin class _$AccountHistoryDtoCopyWith<$Res> implements $AccountHistor
   factory _$AccountHistoryDtoCopyWith(_AccountHistoryDto value, $Res Function(_AccountHistoryDto) _then) = __$AccountHistoryDtoCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int accountId, String changeType, AccountStateDto? previousState, AccountStateDto newState, DateTime changeTimestamp, DateTime createdAt
+ int id, int accountId,@ChangeTypeConverter() ChangeType changeType, AccountStateDto? previousState, AccountStateDto newState, DateTime changeTimestamp, DateTime createdAt
 });
 
 
@@ -173,7 +173,7 @@ class __$AccountHistoryDtoCopyWithImpl<$Res>
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,accountId: null == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
 as int,changeType: null == changeType ? _self.changeType : changeType // ignore: cast_nullable_to_non_nullable
-as String,previousState: freezed == previousState ? _self.previousState : previousState // ignore: cast_nullable_to_non_nullable
+as ChangeType,previousState: freezed == previousState ? _self.previousState : previousState // ignore: cast_nullable_to_non_nullable
 as AccountStateDto?,newState: null == newState ? _self.newState : newState // ignore: cast_nullable_to_non_nullable
 as AccountStateDto,changeTimestamp: null == changeTimestamp ? _self.changeTimestamp : changeTimestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable

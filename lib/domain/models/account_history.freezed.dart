@@ -50,7 +50,7 @@ $Res call({
 });
 
 
-$ChangeTypeCopyWith<$Res> get changeType;$AccountStateCopyWith<$Res>? get previousState;$AccountStateCopyWith<$Res> get newState;
+$AccountStateCopyWith<$Res>? get previousState;$AccountStateCopyWith<$Res> get newState;
 
 }
 /// @nodoc
@@ -75,15 +75,6 @@ as DateTime,
   ));
 }
 /// Create a copy of AccountHistory
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$ChangeTypeCopyWith<$Res> get changeType {
-  
-  return $ChangeTypeCopyWith<$Res>(_self.changeType, (value) {
-    return _then(_self.copyWith(changeType: value));
-  });
-}/// Create a copy of AccountHistory
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -156,7 +147,7 @@ $Res call({
 });
 
 
-@override $ChangeTypeCopyWith<$Res> get changeType;@override $AccountStateCopyWith<$Res>? get previousState;@override $AccountStateCopyWith<$Res> get newState;
+@override $AccountStateCopyWith<$Res>? get previousState;@override $AccountStateCopyWith<$Res> get newState;
 
 }
 /// @nodoc
@@ -182,15 +173,6 @@ as DateTime,
 }
 
 /// Create a copy of AccountHistory
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$ChangeTypeCopyWith<$Res> get changeType {
-  
-  return $ChangeTypeCopyWith<$Res>(_self.changeType, (value) {
-    return _then(_self.copyWith(changeType: value));
-  });
-}/// Create a copy of AccountHistory
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')

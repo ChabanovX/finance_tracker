@@ -10,7 +10,9 @@ _AccountHistoryDto _$AccountHistoryDtoFromJson(Map<String, dynamic> json) =>
     _AccountHistoryDto(
       id: (json['id'] as num).toInt(),
       accountId: (json['accountId'] as num).toInt(),
-      changeType: json['changeType'] as String,
+      changeType: const ChangeTypeConverter().fromJson(
+        json['changeType'] as String,
+      ),
       previousState:
           json['previousState'] == null
               ? null
@@ -28,7 +30,7 @@ Map<String, dynamic> _$AccountHistoryDtoToJson(_AccountHistoryDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'accountId': instance.accountId,
-      'changeType': instance.changeType,
+      'changeType': const ChangeTypeConverter().toJson(instance.changeType),
       'previousState': instance.previousState,
       'newState': instance.newState,
       'changeTimestamp': instance.changeTimestamp.toIso8601String(),
