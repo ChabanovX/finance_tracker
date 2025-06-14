@@ -53,27 +53,25 @@ class _HomePageState extends State<HomePage> {
           onDestinationSelected: _onItemTapped,
           selectedIndex: _selectedIndex,
           indicatorColor: _indicatorBackgroundColor,
-          destinations:
-              _navItems.asMap().entries.map((entry) {
-                final int index = entry.key;
-                final _NavigationItem item = entry.value;
+          destinations: List.generate(_navItems.length, (int index) {
+            final _NavigationItem item = _navItems[index];
 
-                return NavigationDestination(
-                  icon: SvgPicture.asset(
-                    item.iconAsset,
-                    width: 24,
-                    height: 24,
-                    colorFilter:
-                        _selectedIndex == index
-                            ? null
-                            : const ColorFilter.mode(
-                              _inactiveColor,
-                              BlendMode.srcIn,
-                            ),
-                  ),
-                  label: item.label,
-                );
-              }).toList(),
+            return NavigationDestination(
+              icon: SvgPicture.asset(
+                item.iconAsset,
+                width: 24,
+                height: 24,
+                colorFilter:
+                    _selectedIndex == index
+                        ? null
+                        : const ColorFilter.mode(
+                          _inactiveColor,
+                          BlendMode.srcIn,
+                        ),
+              ),
+              label: item.label,
+            );
+          }),
         ),
       ),
     );
