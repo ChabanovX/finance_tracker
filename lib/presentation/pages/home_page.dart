@@ -50,24 +50,24 @@ class _HomePageState extends State<HomePage> {
             final _NavigationItem item = _navItems[index];
 
             return NavigationDestination(
+              label: item.label,
               icon: SvgPicture.asset(
                 item.iconAsset,
                 width: 24,
                 height: 24,
-                colorFilter:
-                    _selectedIndex == index
-                        ? null
-                        : ColorFilter.mode(
-                          context.colors.inactive,
-                          BlendMode.srcIn,
-                        ),
+                colorFilter: _getFilterForItem(_selectedIndex == index),
               ),
-              label: item.label,
             );
           }),
         ),
       ),
     );
+  }
+
+  ColorFilter? _getFilterForItem(bool isSelected) {
+    return isSelected
+        ? null
+        : ColorFilter.mode(context.colors.inactive, BlendMode.srcIn);
   }
 
   void _onItemTapped(int index) {

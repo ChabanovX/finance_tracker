@@ -53,9 +53,10 @@ class _DefaultListTile extends StatelessWidget {
     super.key,
   });
 
+  /// [Transaction] object 
   final Transaction transaction;
 
-  /// Indicates
+  /// Indicates whether [_DefaultListTile] is first in List
   final bool isFirstInList;
 
   @override
@@ -108,7 +109,7 @@ class _HeaderListTile extends StatelessWidget {
       color: context.colors.accentLight,
       height: 56,
       child: Padding(
-        padding: EdgeInsetsGeometry.all(16),
+        padding: EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [Text(leftText), Text(rightText)],
