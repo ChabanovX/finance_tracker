@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:yndx_homework/presentation/pages/transactions_page.dart';
+import 'package:yndx_homework/presentation/shared/default_app_bar.dart';
 
 class _NavigationItem {
   final String iconAsset;
@@ -18,13 +20,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  static const _appBarBackgroundColor = Color(0xFF2AE881);
   static const _inactiveColor = Color(0xFF49454F);
   static const _indicatorBackgroundColor = Color(0xFFD4FAE6);
 
   static const List<Widget> _widgetOptions = [
-    Center(child: Text('Расходы')),
-    Center(child: Text('Доходы')),
+    TransactionsPage(isIncome: false),
+    TransactionsPage(isIncome: true),
     Center(child: Text('Счет')),
     Center(child: Text('Статьи')),
     Center(child: Text('Настройки')),
@@ -44,10 +45,6 @@ class _HomePageState extends State<HomePage> {
       top: false,
       bottom: true,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Мои Финансы'),
-          backgroundColor: _appBarBackgroundColor,
-        ),
         body: _widgetOptions.elementAt(_selectedIndex),
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: _onItemTapped,
