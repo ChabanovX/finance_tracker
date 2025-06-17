@@ -6,7 +6,7 @@ import 'package:yndx_homework/domain/repositories/transactions_repository.dart';
 
 class MockTransactionsRepository implements ITransactionsRepository {
   /// Duration of fake async call.
-  static const _ioDuration = Duration(milliseconds: 500);
+  static const _ioDuration = Duration(milliseconds: 2500);
 
   @override
   Future<List<Transaction>> getTransactions() async {

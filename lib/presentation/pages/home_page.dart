@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:yndx_homework/presentation/pages/transactions_page.dart';
+import 'package:yndx_homework/presentation/pages/transactions_page/transactions_page.dart';
 import 'package:yndx_homework/presentation/theme/app_theme.dart';
 
 class _NavigationItem {
