@@ -15,6 +15,22 @@ class MockTransactionsRepository implements ITransactionsRepository {
   }
 
   @override
+  Future<List<Transaction>> getTransactionsForPeriod(
+    DateTime start,
+    DateTime end,
+  ) async {
+    await Future.delayed(_ioDuration);
+    return mockTransactions
+        .where(
+          // Inclusive Boundaries
+          (t) =>
+              !t.transactionDate.isBefore(start) &&
+              !t.transactionDate.isAfter(end),
+        )
+        .toList();
+  }
+
+  @override
   Future<void> updateTransaction(Transaction transaction) async {
     await Future.delayed(_ioDuration);
     final index = mockTransactions.indexWhere((t) => t.id == transaction.id);
