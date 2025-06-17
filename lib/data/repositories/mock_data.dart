@@ -117,7 +117,6 @@ Account mockAccount = Account(
   currency: 'RUB',
 );
 
-
 // MOCK TRANSACTIONS
 final List<Transaction> mockTransactions = [
   // Income transactions
@@ -126,7 +125,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockSalaryCategory,
     amount: 80000.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 5)),
+    transactionDate: DateTime.now(),
     comment: null,
   ),
   Transaction(
@@ -134,7 +133,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockFreelanceCategory,
     amount: 25000.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 8)),
+    transactionDate: DateTime.now(),
     comment: 'Website development project',
   ),
   Transaction(
@@ -142,7 +141,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockInvestmentCategory,
     amount: 3500.50,
-    transactionDate: DateTime.now().subtract(const Duration(days: 12)),
+    transactionDate: DateTime.now(),
     comment: null,
   ),
   Transaction(
@@ -150,7 +149,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockGiftCategory,
     amount: 5000.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 15)),
+    transactionDate: DateTime.now(),
     comment: 'Birthday gift from parents',
   ),
   
@@ -160,7 +159,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockGroceriesCategory,
     amount: -2550.75,
-    transactionDate: DateTime.now().subtract(const Duration(days: 1)),
+    transactionDate: DateTime.now(),
     comment: null,
   ),
   Transaction(
@@ -168,7 +167,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockGroceriesCategory,
     amount: -140.10,
-    transactionDate: DateTime.now().subtract(const Duration(days: 1)),
+    transactionDate: DateTime.now(),
     comment: 'Forgot some',
   ),
   Transaction(
@@ -176,7 +175,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockHousingCategory,
     amount: -18000.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 2)),
+    transactionDate: DateTime.now(),
     comment: 'Monthly rent payment',
   ),
   Transaction(
@@ -184,7 +183,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockTransportCategory,
     amount: -1200.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 3)),
+    transactionDate: DateTime.now(),
     comment: null,
   ),
   Transaction(
@@ -192,7 +191,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockFoodCategory,
     amount: -850.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 1)),
+    transactionDate: DateTime.now(),
     comment: null,
   ),
   Transaction(
@@ -200,7 +199,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockEntertainmentCategory,
     amount: -1500.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 4)),
+    transactionDate: DateTime.now(),
     comment: 'Cinema tickets and popcorn',
   ),
   Transaction(
@@ -208,7 +207,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockHealthcareCategory,
     amount: -3200.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 7)),
+    transactionDate: DateTime.now(),
     comment: 'Dental checkup',
   ),
   Transaction(
@@ -216,7 +215,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockShoppingCategory,
     amount: -4500.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 6)),
+    transactionDate: DateTime.now(),
     comment: 'New winter clothes',
   ),
   Transaction(
@@ -224,7 +223,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockEducationCategory,
     amount: -12000.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 10)),
+    transactionDate: DateTime.now(),
     comment: 'Online course subscription',
   ),
   Transaction(
@@ -232,7 +231,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockUtilitiesCategory,
     amount: -3500.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 5)),
+    transactionDate: DateTime.now(),
     comment: 'Electricity and gas bill',
   ),
   Transaction(
@@ -240,7 +239,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockSubscriptionsCategory,
     amount: -599.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 1)),
+    transactionDate: DateTime.now(),
     comment: 'Netflix monthly subscription',
   ),
   Transaction(
@@ -248,7 +247,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockGroceriesCategory,
     amount: -1820.50,
-    transactionDate: DateTime.now().subtract(const Duration(days: 3)),
+    transactionDate: DateTime.now(),
     comment: 'Quick grocery run',
   ),
   Transaction(
@@ -256,7 +255,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockTransportCategory,
     amount: -450.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 2)),
+    transactionDate: DateTime.now(),
     comment: 'Taxi ride',
   ),
   Transaction(
@@ -264,7 +263,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockFoodCategory,
     amount: -320.00,
-    transactionDate: DateTime.now().subtract(const Duration(hours: 3)),
+    transactionDate: DateTime.now(),
     comment: 'Coffee and pastry',
   ),
   Transaction(
@@ -272,7 +271,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockShoppingCategory,
     amount: -2100.00,
-    transactionDate: DateTime.now().subtract(const Duration(days: 1)),
+    transactionDate: DateTime.now(),
     comment: 'Phone accessories',
   ),
   Transaction(
@@ -280,7 +279,7 @@ final List<Transaction> mockTransactions = [
     account: mockAccount,
     category: mockEntertainmentCategory,
     amount: -800.00,
-    transactionDate: DateTime.now().subtract(const Duration(hours: 6)),
+    transactionDate: DateTime.now(),
     comment: 'Gaming subscription',
   ),
 ];

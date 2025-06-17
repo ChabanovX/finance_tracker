@@ -17,12 +17,10 @@ final transactionForTodayProvider =
           .add(const Duration(days: 1))
           .subtract(const Duration(milliseconds: 1));
 
-      // final operations = await repo.getTransactionsForPeriod(
-      //   startOfDay,
-      //   endOfDay,
-      // );
-
-      final operations = await repo.getTransactions();
+      final operations = await repo.getTransactionsForPeriod(
+        startOfDay,
+        endOfDay,
+      );
 
       return operations.where((op) => op.category.isIncome == isIncome).toList();
     });
