@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yndx_homework/domain/models/transaction.dart';
 import 'package:yndx_homework/presentation/shared/default_app_bar.dart';
+import 'package:yndx_homework/presentation/theme/app_theme.dart';
 import 'package:yndx_homework/providers.dart';
 
 class TransactionsPage extends ConsumerWidget {
@@ -30,11 +31,10 @@ class TransactionsPage extends ConsumerWidget {
             ),
             body: _TransactionsList(transactions),
             floatingActionButton: FloatingActionButton(
-              backgroundColor: Color(0xFF2AE881),
               shape: const CircleBorder(),
               child: Icon(
                 Icons.add_rounded,
-                color: Colors.white,
+                color: context.colors.white,
                 size: 15.56 * 2,
               ),
               onPressed: () {},
@@ -99,14 +99,13 @@ class _HeaderListTile extends StatelessWidget {
     required this.rightText,
   });
 
-  static const _totalAmountTileColor = Color(0xFFD4FAE6);
   final String leftText;
   final String rightText;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: _totalAmountTileColor,
+      color: context.colors.accentLight,
       height: 56,
       child: Padding(
         padding: EdgeInsetsGeometry.all(16),

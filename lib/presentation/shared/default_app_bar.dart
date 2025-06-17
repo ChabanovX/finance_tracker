@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:yndx_homework/presentation/theme/app_theme.dart';
+
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   const DefaultAppBar({super.key, required this.title, this.actions});
 
@@ -9,14 +11,11 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Centered text in [DefaultAppBar]
   final String title;
 
-  /// Background color of the [DefaultAppBar]
-  static const _appBarBackgroundColor = Color(0xFF2AE881);
-
   @override
   Widget build(BuildContext context) {
     return AppBar(
       actions: actions,
-      backgroundColor: _appBarBackgroundColor,
+      backgroundColor: context.colors.accent,
       title: Text(title),
       centerTitle: true,
     );
