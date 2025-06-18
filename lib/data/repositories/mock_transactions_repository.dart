@@ -6,12 +6,28 @@ import 'package:yndx_homework/domain/repositories/transactions_repository.dart';
 
 class MockTransactionsRepository implements ITransactionsRepository {
   /// Duration of fake async call.
-  static const _ioDuration = Duration(milliseconds: 500);
+  static const _ioDuration = Duration(milliseconds: 2500);
 
   @override
   Future<List<Transaction>> getTransactions() async {
     await Future.delayed(_ioDuration);
     return mockTransactions;
+  }
+
+  @override
+  Future<List<Transaction>> getTransactionsForPeriod(
+    DateTime start,
+    DateTime end,
+  ) async {
+    await Future.delayed(_ioDuration);
+    return mockTransactions
+        .where(
+          // Inclusive Boundaries
+          (t) =>
+              !t.transactionDate.isBefore(start) &&
+              !t.transactionDate.isAfter(end),
+        )
+        .toList();
   }
 
   @override

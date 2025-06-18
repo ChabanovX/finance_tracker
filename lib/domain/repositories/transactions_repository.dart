@@ -4,6 +4,12 @@ abstract interface class ITransactionsRepository {
   /// Fetches a list of all transactions.
   Future<List<Transaction>> getTransactions();
 
+  /// Fetches transactions within provided range.
+  Future<List<Transaction>> getTransactionsForPeriod(
+    DateTime start,
+    DateTime end,
+  );
+
   /// Adds a new transaction.
   Future<void> addTransaction(Transaction transaction);
 
