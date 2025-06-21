@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yndx_homework/domain/models/transaction.dart';
-import 'package:yndx_homework/presentation/shared/default_app_bar.dart';
-import 'package:yndx_homework/presentation/theme/app_theme.dart';
-import 'package:yndx_homework/providers.dart';
+import '/domain/models/transaction.dart';
+import '/presentation/providers.dart';
+import '/presentation/shared/default_app_bar.dart';
+import '/presentation/shared/default_header_list_tile.dart';
+import '/presentation/shared/default_list_tile.dart';
+import '../transactions_history_page/transactions_history_page.dart';
+import '/presentation/theme/app_theme.dart';
 
 part 'transactions_loading_widgets.dart';
 part 'transactions_widgets.dart';
@@ -23,7 +26,25 @@ class TransactionsPage extends ConsumerWidget {
       appBar: DefaultAppBar(
         title: isIncome ? 'Доходы сегодня' : 'Расходы сегодня',
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.history), iconSize: 24),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (_) => ProviderScope(
+                        overrides: [
+                          isIncomeProvider.overrideWithValue(isIncome),
+                        ],
+                        child: TransactionsHistoryPage(isIncome: isIncome),
+                      ),
+                ),
+              );
+            },
+            icon: Icon(Icons.history),
+            iconSize: 24,
+            padding: EdgeInsets.all(12),
+          ),
         ],
       ),
       body: transactionsAsync.when(
@@ -43,4 +64,3 @@ class TransactionsPage extends ConsumerWidget {
     );
   }
 }
-
