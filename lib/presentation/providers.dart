@@ -13,7 +13,9 @@ final transactionRepositoryProvider = Provider<ITransactionsRepository>(
 
 enum SortBy { date, amount }
 
-/// Direction of operations (income / expense) - injected from page
+/// Direction of operations (income / expense) - injected from page.
+///
+/// Overrided via [ProviderScope]
 final isIncomeProvider = Provider<bool>((_) => throw UnimplementedError());
 
 /// Whether to sort by date or amount
@@ -29,6 +31,7 @@ final historyEndProvider = StateProvider<DateTime>((_) {
   return DateTime(now.year, now.month, now.day);
 });
 
+/// Safely update startTime.
 void updateStartDate(WidgetRef ref, DateTime newStart) {
   final end = ref.read(historyEndProvider);
   ref.read(historyStartProvider.notifier).state = newStart;
@@ -38,13 +41,22 @@ void updateStartDate(WidgetRef ref, DateTime newStart) {
   }
 }
 
+/// Safely update endTime.
 void updateEndDate(WidgetRef ref, DateTime newEnd) {
   final start = ref.read(historyStartProvider);
-  ref.read(historyStartProvider.notifier).state = newEnd;
+  ref.read(historyEndProvider.notifier).state = newEnd;
   // Keeping range valid
   if (newEnd.isBefore(start)) {
     ref.read(historyStartProvider.notifier).state = newEnd;
   }
+}
+
+/// Update both start and end of history at once.
+///
+/// Method does not check ranging, considering UI checking that.
+void updateRange(WidgetRef ref, DateTime start, DateTime end) {
+  ref.read(historyStartProvider.notifier).state = start;
+  ref.read(historyEndProvider.notifier).state = end;
 }
 
 /// Data loader (AsyncNotifier)
@@ -71,10 +83,12 @@ class TransactionsNotifier extends AsyncNotifier<List<Transaction>> {
 final transactionsProvider =
     AsyncNotifierProvider<TransactionsNotifier, List<Transaction>>(
       TransactionsNotifier.new,
+      dependencies: [isIncomeProvider],
     );
 
 // Derived data
-final sortedTransactionProvider = Provider<List<Transaction>>((ref) {
+final sortedTransactionsProvider = Provider<List<Transaction>>((ref) {
+  ref.watch(isIncomeProvider);
   final list = ref.watch(transactionsProvider).valueOrNull ?? [];
   final sortBy = ref.watch(sortByProvider);
 
@@ -88,13 +102,14 @@ final sortedTransactionProvider = Provider<List<Transaction>>((ref) {
       break;
   }
   return copy;
-});
+}, dependencies: [isIncomeProvider, transactionsProvider, sortByProvider]);
 
 final totalAmountProvider = Provider<double>((ref) {
+  ref.watch(isIncomeProvider);
   return ref
-      .watch(sortedTransactionProvider)
+      .watch(sortedTransactionsProvider)
       .fold(0, (sum, t) => sum + t.amount);
-});
+}, dependencies: [isIncomeProvider, sortedTransactionsProvider]);
 
 /// Today's transactions shortcut
 final transactionForTodayProvider = FutureProvider.family<
