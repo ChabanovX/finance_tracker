@@ -12,7 +12,7 @@ class DefaultListTile extends StatelessWidget {
   /// [Transaction] object
   final Transaction transaction;
 
-  /// Indicates whether [DefaultListTile] is first in List
+  /// Indicates whether [DefaultListTile] is first in [List].
   /// This will account whether to size box to header divider or not
   /// (by default tile is 70px, but we put dividers)
   final bool isFirstInList;
