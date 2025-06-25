@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yndx_homework/presentation/pages/home_page.dart';
+import 'core/navigation/app_route_config.dart';
 import 'presentation/theme/app_theme.dart';
 
 void main() {
@@ -13,11 +13,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Finance Tracker',
       theme: appTheme,
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      routerDelegate: AppRouterDelegate(),
     );
   }
 }

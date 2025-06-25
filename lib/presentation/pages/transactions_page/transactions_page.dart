@@ -6,17 +6,23 @@ import '/presentation/providers.dart';
 import '/presentation/shared/default_app_bar.dart';
 import '/presentation/shared/default_header_list_tile.dart';
 import '/presentation/shared/default_list_tile.dart';
-import '../transactions_history_page/transactions_history_page.dart';
 import '/presentation/theme/app_theme.dart';
 
 part 'transactions_loading_widgets.dart';
 part 'transactions_widgets.dart';
 
 class TransactionsPage extends ConsumerWidget {
-  const TransactionsPage({super.key, required this.isIncome});
+  const TransactionsPage({
+    super.key,
+    required this.isIncome,
+    required this.onShowHistory,
+  });
 
   /// Indicates whether [TransactionsPage] is about expenses or incomes
   final bool isIncome;
+
+  /// [Router]'s callback to show history.
+  final VoidCallback onShowHistory;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,20 +33,7 @@ class TransactionsPage extends ConsumerWidget {
         title: isIncome ? 'Доходы сегодня' : 'Расходы сегодня',
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (_) => ProviderScope(
-                        overrides: [
-                          isIncomeProvider.overrideWithValue(isIncome),
-                        ],
-                        child: TransactionsHistoryPage(isIncome: isIncome),
-                      ),
-                ),
-              );
-            },
+            onPressed: onShowHistory,
             icon: Icon(Icons.history),
             iconSize: 24,
             padding: EdgeInsets.all(12),
