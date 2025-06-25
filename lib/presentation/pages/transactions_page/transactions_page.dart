@@ -21,7 +21,7 @@ class TransactionsPage extends ConsumerWidget {
   /// Indicates whether [TransactionsPage] is about expenses or incomes
   final bool isIncome;
 
-  /// [Router]'s callback to show history.
+  /// Navigator 2.0 [Router]'s callback to show history.
   final VoidCallback onShowHistory;
 
   @override
