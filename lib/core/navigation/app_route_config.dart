@@ -17,104 +17,97 @@ class _NavigationItem {
 
 class AppRouterDelegate extends RouterDelegate<int>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<int> {
-  AppRouterDelegate();
+  AppRouterDelegate() {
+    _tabs = [
+      _buildExpensesNavigator(),
+      _buildIncomesNavigator(),
+      _simpleNavigator(const Center(child: Text('Счет')), 2),
+      _simpleNavigator(const Center(child: Text('Статьи')), 3),
+      _simpleNavigator(const Center(child: Text('Настройки')), 4),
+    ];
+  }
+
+  /// Navigators used in the [IndexedStack]. They are created once in the
+  /// constructor so their state is preserved.
+  late final List<Widget> _tabs;
+
+  /// Root navigator key.
+  final GlobalKey<NavigatorState> _rootKey = GlobalKey<NavigatorState>();
+
+  /// Keys for each tab navigator.
+  final List<GlobalKey<NavigatorState>> _navigatorKeys = List.generate(
+    5,
+    (_) => GlobalKey<NavigatorState>(),
+  );
 
   @override
-  GlobalKey<NavigatorState>? get navigatorKey => GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState>? get navigatorKey => _rootKey;
 
+  /// Currently selected bottom navigation bar.
   int _selectedIndex = 0;
 
-  bool _showExpensesHistory = false;
+  Widget _simpleNavigator(Widget child, int index) {
+    final key = _navigatorKeys[index];
+    return Navigator(
+      key: key,
+      onGenerateRoute: (_) => MaterialPageRoute(builder: (_) => child),
+    );
+  }
 
-  bool _showIncomesHistory = false;
+  Widget _buildExpensesNavigator() {
+    final key = _navigatorKeys[0];
+    return Navigator(
+      key: key,
+      onGenerateRoute:
+          (_) => MaterialPageRoute(
+            builder:
+                (_) => ProviderScope(
+                  overrides: [isIncomeProvider.overrideWithValue(false)],
+                  child: TransactionsPage(
+                    isIncome: false,
+                    onShowHistory:
+                        () => key.currentState?.push(
+                          MaterialPageRoute(
+                            builder:
+                                (_) => const TransactionsHistoryPage(
+                                  isIncome: false,
+                                ),
+                          ),
+                        ),
+                  ),
+                ),
+          ),
+    );
+  }
+
+  Widget _buildIncomesNavigator() {
+    final key = _navigatorKeys[1];
+    return Navigator(
+      key: key,
+      onGenerateRoute:
+          (_) => MaterialPageRoute(
+            builder:
+                (_) => ProviderScope(
+                  overrides: [isIncomeProvider.overrideWithValue(true)],
+                  child: TransactionsPage(
+                    isIncome: true,
+                    onShowHistory:
+                        () => key.currentState?.push(
+                          MaterialPageRoute(
+                            builder:
+                                (_) =>
+                                    const TransactionsHistoryPage(isIncome: true),
+                          ),
+                        ),
+                  ),
+                ),
+          ),
+    );
+  }
 
   @override
   Future<void> setNewRoutePath(int configuration) async {
     _selectedIndex = configuration;
-  }
-
-  /// Build pages to use in [Navigator].
-  List<Page> _buildPages() {
-    switch (_selectedIndex) {
-      case 0:
-        final pages = <Page>[
-          MaterialPage(
-            key: const ValueKey('expenses'),
-            child: TransactionsPage(
-              isIncome: false,
-              onShowHistory: () {
-                _showExpensesHistory = true;
-                notifyListeners();
-              },
-            ),
-          ),
-        ];
-        // Show history if pressed
-        if (_showIncomesHistory) {
-          pages.add(
-            MaterialPage(
-              key: const ValueKey('expenses_history'),
-              child: ProviderScope(
-                overrides: [isIncomeProvider.overrideWithValue(false)],
-                child: TransactionsHistoryPage(isIncome: false),
-              ),
-            ),
-          );
-        }
-        return pages;
-
-      case 1:
-        final pages = <Page>[
-          MaterialPage(
-            key: const ValueKey('incomes'),
-            child: TransactionsPage(
-              isIncome: true,
-              onShowHistory: () {
-                _showIncomesHistory = true;
-                notifyListeners();
-              },
-            ),
-          ),
-        ];
-        // Show history if pressed
-        if (_showIncomesHistory) {
-          pages.add(
-            MaterialPage(
-              key: const ValueKey('incomes_history'),
-              child: ProviderScope(
-                overrides: [isIncomeProvider.overrideWithValue(true)],
-                child: TransactionsHistoryPage(isIncome: true),
-              ),
-            ),
-          );
-        }
-        return pages;
-
-      case 2:
-        return [
-          const MaterialPage(
-            key: ValueKey('account'),
-            child: Center(child: Text('Счет')),
-          ),
-        ];
-
-      case 3:
-        return [
-          const MaterialPage(
-            key: ValueKey('articles'),
-            child: Center(child: Text('Статьи')),
-          ),
-        ];
-
-      case 4:
-      default:
-        return [
-          const MaterialPage(
-            key: ValueKey('settings'),
-            child: Center(child: Text('Settings')),
-          ),
-        ];
-    }
   }
 
   /// Shortcut labels for [NavigationDestination].
@@ -161,23 +154,21 @@ class AppRouterDelegate extends RouterDelegate<int>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        body: Navigator(
-          key: navigatorKey,
-          pages: _buildPages(),
-          onDidRemovePage: (_) {
-            if (_showExpensesHistory) {
-              _showExpensesHistory = false;
-            } else if (_showIncomesHistory) {
-              _showIncomesHistory = false;
-            }
-            notifyListeners();
-          },
+    return Navigator(
+      onDidRemovePage: (_) {},
+      key: navigatorKey,
+      pages: [
+        MaterialPage(
+          key: ValueKey('root_scaffold'),
+          child: SafeArea(
+            top: false,
+            child: Scaffold(
+              body: IndexedStack(index: _selectedIndex, children: _tabs),
+              bottomNavigationBar: _buildNavigationBar(context),
+            ),
+          ),
         ),
-        bottomNavigationBar: _buildNavigationBar(context),
-      ),
+      ],
     );
   }
 }
