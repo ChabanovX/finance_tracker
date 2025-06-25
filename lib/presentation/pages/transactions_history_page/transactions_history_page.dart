@@ -18,8 +18,8 @@ class TransactionsHistoryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final start = ref.watch(historyStartProvider);
-    final end = ref.watch(historyEndProvider);
+    final start = ref.watch(historyStartProvider(isIncome));
+    final end = ref.watch(historyEndProvider(isIncome));
     final total = ref.watch(totalAmountProvider);
     final transactionsAsync = ref.watch(transactionsProvider);
     final sortBy = ref.watch(sortByProvider);

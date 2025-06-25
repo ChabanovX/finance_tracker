@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:yndx_homework/presentation/pages/transactions_history_page/transactions_history_page.dart';
-import 'package:yndx_homework/presentation/pages/transactions_page/transactions_page.dart';
-import 'package:yndx_homework/presentation/theme/app_theme.dart';
+
+import '/presentation/pages/transactions_history_page/transactions_history_page.dart';
+import '/presentation/pages/transactions_page/transactions_page.dart';
+import '/presentation/theme/app_theme.dart';
+import '/presentation/providers.dart' show isIncomeProvider;
 
 /// Shortcut for [NavigationDestination].
 class _NavigationItem {
@@ -25,29 +28,10 @@ class AppRouterDelegate extends RouterDelegate<int>
 
   bool _showIncomesHistory = false;
 
-  // @override
-  // String? get restorationId => 'app_router';
-
   @override
   Future<void> setNewRoutePath(int configuration) async {
     _selectedIndex = configuration;
   }
-
-  // TODO: check problem with RestorationMixin
-  // @override
-  // void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-  //   registerForRestoration(_selectedIndex, 'selected_index');
-  //   registerForRestoration(_showExpensesHistory, 'show_expenses_history');
-  //   registerForRestoration(_showIncomesHistory, 'show_incomes_history');
-  // }
-
-  // @override
-  // void dispose() {
-  //   _selectedIndex.dispose();
-  //   _showExpensesHistory.dispose();
-  //   _showIncomesHistory.dispose();
-  //   super.dispose();
-  // }
 
   /// Build pages to use in [Navigator].
   List<Page> _buildPages() {
@@ -66,11 +50,14 @@ class AppRouterDelegate extends RouterDelegate<int>
           ),
         ];
         // Show history if pressed
-        if (_showExpensesHistory) {
+        if (_showIncomesHistory) {
           pages.add(
-            const MaterialPage(
-              key: ValueKey('expenses_history'),
-              child: TransactionsHistoryPage(isIncome: false),
+            MaterialPage(
+              key: const ValueKey('expenses_history'),
+              child: ProviderScope(
+                overrides: [isIncomeProvider.overrideWithValue(false)],
+                child: TransactionsHistoryPage(isIncome: false),
+              ),
             ),
           );
         }
@@ -92,9 +79,12 @@ class AppRouterDelegate extends RouterDelegate<int>
         // Show history if pressed
         if (_showIncomesHistory) {
           pages.add(
-            const MaterialPage(
-              key: ValueKey('incomes_history'),
-              child: TransactionsHistoryPage(isIncome: true),
+            MaterialPage(
+              key: const ValueKey('incomes_history'),
+              child: ProviderScope(
+                overrides: [isIncomeProvider.overrideWithValue(true)],
+                child: TransactionsHistoryPage(isIncome: true),
+              ),
             ),
           );
         }

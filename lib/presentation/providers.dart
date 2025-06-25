@@ -21,33 +21,37 @@ final isIncomeProvider = Provider<bool>((_) => throw UnimplementedError());
 /// Whether to sort by date or amount
 final sortByProvider = StateProvider<SortBy>((_) => SortBy.date);
 
-final historyStartProvider = StateProvider<DateTime>((_) {
+final historyStartProvider = StateProvider.family<DateTime, bool>((_, isIncome) {
   final now = DateTime.now();
   return DateTime(now.year, now.month - 1, now.day);
 });
 
-final historyEndProvider = StateProvider<DateTime>((_) {
+final historyEndProvider = StateProvider.family<DateTime, bool>((_, isIncome) {
   final now = DateTime.now();
   return DateTime(now.year, now.month, now.day);
 });
 
 /// Safely update startTime.
 void updateStartDate(WidgetRef ref, DateTime newStart) {
-  final end = ref.read(historyEndProvider);
-  ref.read(historyStartProvider.notifier).state = newStart;
+  final isIncome = ref.read(isIncomeProvider);
+  ref.read(historyStartProvider(isIncome).notifier).state = newStart;
+
   // Keeping range valid
+  final end = ref.read(historyEndProvider(isIncome));
   if (newStart.isAfter(end)) {
-    ref.read(historyEndProvider.notifier).state = newStart;
+    ref.read(historyEndProvider(isIncome).notifier).state = newStart;
   }
 }
 
 /// Safely update endTime.
 void updateEndDate(WidgetRef ref, DateTime newEnd) {
-  final start = ref.read(historyStartProvider);
-  ref.read(historyEndProvider.notifier).state = newEnd;
+  final isIncome = ref.read(isIncomeProvider);
+  ref.read(historyEndProvider(isIncome).notifier).state = newEnd;
+
   // Keeping range valid
+  final start = ref.read(historyStartProvider(isIncome));
   if (newEnd.isBefore(start)) {
-    ref.read(historyStartProvider.notifier).state = newEnd;
+    ref.read(historyStartProvider(isIncome).notifier).state = newEnd;
   }
 }
 
@@ -55,8 +59,9 @@ void updateEndDate(WidgetRef ref, DateTime newEnd) {
 ///
 /// Method does not check ranging, considering UI checking that.
 void updateRange(WidgetRef ref, DateTime start, DateTime end) {
-  ref.read(historyStartProvider.notifier).state = start;
-  ref.read(historyEndProvider.notifier).state = end;
+  final isIncome = ref.read(isIncomeProvider);
+  ref.read(historyStartProvider(isIncome).notifier).state = start;
+  ref.read(historyEndProvider(isIncome).notifier).state = end;
 }
 
 /// Data loader (AsyncNotifier)
@@ -64,9 +69,9 @@ class TransactionsNotifier extends AsyncNotifier<List<Transaction>> {
   @override
   FutureOr<List<Transaction>> build() async {
     final repo = ref.watch(transactionRepositoryProvider);
-    final start = ref.watch(historyStartProvider);
-    final end = ref.watch(historyEndProvider);
     final isIncome = ref.watch(isIncomeProvider);
+    final start = ref.watch(historyStartProvider(isIncome));
+    final end = ref.watch(historyEndProvider(isIncome));
 
     final startOfDay = DateTime(start.year, start.month, start.day);
     final endOfDay = DateTime(
