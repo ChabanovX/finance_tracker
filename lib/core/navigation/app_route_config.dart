@@ -56,14 +56,14 @@ class AppRouterDelegate extends RouterDelegate<int>
 
   Widget _buildExpensesNavigator() {
     final key = _navigatorKeys[0];
-    return Navigator(
-      key: key,
-      onGenerateRoute:
-          (_) => MaterialPageRoute(
-            builder:
-                (_) => ProviderScope(
-                  overrides: [isIncomeProvider.overrideWithValue(false)],
-                  child: TransactionsPage(
+    return ProviderScope(
+      overrides: [isIncomeProvider.overrideWithValue(false)],
+      child: Navigator(
+        key: key,
+        onGenerateRoute:
+            (_) => MaterialPageRoute(
+              builder:
+                  (_) => TransactionsPage(
                     isIncome: false,
                     onShowHistory:
                         () => key.currentState?.push(
@@ -75,21 +75,21 @@ class AppRouterDelegate extends RouterDelegate<int>
                           ),
                         ),
                   ),
-                ),
-          ),
+            ),
+      ),
     );
   }
 
   Widget _buildIncomesNavigator() {
     final key = _navigatorKeys[1];
-    return Navigator(
-      key: key,
-      onGenerateRoute:
-          (_) => MaterialPageRoute(
-            builder:
-                (_) => ProviderScope(
-                  overrides: [isIncomeProvider.overrideWithValue(true)],
-                  child: TransactionsPage(
+    return ProviderScope(
+      overrides: [isIncomeProvider.overrideWithValue(true)],
+      child: Navigator(
+        key: key,
+        onGenerateRoute:
+            (_) => MaterialPageRoute(
+              builder:
+                  (_) => TransactionsPage(
                     isIncome: true,
                     onShowHistory:
                         () => key.currentState?.push(
@@ -100,8 +100,8 @@ class AppRouterDelegate extends RouterDelegate<int>
                           ),
                         ),
                   ),
-                ),
-          ),
+            ),
+      ),
     );
   }
 
