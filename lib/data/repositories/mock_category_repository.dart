@@ -1,4 +1,4 @@
-import 'package:yndx_homework/data/repositories/mock_data.dart';
+import 'package:yndx_homework/data/datasources/mock_data.dart';
 import 'package:yndx_homework/domain/models/category.dart';
 import 'package:yndx_homework/domain/repositories/category_repository.dart';
 

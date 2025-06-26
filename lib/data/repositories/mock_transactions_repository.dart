@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print
 
-import 'package:yndx_homework/data/repositories/mock_data.dart';
+import 'package:yndx_homework/data/datasources/mock_data.dart';
 import 'package:yndx_homework/domain/models/transaction.dart';
 import 'package:yndx_homework/domain/repositories/transactions_repository.dart';
 

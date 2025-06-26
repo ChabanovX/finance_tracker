@@ -1,3 +1,6 @@
+import 'account.dart';
+
+/// Type of [Account] changing event. 
 enum ChangeType {
   creation('CREATION'),
   modification('MODIFICATION'),
