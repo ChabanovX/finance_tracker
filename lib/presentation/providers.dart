@@ -1,16 +1,33 @@
 import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '/data/repositories/mock_transactions_repository.dart';
+import '/data/datasources/local/objectbox.dart';
+import '/data/repositories/objectbox_account_repository.dart';
+import '/data/repositories/objectbox_category_repository.dart';
+import '/data/repositories/objectbox_transactions_repository.dart';
+import '/domain/repositories/account_repository.dart';
+import '/domain/repositories/category_repository.dart';
+
 import '/domain/models/transaction.dart';
 import '/domain/repositories/transactions_repository.dart';
 
 enum SortBy { date, amount }
 
-// Some day should replace with a real one
+/// ObjectBox instance. Must be overridden in [ProviderScope].
+final objectBoxProvider = Provider<ObjectBox>(
+  (_) => throw UnimplementedError(),
+);
+
 final transactionRepositoryProvider = Provider<ITransactionsRepository>(
-  (_) => MockTransactionsRepository(),
+  (ref) => TransactionsObjectBoxRepository(ref.watch(objectBoxProvider)),
+);
+
+final accountRepositoryProvider = Provider<IAccountRepository>(
+  (ref) => AccountObjectBoxRepository(ref.watch(objectBoxProvider)),
+);
+
+final categoryRepositoryProvider = Provider<ICategoryRepository>(
+  (ref) => CategoryObjectBoxRepository(ref.watch(objectBoxProvider)),
 );
 
 /// Direction of operations (income / expense) - injected from page.
