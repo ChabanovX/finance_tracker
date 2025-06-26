@@ -1,0 +1,121 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:1930924216488569758",
+      "lastPropertyId": "4:2962670302112480512",
+      "name": "AccountEntity",
+      "properties": [
+        {
+          "id": "1:6162387280736367855",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8604724686551519802",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:322794399568165033",
+          "name": "balance",
+          "type": 8
+        },
+        {
+          "id": "4:2962670302112480512",
+          "name": "currency",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:7153350534390383964",
+      "lastPropertyId": "4:1449448222041827094",
+      "name": "CategoryEntity",
+      "properties": [
+        {
+          "id": "1:6815499229416320724",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6992162516221074401",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:7254229065208335716",
+          "name": "emoji",
+          "type": 9
+        },
+        {
+          "id": "4:1449448222041827094",
+          "name": "isIncome",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:6589889748139525854",
+      "lastPropertyId": "6:3255317689472647356",
+      "name": "TransactionEntity",
+      "properties": [
+        {
+          "id": "1:7271937693470775355",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:907392321256678845",
+          "name": "accountId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:4474749691486538945",
+          "relationTarget": "AccountEntity"
+        },
+        {
+          "id": "3:1381580754785558294",
+          "name": "categoryId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "2:7218867096032702561",
+          "relationTarget": "CategoryEntity"
+        },
+        {
+          "id": "4:2332132612360878797",
+          "name": "amount",
+          "type": 8
+        },
+        {
+          "id": "5:2588781557277055635",
+          "name": "transactionDate",
+          "type": 10
+        },
+        {
+          "id": "6:3255317689472647356",
+          "name": "comment",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "3:6589889748139525854",
+  "lastIndexId": "2:7218867096032702561",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

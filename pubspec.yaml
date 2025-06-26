@@ -25,6 +25,9 @@ dev_dependencies:
   json_serializable: ^6.9.5
   objectbox_generator: any
 
+objectbox:
+  output_dir: data/datasources/local
+
 flutter:
   assets:
     - assets/icons/

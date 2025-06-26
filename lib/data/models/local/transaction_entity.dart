@@ -1,0 +1,19 @@
+import 'package:objectbox/objectbox.dart';
+
+import 'account_entity.dart';
+import 'category_entity.dart';
+
+@Entity()
+class TransactionEntity {
+  @Id()
+  int id = 0;
+
+  final account = ToOne<AccountEntity>();
+  final category = ToOne<CategoryEntity>();
+
+  late double amount;
+  late DateTime transactionDate;
+  String? comment;
+
+  TransactionEntity();
+}
