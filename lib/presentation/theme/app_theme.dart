@@ -14,16 +14,28 @@ class AppColors {
   final Color inactive;
   final Color white;
 
-  // Static fields for const default theme definitions
+  // Static fields for const default theme definitions.
   static const Color kAccent = Color(0xFF2AE881);
   static const Color kAccentLight = Color(0xFFD4FAE6);
   static const Color kInactive = Color(0xFF49454F);
   static const Color kWhite = Colors.white;
 
+  // Additional colors for dark theme.
+  static const Color kAccentDarkmode = Color(0xFF1B5E20);
+  static const Color kAccentLightDarkmode = Color.fromARGB(255, 22, 141, 30);
+  static const Color kInactiveDarkmode = Color(0xFF79747E);
+
   static const light = AppColors(
     accent: AppColors.kAccent,
     accentLight: AppColors.kAccentLight,
     inactive: AppColors.kInactive,
+    white: AppColors.kWhite,
+  );
+
+  static const dark = AppColors(
+    accent: AppColors.kAccent,
+    accentLight: AppColors.kAccentLightDarkmode,
+    inactive: AppColors.kInactiveDarkmode,
     white: AppColors.kWhite,
   );
 
@@ -85,5 +97,17 @@ final ThemeData appTheme = ThemeData(
   appBarTheme: const AppBarTheme(backgroundColor: AppColors.kAccent),
   navigationBarTheme: const NavigationBarThemeData(
     indicatorColor: AppColors.kAccentLight,
-  )
+  ),
+);
+
+/// Global dark [ThemeData] for the app.
+final ThemeData appDarkTheme = ThemeData.dark().copyWith(
+  extensions: const [AppColorsTheme(colors: AppColors.dark)],
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: AppColors.kAccentDarkmode,
+  ),
+  appBarTheme: const AppBarTheme(backgroundColor: AppColors.kAccentDarkmode),
+  navigationBarTheme: const NavigationBarThemeData(
+    indicatorColor: AppColors.kAccentLightDarkmode,
+  ),
 );
