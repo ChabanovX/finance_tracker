@@ -17,7 +17,6 @@ extension AccountEntityMapper on AccountEntity {
 
 extension AccountDomainMapper on Account {
   AccountEntity toEntity() => AccountEntity()
-    ..id = id
     ..name = name
     ..balance = balance
     ..currency = currency;
@@ -34,7 +33,6 @@ extension CategoryEntityMapper on CategoryEntity {
 
 extension CategoryDomainMapper on Category {
   CategoryEntity toEntity() => CategoryEntity()
-    ..id = id
     ..name = name
     ..emoji = emoji
     ..isIncome = isIncome;
@@ -54,7 +52,6 @@ extension TransactionEntityMapper on TransactionEntity {
 
 extension TransactionDomainMapper on Transaction {
   TransactionEntity toEntity() => TransactionEntity()
-    ..id = id
     ..amount = amount
     ..transactionDate = transactionDate
     ..comment = comment

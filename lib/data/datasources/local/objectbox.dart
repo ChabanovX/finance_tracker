@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'objectbox.g.dart';
 
 import 'mappers.dart';
@@ -21,10 +25,23 @@ class ObjectBox {
 
   /// Opens the store and loads initial data if boxes are empty.
   static Future<ObjectBox> init() async {
-    final store = await openStore();
+    final appDir = await getApplicationSupportDirectory();
+
+    final store = await openStore(
+      directory: p.join(appDir.path, 'object-box'),
+      macosApplicationGroup: 'group.cha.money',
+    );
     final ob = ObjectBox._create(store);
 
-    // Prepopulate with mock data if empty
+    // Prepopulate with mock data if boxes are empty.
+    _prepopulateData(ob);
+
+    return ob;
+  }
+
+  /// Populate mock data into database.
+  static Future<void> _prepopulateData(ObjectBox ob) async {
+    // Prepopulate with mock data if boxes are empty.
     if (ob.categoryBox.isEmpty()) {
       ob.categoryBox.putMany(mockCategories.map((c) => c.toEntity()).toList());
     }
@@ -38,7 +55,5 @@ class ObjectBox {
         mockTransactions.map((t) => t.toEntity()).toList(),
       );
     }
-
-    return ob;
   }
 }
