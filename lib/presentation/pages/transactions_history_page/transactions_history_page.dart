@@ -62,7 +62,7 @@ class TransactionsHistoryPage extends ConsumerWidget {
             child: transactionsAsync.when(
               data: (_) => _HistoryList(ref.watch(sortedTransactionsProvider)),
               loading: () => const _HistoryLoading(),
-              error: (err, _) => Center(child: Text('Error occured: $err'),),
+              error: (err, _) => Center(child: Text('Error occured: $err')),
             ),
           ),
         ],
