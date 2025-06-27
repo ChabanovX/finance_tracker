@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yndx_homework/core/log.dart';
 
 import '/domain/models/transaction.dart';
 import '/presentation/providers.dart';
@@ -43,7 +44,10 @@ class TransactionsPage extends ConsumerWidget {
       body: transactionsAsync.when(
         data: (data) => _TransactionsList(data),
         loading: () => _LoadingTransactionsList(),
-        error: (error, _) => Center(child: Text("Error occured: $error")),
+        error: (error, _) {
+          Log.error(error.toString());
+          return Center(child: Text("Error occured: $error"));
+        },
       ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),

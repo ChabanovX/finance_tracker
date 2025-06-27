@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:yndx_homework/domain/models/category.dart';
 import 'objectbox.g.dart';
 
 import 'mappers.dart';
@@ -26,34 +25,43 @@ class ObjectBox {
   /// Opens the store and loads initial data if boxes are empty.
   static Future<ObjectBox> init() async {
     final appDir = await getApplicationSupportDirectory();
-
     final store = await openStore(
       directory: p.join(appDir.path, 'object-box'),
       macosApplicationGroup: 'group.cha.money',
     );
+
     final ob = ObjectBox._create(store);
 
     // Prepopulate with mock data if boxes are empty.
-    _prepopulateData(ob);
+    if (ob.categoryBox.isEmpty()) _seed(ob);
 
     return ob;
   }
 
   /// Populate mock data into database.
-  static Future<void> _prepopulateData(ObjectBox ob) async {
-    // Prepopulate with mock data if boxes are empty.
-    if (ob.categoryBox.isEmpty()) {
-      ob.categoryBox.putMany(mockCategories.map((c) => c.toEntity()).toList());
-    }
+  static void _seed(ObjectBox ob) {
+    ob.store.runInTransaction(TxMode.write, () {
+      // Parents first
+      final catEntities = mockCategories.map((c) => c.toEntity()).toList();
+      ob.categoryBox.putMany(catEntities);
 
-    if (ob.accountBox.isEmpty()) {
-      ob.accountBox.put(mockAccount.toEntity());
-    }
+      final accEntiity = mockAccount.toEntity();
+      ob.accountBox.put(accEntiity);
 
-    if (ob.transactionBox.isEmpty()) {
-      ob.transactionBox.putMany(
-        mockTransactions.map((t) => t.toEntity()).toList(),
-      );
-    }
+      // Build Category -> Entity map by IDENTITY.
+      final catMap = <Category, CategoryEntity>{};
+      for (var i = 0; i < mockCategories.length; i++) {
+        catMap[mockCategories[i]] = catEntities[i];
+      }
+
+      // Then children
+      final txEntities =
+          mockTransactions.map((t) {
+            // Not by id, but by identity. (ids invalid at this point)
+            final cat = catMap[t.category]!;
+            return t.toEntity(accEntiity, cat);
+          }).toList();
+      ob.transactionBox.putMany(txEntities);
+    });
   }
 }

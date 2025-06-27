@@ -2,7 +2,7 @@ import 'package:objectbox/objectbox.dart';
 
 @Entity()
 class CategoryEntity {
-  @Id()
+  @Id(assignable: true)
   int id = 0;
 
   late String name;

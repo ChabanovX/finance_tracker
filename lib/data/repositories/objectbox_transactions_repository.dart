@@ -1,3 +1,5 @@
+import 'package:yndx_homework/core/log.dart';
+
 import '/data/datasources/local/mappers.dart';
 import '/data/datasources/local/objectbox.dart';
 import '/data/datasources/local/objectbox.g.dart';
@@ -10,25 +12,37 @@ class TransactionsObjectBoxRepository implements ITransactionsRepository {
 
   TransactionsObjectBoxRepository(this._ob);
 
+  /// Crushes if something goes wrong.
   Transaction _map(TransactionEntity entity) {
-    final account = _ob.accountBox.get(entity.account.targetId)!;
-    final category = _ob.categoryBox.get(entity.category.targetId)!;
-    return entity.toDomain(account, category);
+    final accountEntity = _ob.accountBox.get(entity.account.targetId);
+    final categoryEntity = _ob.categoryBox.get(entity.category.targetId);
+
+    if (accountEntity == null || categoryEntity == null) {
+      // Data is corrupt.
+      throw StateError('Dangling link in transactions: ${entity.id}');
+    }
+
+    return entity.toDomain(accountEntity, categoryEntity);
   }
 
-  @override
-  Future<void> addTransaction(Transaction transaction) async {
-    _ob.transactionBox.put(transaction.toEntity());
-  }
+  /// Gracefully logs if fails.
+  Transaction? _tryMap(TransactionEntity e) {
+    final a = e.account.target;
+    final c = e.category.target;
 
-  @override
-  Future<void> deleteTransaction(int transactionId) async {
-    _ob.transactionBox.remove(transactionId);
+    if (a == null || c == null) {
+      Log.error('Missing link on transaction id=${e.id}');
+      return null;
+    }
+
+    Log.debug('✅ Successfully added $e');
+    return e.toDomain(a, c);
   }
 
   @override
   Future<List<Transaction>> getTransactions() async {
-    return _ob.transactionBox.getAll().map(_map).toList();
+    final transactionEntities = _ob.transactionBox.getAll();
+    return transactionEntities.map(_tryMap).whereType<Transaction>().toList();
   }
 
   @override
@@ -36,12 +50,15 @@ class TransactionsObjectBoxRepository implements ITransactionsRepository {
     DateTime start,
     DateTime end,
   ) async {
-    final query = _ob.transactionBox.query(
-      TransactionEntity_.transactionDate.between(
-        start.millisecondsSinceEpoch,
-        end.millisecondsSinceEpoch,
-      ),
-    ).build();
+    final query =
+        _ob.transactionBox
+            .query(
+              TransactionEntity_.transactionDate.between(
+                start.millisecondsSinceEpoch,
+                end.millisecondsSinceEpoch,
+              ),
+            )
+            .build();
     final result = query.find();
     query.close();
 
@@ -49,7 +66,31 @@ class TransactionsObjectBoxRepository implements ITransactionsRepository {
   }
 
   @override
+  Future<void> addTransaction(Transaction transaction) async {
+    final acc = _ob.accountBox.get(transaction.account.id);
+    final cat = _ob.categoryBox.get(transaction.category.id);
+    if (acc == null || cat == null) {
+      throw StateError('Parent row missing when adding transaction');
+    }
+
+    _ob.transactionBox.put(transaction.toEntity(acc, cat));
+  }
+
+  @override
   Future<void> updateTransaction(Transaction transaction) async {
-    _ob.transactionBox.put(transaction.toEntity());
+    final existing = _ob.transactionBox.get(transaction.id);
+    if (existing == null) return; // might throw in future
+
+    existing
+      ..amount = transaction.amount
+      ..transactionDate = transaction.transactionDate
+      ..comment = transaction.comment;
+
+    _ob.transactionBox.put(existing);
+  }
+
+  @override
+  Future<void> deleteTransaction(int transactionId) async {
+    _ob.transactionBox.remove(transactionId);
   }
 }

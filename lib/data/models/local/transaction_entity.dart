@@ -5,7 +5,7 @@ import 'category_entity.dart';
 
 @Entity()
 class TransactionEntity {
-  @Id()
+  @Id(assignable: true)
   int id = 0;
 
   final account = ToOne<AccountEntity>();

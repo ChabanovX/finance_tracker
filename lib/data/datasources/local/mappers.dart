@@ -7,35 +7,31 @@ import '/data/models/local/category_entity.dart';
 import '/data/models/local/transaction_entity.dart';
 
 extension AccountEntityMapper on AccountEntity {
-  Account toDomain() => Account(
-        id: id,
-        name: name,
-        balance: balance,
-        currency: currency,
-      );
+  Account toDomain() =>
+      Account(id: id, name: name, balance: balance, currency: currency);
 }
 
 extension AccountDomainMapper on Account {
-  AccountEntity toEntity() => AccountEntity()
-    ..name = name
-    ..balance = balance
-    ..currency = currency;
+  AccountEntity toEntity() =>
+      AccountEntity()
+        ..id = 0
+        ..name = name
+        ..balance = balance
+        ..currency = currency;
 }
 
 extension CategoryEntityMapper on CategoryEntity {
-  Category toDomain() => Category(
-        id: id,
-        name: name,
-        emoji: emoji,
-        isIncome: isIncome,
-      );
+  Category toDomain() =>
+      Category(id: id, name: name, emoji: emoji, isIncome: isIncome);
 }
 
 extension CategoryDomainMapper on Category {
-  CategoryEntity toEntity() => CategoryEntity()
-    ..name = name
-    ..emoji = emoji
-    ..isIncome = isIncome;
+  CategoryEntity toEntity() =>
+      CategoryEntity()
+        ..id = 0
+        ..name = name
+        ..emoji = emoji
+        ..isIncome = isIncome;
 }
 
 extension TransactionEntityMapper on TransactionEntity {
@@ -51,10 +47,19 @@ extension TransactionEntityMapper on TransactionEntity {
 }
 
 extension TransactionDomainMapper on Transaction {
-  TransactionEntity toEntity() => TransactionEntity()
-    ..amount = amount
-    ..transactionDate = transactionDate
-    ..comment = comment
-    ..account.targetId = account.id
-    ..category.targetId = category.id;
+  /// Convert a [Transaction] to [TransactionEntity] **after** its [AccountEntity]
+  /// and [CategoryEntity] have already been put into ObjectBox. Links are set
+  /// via `.target`, so they can never be null.
+  TransactionEntity toEntity(
+    AccountEntity persistedAccount,
+    CategoryEntity persistedCategory,
+  ) {
+    return TransactionEntity()
+      ..id = 0
+      ..amount = amount
+      ..transactionDate = transactionDate
+      ..comment = comment
+      ..account.target = persistedAccount
+      ..category.target = persistedCategory;
+  }
 }
