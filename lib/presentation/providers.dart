@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 
+import '/data/repositories/mock_articles_repository.dart';
+import '/domain/models/article.dart';
+import '/domain/repositories/articles_repository.dart';
 import '/data/datasources/local/objectbox.dart';
 import '/data/repositories/objectbox_account_repository.dart';
 import '/data/repositories/objectbox_category_repository.dart';
 import '/data/repositories/objectbox_transactions_repository.dart';
 import '/domain/repositories/account_repository.dart';
 import '/domain/repositories/category_repository.dart';
-
 import '/domain/models/transaction.dart';
 import '/domain/repositories/transactions_repository.dart';
 
@@ -29,6 +32,29 @@ final accountRepositoryProvider = Provider<IAccountRepository>(
 final categoryRepositoryProvider = Provider<ICategoryRepository>(
   (ref) => CategoryObjectBoxRepository(ref.watch(objectBoxProvider)),
 );
+
+final articlesRepositoryProvider = Provider<IArticlesRepository>(
+  (_) => MockArticlesRepository(),
+);
+
+final articleSearchQueryProvider = StateProvider<String>((_) => '');
+
+final articlesProvider = FutureProvider<List<Article>>((ref) {
+  final repo = ref.watch(articlesRepositoryProvider);
+  return repo.getArticles();
+});
+
+final filteredArticlesProvider = Provider<List<Article>>((ref) {
+  final query = ref.watch(articleSearchQueryProvider);
+  final articles = ref.watch(articlesProvider).valueOrNull ?? [];
+  if (query.isEmpty) return articles;
+  return extractTop(
+    query: query,
+    choices: articles,
+    limit: articles.length,
+    getter: (Article a) => a.text,
+  ).map((e) => e.choice).toList();
+}, dependencies: [articleSearchQueryProvider, articlesProvider]);
 
 /// Direction of operations (income / expense) - injected from page.
 ///
