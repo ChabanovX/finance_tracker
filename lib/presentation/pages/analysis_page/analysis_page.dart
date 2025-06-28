@@ -26,53 +26,87 @@ class AnalysisPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(backgroundColor: bg, title: Text('Анализ')),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            DefaultHeaderListTile(
-              backgroundColor: bg,
-              leading: Text('Период: начало'),
-              trailing: FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: context.colors.accent,
-                  shape: const StadiumBorder(),
-                  elevation: 0,
-                ),
-                onPressed: () {},
-                child: Text('март 2025'),
-              ),
+      body: Column(
+        children: [
+          _DateTile(
+            label: 'Период: начало',
+            date: start,
+            onTap: () => _pickStart(context, ref, start),
+            backgroundColor: bg,
+          ),
+          Divider(height: 1),
+          _DateTile(
+            label: 'Период: конец',
+            date: end,
+            onTap: () => _pickEnd(context, ref, end),
+            backgroundColor: bg,
+          ),
+          Divider(height: 1),
+          DefaultHeaderListTile(
+            backgroundColor: bg,
+            leading: Text('Сумма'),
+            trailing: Text('$total₽'),
+          ),
+          Divider(height: 1),
+          SizedBox(
+            height: 200,
+            child: Padding(padding: EdgeInsets.all(24), child: Placeholder()),
+          ),
+          Divider(height: 1),
+          // And build listView of those
+          Expanded(
+            child: transactionsAsync.when(
+              data: (_) {
+                final groups =
+                    ref
+                        .watch(transactionsByCategoryProvider)
+                        .entries
+                        .map((e) => _CategoryGroup(e.key, e.value))
+                        .toList();
+                groups.sort((a, b) => b.total.compareTo(a.total));
+                return _CategoryList(groups);
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, _) => Center(child: Text('Error occured: $err')),
             ),
-            Divider(height: 1),
-            DefaultHeaderListTile(
-              backgroundColor: bg,
-              leading: Text('Период: конец'),
-              trailing: FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: context.colors.accent,
-                  shape: const StadiumBorder(),
-                  elevation: 0,
-                ),
-                onPressed: () {},
-                child: Text('март 2025'),
-              ),
-            ),
-            Divider(height: 1),
-            DefaultHeaderListTile(
-              backgroundColor: bg,
-              leading: Text('Сумма'),
-              trailing: Text('123123 ₽'),
-            ),
-            Divider(height: 1),
-            SizedBox(
-              height: 200,
-              child: Padding(padding: EdgeInsets.all(24), child: Placeholder()),
-            ),
-            Divider(height: 1),
-            // And build listView of those
-            DefaultListTile(transaction: transaction, isFirstInList: isFirstInList),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+}
+
+Future<void> _pickStart(
+  BuildContext context,
+  WidgetRef ref,
+  DateTime initial,
+) async {
+  final picked = await _showPicker(context, initial);
+  if (picked != null) {
+    updateStartDate(ref, picked);
+  }
+}
+
+Future<void> _pickEnd(
+  BuildContext context,
+  WidgetRef ref,
+  DateTime initial,
+) async {
+  final picked = await _showPicker(context, initial);
+  if (picked != null) {
+    updateEndDate(ref, picked);
+  }
+}
+
+Future<DateTime?> _showPicker(BuildContext context, DateTime initial) {
+  final now = DateTime.now();
+  return showDatePicker(
+    context: context,
+    initialDate: initial,
+    firstDate: DateTime(now.year - 3),
+    lastDate: DateTime(now.year + 3),
+    builder: (context, child) {
+      return child!;
+    },
+  );
 }
