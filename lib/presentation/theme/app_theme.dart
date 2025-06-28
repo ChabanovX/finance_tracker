@@ -90,6 +90,8 @@ extension AppColorsX on BuildContext {
 
 /// Global [ThemeData] for the app.
 final ThemeData appTheme = ThemeData(
+  colorSchemeSeed: AppColors.kAccent,
+  useMaterial3: true,
   extensions: const [AppColorsTheme(colors: AppColors.light)],
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: AppColors.kAccent,
@@ -102,7 +104,10 @@ final ThemeData appTheme = ThemeData(
 );
 
 /// Global dark [ThemeData] for the app.
-final ThemeData appDarkTheme = ThemeData.dark().copyWith(
+final ThemeData appDarkTheme = ThemeData(
+  brightness: Brightness.dark,
+  colorSchemeSeed: AppColors.kAccentDarkmode,
+  useMaterial3: true,
   extensions: const [AppColorsTheme(colors: AppColors.dark)],
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: AppColors.kAccentDarkmode,
