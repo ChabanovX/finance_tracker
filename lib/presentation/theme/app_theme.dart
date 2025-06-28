@@ -93,6 +93,7 @@ final ThemeData appTheme = ThemeData(
   extensions: const [AppColorsTheme(colors: AppColors.light)],
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: AppColors.kAccent,
+    shape: CircleBorder(),
   ),
   appBarTheme: const AppBarTheme(backgroundColor: AppColors.kAccent),
   navigationBarTheme: const NavigationBarThemeData(
@@ -105,6 +106,7 @@ final ThemeData appDarkTheme = ThemeData.dark().copyWith(
   extensions: const [AppColorsTheme(colors: AppColors.dark)],
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: AppColors.kAccentDarkmode,
+    shape: CircleBorder(),
   ),
   appBarTheme: const AppBarTheme(backgroundColor: AppColors.kAccentDarkmode),
   navigationBarTheme: const NavigationBarThemeData(

@@ -14,7 +14,6 @@ class _TransactionsList extends StatelessWidget {
         DefaultHeaderListTile(
           key: ValueKey(total),
           leading: Text('Всего'),
-          // TODO: use Account's currency in future
           trailing: Text('${total.toString()} ₽'),
         ),
         const Divider(height: 1),

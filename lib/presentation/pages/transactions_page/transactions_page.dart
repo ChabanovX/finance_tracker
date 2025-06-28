@@ -50,7 +50,6 @@ class TransactionsPage extends ConsumerWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
         child: Icon(
           Icons.add_rounded,
           color: context.colors.white,
