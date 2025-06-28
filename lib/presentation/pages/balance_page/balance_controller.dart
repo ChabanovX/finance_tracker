@@ -15,10 +15,12 @@ class _BalanceController extends ChangeNotifier {
   ShakeDetector? _shakeDetector;
 
   _BalanceController() {
-    _shakeDetector = ShakeDetector.autoStart(
-      onPhoneShake: (_) => toggleVisibility,
-    );
-    _accelSub = accelerometerEventStream().listen(_handleAccel);
+    if (Platform.isAndroid || Platform.isIOS) {
+      _shakeDetector = ShakeDetector.autoStart(
+        onPhoneShake: (_) => toggleVisibility,
+      );
+      _accelSub = accelerometerEventStream().listen(_handleAccel);
+    }
   }
 
   void setBalance(double value) {

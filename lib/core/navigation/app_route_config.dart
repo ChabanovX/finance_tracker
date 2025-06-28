@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:yndx_homework/presentation/pages/analysis_page/analysis_page.dart';
 import 'package:yndx_homework/presentation/pages/articles_page/articles_page.dart';
 import 'package:yndx_homework/presentation/pages/balance_page/balance_page.dart';
 
@@ -71,8 +72,17 @@ class AppRouterDelegate extends RouterDelegate<int>
                         () => key.currentState?.push(
                           MaterialPageRoute(
                             builder:
-                                (_) => const TransactionsHistoryPage(
+                                (_) => TransactionsHistoryPage(
                                   isIncome: false,
+                                  onShowAnalysis:
+                                      () => key.currentState?.push(
+                                        MaterialPageRoute(
+                                          builder:
+                                              (_) => const AnalysisPage(
+                                                isIncome: false,
+                                              ),
+                                        ),
+                                      ),
                                 ),
                           ),
                         ),
@@ -97,8 +107,17 @@ class AppRouterDelegate extends RouterDelegate<int>
                         () => key.currentState?.push(
                           MaterialPageRoute(
                             builder:
-                                (_) =>
-                                    const TransactionsHistoryPage(isIncome: true),
+                                (_) => TransactionsHistoryPage(
+                                  isIncome: true,
+                                  onShowAnalysis: () => key.currentState?.push(
+                                        MaterialPageRoute(
+                                          builder:
+                                              (_) => const AnalysisPage(
+                                                isIncome: true,
+                                              ),
+                                        ),
+                                      ),
+                                ),
                           ),
                         ),
                   ),

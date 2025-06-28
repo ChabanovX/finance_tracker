@@ -11,10 +11,12 @@ import '/presentation/shared/default_header_list_tile.dart';
 part 'transactions_history_widgets.dart';
 
 class TransactionsHistoryPage extends ConsumerWidget {
-  const TransactionsHistoryPage({super.key, required this.isIncome});
+  const TransactionsHistoryPage({super.key, required this.isIncome, required this.onShowAnalysis});
 
   /// Indicates whether [TransactionsHistoryPage] is about expenses or incomes.
   final bool isIncome;
+
+  final VoidCallback onShowAnalysis;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +31,7 @@ class TransactionsHistoryPage extends ConsumerWidget {
         title: isIncome ? 'История доходов' : 'История расходов',
         actions: [
           IconButton(
-            onPressed: () => _pickRange(context, ref, start, end),
+            onPressed: onShowAnalysis,
             padding: EdgeInsets.all(12),
             icon: Icon(Icons.pending_actions, size: 24),
           ),
