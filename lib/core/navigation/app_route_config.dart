@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:yndx_homework/presentation/pages/articles_page/articles_page.dart';
+import 'package:yndx_homework/presentation/pages/balance_page/balance_page.dart';
 
 import '/presentation/pages/transactions_history_page/transactions_history_page.dart';
 import '/presentation/pages/transactions_page/transactions_page.dart';
@@ -21,8 +23,8 @@ class AppRouterDelegate extends RouterDelegate<int>
     _tabs = [
       _buildExpensesNavigator(),
       _buildIncomesNavigator(),
-      _simpleNavigator(const Center(child: Text('Счет')), 2),
-      _simpleNavigator(const Center(child: Text('Статьи')), 3),
+      _simpleNavigator(const BalancePage(), 2),
+      _simpleNavigator(const ArticlesPage(), 3),
       _simpleNavigator(const Center(child: Text('Настройки')), 4),
     ];
   }

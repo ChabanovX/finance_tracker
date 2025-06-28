@@ -31,7 +31,7 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(1, 6162387280736367855),
         name: 'id',
         type: 6,
-        flags: 1,
+        flags: 129,
       ),
       obx_int.ModelProperty(
         id: const obx_int.IdUid(2, 8604724686551519802),
@@ -65,7 +65,7 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(1, 6815499229416320724),
         name: 'id',
         type: 6,
-        flags: 1,
+        flags: 129,
       ),
       obx_int.ModelProperty(
         id: const obx_int.IdUid(2, 6992162516221074401),
@@ -99,7 +99,7 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(1, 7271937693470775355),
         name: 'id',
         type: 6,
-        flags: 1,
+        flags: 129,
       ),
       obx_int.ModelProperty(
         id: const obx_int.IdUid(2, 907392321256678845),
