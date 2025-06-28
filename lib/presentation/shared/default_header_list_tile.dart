@@ -7,15 +7,17 @@ class DefaultHeaderListTile extends StatelessWidget {
     super.key,
     required this.leading,
     required this.trailing,
+    this.backgroundColor
   });
 
   final Widget leading;
   final Widget trailing;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: context.colors.accentLight,
+      color: backgroundColor ?? context.colors.accentLight,
       height: 56,
       child: Padding(
         padding: EdgeInsets.all(16),

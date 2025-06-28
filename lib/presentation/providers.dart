@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
+import 'package:yndx_homework/domain/models/category.dart';
 
 import '/data/repositories/mock_articles_repository.dart';
 import '/domain/models/article.dart';
@@ -179,3 +180,13 @@ class TransactionsNotifier extends AsyncNotifier<List<Transaction>> {
     return ops.where((t) => t.category.isIncome == isIncome).toList();
   }
 }
+
+final transactionsByCategoryProvider =
+    Provider<Map<Category, List<Transaction>>>((ref) {
+      final list = ref.watch(transactionsProvider).valueOrNull ?? [];
+      final map = <Category, List<Transaction>>{};
+      for (final t in list) {
+        map.putIfAbsent(t.category, () => []).add(t);
+      }
+      return map;
+    }, dependencies: [transactionsProvider]);
