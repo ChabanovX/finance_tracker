@@ -1,7 +1,7 @@
 part of 'articles_page.dart';
 
 class _ArticleTile extends StatelessWidget {
-  const _ArticleTile({super.key, required this.emoji, required this.name});
+  const _ArticleTile({required this.emoji, required this.name});
 
   final String emoji;
   final String name;

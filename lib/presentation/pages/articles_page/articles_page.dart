@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yndx_homework/presentation/shared/default_app_bar.dart';
-import 'package:yndx_homework/presentation/theme/app_theme.dart';
 
 import '/presentation/providers.dart';
 

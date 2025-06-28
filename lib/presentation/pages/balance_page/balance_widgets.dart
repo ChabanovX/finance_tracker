@@ -83,7 +83,6 @@ class _BalanceHeader extends ConsumerWidget {
 
 class _AnimatedSpoiler extends StatelessWidget {
   const _AnimatedSpoiler({
-    super.key,
     required this.revealed,
     required this.child,
   });
