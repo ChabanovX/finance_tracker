@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sensors_plus/sensors_plus.dart';
+import 'package:shake/shake.dart';
 
 import 'package:yndx_homework/presentation/shared/default_app_bar.dart';
 import 'package:yndx_homework/presentation/shared/default_header_list_tile.dart';

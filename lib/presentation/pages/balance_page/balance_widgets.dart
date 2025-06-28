@@ -20,7 +20,12 @@ class _BalanceHeader extends ConsumerWidget {
             ),
             trailing: Row(
               children: [
-                Text('${ctrl.balance.toStringAsFixed(2)} ${ctrl.currency}'),
+                _AnimatedSpoiler(
+                  revealed: ctrl.isVisible,
+                  child: Text(
+                    '${ctrl.balance.toStringAsFixed(2)} ${ctrl.currency}',
+                  ),
+                ),
                 const SizedBox(width: 16),
                 Icon(
                   Icons.chevron_right_rounded,
@@ -68,6 +73,35 @@ class _BalanceHeader extends ConsumerWidget {
                   color: context.colors.inactive.withAlpha((0.3 * 255).toInt()),
                 ),
               ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AnimatedSpoiler extends StatelessWidget {
+  const _AnimatedSpoiler({
+    super.key,
+    required this.revealed,
+    required this.child,
+  });
+
+  final bool revealed;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        child,
+        Positioned.fill(
+          child: IgnorePointer(
+            child: AnimatedOpacity(
+              opacity: revealed ? 0.0 : 1.0,
+              duration: const Duration(milliseconds: 300),
+              child: Container(color: context.colors.accentLight),
             ),
           ),
         ),
