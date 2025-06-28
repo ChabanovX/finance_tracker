@@ -1,4 +1,5 @@
 import 'package:yndx_homework/domain/models/account.dart';
+import 'package:yndx_homework/domain/models/article.dart';
 import 'package:yndx_homework/domain/models/category.dart';
 import 'package:yndx_homework/domain/models/transaction.dart';
 
@@ -112,6 +113,51 @@ final List<Category> mockCategories = [
   mockUtilitiesCategory,
   mockSubscriptionsCategory,
 ];
+
+// MOCK ARTICLES
+final List<Article> mockArticles = [
+  Article(
+    id: 1,
+    text: 'Как накопить на отпуск',
+    emoji: '😂',
+  ),
+  Article(
+    id: 2,
+    text: 'Инвестиции для начинающих',
+    emoji: '🇷🇺',
+  ),
+  Article(
+    id: 3,
+    text: 'Экономим на продуктах',
+    emoji: '🥳',
+  ),
+  Article(
+    id: 4,
+    text: 'Первые шаги в криптовалюте',
+    emoji: '🪙',
+  ),
+  Article(
+    id: 5,
+    text: 'Как вести семейный бюджет',
+    emoji: '👨‍👩‍👧‍👦',
+  ),
+  Article(
+    id: 6,
+    text: 'Погашаем кредиты быстрее',
+    emoji: '💳',
+  ),
+  Article(
+    id: 7,
+    text: 'Выбираем выгодную ипотеку',
+    emoji: '🏠',
+  ),
+  Article(
+    id: 8,
+    text: 'Финансовая подушка безопасности',
+    emoji: '🛟',
+  ),
+];
+
 
 // MOCK ACCOUNT
 Account mockAccount = Account(
