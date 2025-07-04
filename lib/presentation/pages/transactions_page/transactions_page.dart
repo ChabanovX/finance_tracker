@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:yndx_homework/core/log.dart';
+import 'package:yndx_homework/domain/models/account.dart';
 import 'package:yndx_homework/domain/models/category.dart';
 
 import '/domain/models/transaction.dart';

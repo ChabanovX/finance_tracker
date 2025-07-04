@@ -42,6 +42,8 @@ class _TransactionsList extends StatelessWidget {
                       barrierLabel: 'Edit Transaction',
                       pageBuilder: (ctx, an1, an2) {
                         return _EditTransactionModal(
+                          // Simply pass it without DI.
+                          isIncome: transaction.category.isIncome,
                           transaction: transaction,
                           key: Key('_EditTransactionModal'),
                         );
@@ -56,19 +58,27 @@ class _TransactionsList extends StatelessWidget {
   }
 }
 
-class _EditTransactionModal extends StatefulWidget {
-  const _EditTransactionModal({super.key, required this.transaction});
+class _EditTransactionModal extends ConsumerStatefulWidget {
+  const _EditTransactionModal({
+    super.key,
+    required this.transaction,
+    required this.isIncome,
+  });
 
   final Transaction transaction;
+  final bool isIncome;
 
   @override
-  State<_EditTransactionModal> createState() => _EditTransactionModalState();
+  ConsumerState<_EditTransactionModal> createState() =>
+      _EditTransactionModalState();
 }
 
-class _EditTransactionModalState extends State<_EditTransactionModal> {
+class _EditTransactionModalState extends ConsumerState<_EditTransactionModal> {
   late TextEditingController _amountCtrl;
   late TextEditingController _commentCtrl;
-  late TextEditingController _categoryCtrl;
+
+  Category? _category;
+  Account? _account;
 
   @override
   void initState() {
@@ -77,20 +87,90 @@ class _EditTransactionModalState extends State<_EditTransactionModal> {
       text: widget.transaction.amount.toString(),
     );
     _commentCtrl = TextEditingController(text: widget.transaction.comment);
-    _categoryCtrl = TextEditingController(
-      text: widget.transaction.category.toString(),
-    );
+    _category = widget.transaction.category;
+    _account = widget.transaction.account;
   }
 
   @override
   void dispose() {
     _amountCtrl.dispose();
     _commentCtrl.dispose();
-    _categoryCtrl.dispose();
     super.dispose();
   }
 
-  void _save() {}
+  /// Parses entered data and saves via riverpod.
+  Future<void> _save() async {
+    final amount =
+        double.tryParse(_amountCtrl.text.replaceAll(',', '.')) ??
+        widget.transaction.amount;
+
+    final updated = widget.transaction.copyWith(
+      amount: amount,
+      comment: _commentCtrl.text.isEmpty ? null : _commentCtrl.text,
+      category: _category ?? widget.transaction.category,
+      account: _account ?? widget.transaction.account,
+    );
+
+    // Save and update state.
+    final repo = ref.read(transactionRepositoryProvider);
+    await repo.updateTransaction(updated);
+    ref.invalidate(transactionsProvider);
+    ref.invalidate(transactionForTodayProvider);
+
+    // Leave safely.
+    if (!mounted) return;
+    Navigator.of(context).pop();
+  }
+
+  /// THIS LOOKS AWFUL.
+  Widget _buildAccountRef() => ref
+      .watch(accountProvider)
+      .when(
+        data:
+            (acc) => DropdownButtonFormField<Account>(
+              value: _account ?? acc,
+              items:
+                  [acc]
+                      .map(
+                        (a) => DropdownMenuItem(value: a, child: Text(a.name)),
+                      )
+                      .toList(),
+              onChanged: (a) => setState(() => _account = a),
+              decoration: const InputDecoration(labelText: 'Account'),
+            ),
+        loading: () => const CircularProgressIndicator(),
+        error: (e, _) => Text('Error: $e'),
+      );
+
+  /// THIS LOOKS AWFUL too.
+  Widget _buildCategoryRef() => ref
+      .watch(categoriesProvider)
+      .when(
+        data:
+            (cats) => DropdownButtonFormField(
+              value: _category,
+              items:
+                  cats
+                      .map(
+                        (cat) =>
+                            DropdownMenuItem(value: cat, child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(cat.name),
+                                Text(cat.emoji),
+                              ],
+                            )),
+                      )
+                      .toList(),
+              onChanged:
+                  (c) => setState(() {
+                    _category = c;
+                  }),
+              decoration: const InputDecoration(labelText: 'Category'),
+            ),
+        error: (err, _) => Center(child: Text(err.toString())),
+        loading: () => const CircularProgressIndicator(),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -98,8 +178,8 @@ class _EditTransactionModalState extends State<_EditTransactionModal> {
       child: Material(
         child: Container(
           padding: EdgeInsets.fromLTRB(16, 16, 16, 32),
-          height: 300,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text('Edit Transaction'),
               const SizedBox(height: 12),
@@ -109,46 +189,15 @@ class _EditTransactionModalState extends State<_EditTransactionModal> {
                 decoration: const InputDecoration(labelText: 'Amount'),
               ),
               const SizedBox(height: 8),
-              GestureDetector(
-                onTap: () async {
-                  final Category? picked = await showMenu<Category>(
-                    context: context,
-                    position: RelativeRect.fromLTRB(100, 200, 100, 0),
-                    items:
-                        [
-                              Category(
-                                id: 0,
-                                name: 'Salary',
-                                emoji: '🏦',
-                                isIncome: true,
-                              ),
-                              Category(
-                                id: 0,
-                                name: 'Freelance',
-                                emoji: '💻',
-                                isIncome: true,
-                              ),
-                              Category(
-                                id: 0,
-                                name: 'Investments',
-                                emoji: '📈',
-                                isIncome: true,
-                              ),
-                            ]
-                            .map(
-                              (c) =>
-                                  PopupMenuItem(value: c, child: Text(c.name)),
-                            )
-                            .toList(),
-                  );
-                  if (picked != null)
-                    setState(() {});
-                },
-                child: InputDecorator(
-                  decoration: const InputDecoration(labelText: 'Category'),
-                  child: Text('Select…'),
-                ),
+              TextField(
+                controller: _commentCtrl,
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(labelText: 'Commentary'),
               ),
+              const SizedBox(height: 8),
+              _buildCategoryRef(),
+              const SizedBox(height: 8),
+              _buildAccountRef(),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

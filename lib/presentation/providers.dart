@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
+import 'package:yndx_homework/domain/models/account.dart';
 import 'package:yndx_homework/domain/models/category.dart';
 
 import '/data/repositories/mock_articles_repository.dart';
@@ -56,6 +57,16 @@ final filteredArticlesProvider = Provider<List<Article>>((ref) {
     getter: (Article a) => a.text,
   ).map((e) => e.choice).toList();
 }, dependencies: [articleSearchQueryProvider, articlesProvider]);
+
+final accountProvider = FutureProvider<Account>((ref) {
+  final repo = ref.watch(accountRepositoryProvider);
+  return repo.getAccount();
+});
+
+final categoriesProvider = FutureProvider<List<Category>>((ref) {
+  final repo = ref.watch(categoryRepositoryProvider);
+  return repo.getAllCategories();
+});
 
 /// Direction of operations (income / expense) - injected from page.
 ///
