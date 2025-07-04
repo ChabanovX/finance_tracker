@@ -7,7 +7,11 @@ String _fmt(DateTime d) {
 }
 
 class _DateTile extends StatelessWidget {
-  const _DateTile({required this.label, required this.date, required this.onTap});
+  const _DateTile({
+    required this.label,
+    required this.date,
+    required this.onTap,
+  });
 
   final String label;
   final DateTime date;
@@ -37,19 +41,20 @@ class _SortTile extends StatelessWidget {
       onTap: () async {
         final result = await showModalBottomSheet<SortBy>(
           context: context,
-          builder: (ctx) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: const Text('По дате'),
-                onTap: () => Navigator.pop(ctx, SortBy.date),
+          builder:
+              (ctx) => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: const Text('По дате'),
+                    onTap: () => Navigator.pop(ctx, SortBy.date),
+                  ),
+                  ListTile(
+                    title: const Text('По сумме'),
+                    onTap: () => Navigator.pop(ctx, SortBy.amount),
+                  ),
+                ],
               ),
-              ListTile(
-                title: const Text('По сумме'),
-                onTap: () => Navigator.pop(ctx, SortBy.amount),
-              ),
-            ],
-          ),
         );
         if (result != null) onChange(result);
       },
@@ -65,6 +70,17 @@ class _HistoryList extends StatelessWidget {
   const _HistoryList(this.transactions);
 
   final List<Transaction> transactions;
+
+  /// Shows modal popup for changing transaction.
+  // void _onTap(BuildContext context, Transaction t) => showGeneralDialog(
+  //   context: context,
+  //   barrierDismissible: true,
+  //   pageBuilder: (ctx, animation1, animation2) {
+  //     return Center(
+  //       child: Material(child: Container(height: 100, color: Colors.red)),
+  //     );
+  //   },
+  // );
 
   @override
   Widget build(BuildContext context) {
