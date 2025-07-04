@@ -71,17 +71,6 @@ class _HistoryList extends StatelessWidget {
 
   final List<Transaction> transactions;
 
-  /// Shows modal popup for changing transaction.
-  // void _onTap(BuildContext context, Transaction t) => showGeneralDialog(
-  //   context: context,
-  //   barrierDismissible: true,
-  //   pageBuilder: (ctx, animation1, animation2) {
-  //     return Center(
-  //       child: Material(child: Container(height: 100, color: Colors.red)),
-  //     );
-  //   },
-  // );
-
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
