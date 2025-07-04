@@ -23,7 +23,7 @@ class _DateTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultHeaderListTile(
       backgroundColor: backgroundColor,
-      leading: Text(label),
+      leading: Text(label, overflow: TextOverflow.ellipsis),
       trailing: FilledButton(
         style: FilledButton.styleFrom(
           backgroundColor: context.colors.accent,
@@ -31,7 +31,7 @@ class _DateTile extends StatelessWidget {
           elevation: 0,
         ),
         onPressed: onTap,
-        child: Text(_fmt(date)),
+        child: Text(_fmt(date), overflow: TextOverflow.ellipsis),
       ),
     );
   }
@@ -92,11 +92,14 @@ class _CategoryTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(item.category.name),
+                    Text(item.category.name, overflow: TextOverflow.ellipsis),
                     if (item.last.comment != null)
-                      Text(item.last.comment!)
+                      Text(item.last.comment!, overflow: TextOverflow.ellipsis)
                     else
-                      Text(_fmt(item.last.transactionDate)),
+                      Text(
+                        _fmt(item.last.transactionDate),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                   ],
                 ),
               ),

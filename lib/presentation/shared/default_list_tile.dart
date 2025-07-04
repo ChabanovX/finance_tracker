@@ -34,8 +34,12 @@ class DefaultListTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(transaction.category.name),
-                  if (transaction.comment != null) Text(transaction.comment!),
+                  Text(
+                    transaction.category.name,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (transaction.comment != null)
+                    Text(transaction.comment!, overflow: TextOverflow.ellipsis),
                 ],
               ),
             ),

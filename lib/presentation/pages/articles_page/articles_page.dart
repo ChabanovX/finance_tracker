@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yndx_homework/presentation/shared/default_app_bar.dart';
+import 'package:yndx_homework/presentation/theme/app_theme.dart';
 
 import '/presentation/providers.dart';
 
@@ -17,7 +18,7 @@ class ArticlesPage extends ConsumerWidget {
       body: Column(
         children: [
           Container(
-            color: Color(0xFFECE6F0),
+            color: context.colors.secondary,
             height: 56,
             child: Row(
               children: [

@@ -5,29 +5,34 @@ class AppColors {
   const AppColors({
     required this.accent,
     required this.accentLight,
+    required this.secondary,
     required this.inactive,
     required this.white,
   });
 
   final Color accent;
   final Color accentLight;
+  final Color secondary;
   final Color inactive;
   final Color white;
 
   // Static fields for const default theme definitions.
   static const Color kAccent = Color(0xFF2AE881);
   static const Color kAccentLight = Color(0xFFD4FAE6);
+  static const Color kSecondary = Color(0xFFECE6F0);
   static const Color kInactive = Color(0xFF49454F);
   static const Color kWhite = Colors.white;
 
   // Additional colors for dark theme.
   static const Color kAccentDarkmode = Color(0xFF1B5E20);
   static const Color kAccentLightDarkmode = Color.fromARGB(255, 22, 141, 30);
+  static const Color kSecondaryDarkmode = Colors.grey;
   static const Color kInactiveDarkmode = Color(0xFF79747E);
 
   static const light = AppColors(
     accent: AppColors.kAccent,
     accentLight: AppColors.kAccentLight,
+    secondary: AppColors.kSecondary,
     inactive: AppColors.kInactive,
     white: AppColors.kWhite,
   );
@@ -35,6 +40,7 @@ class AppColors {
   static const dark = AppColors(
     accent: AppColors.kAccent,
     accentLight: AppColors.kAccentLightDarkmode,
+    secondary: AppColors.kSecondaryDarkmode,
     inactive: AppColors.kInactiveDarkmode,
     white: AppColors.kWhite,
   );
@@ -42,12 +48,14 @@ class AppColors {
   AppColors copyWith({
     Color? accent,
     Color? accentLight,
+    Color? secondary,
     Color? inactive,
     Color? white,
   }) {
     return AppColors(
       accent: accent ?? this.accent,
       accentLight: accentLight ?? this.accentLight,
+      secondary: secondary ?? this.secondary,
       inactive: inactive ?? this.inactive,
       white: white ?? this.white,
     );
@@ -57,6 +65,7 @@ class AppColors {
     return AppColors(
       accent: Color.lerp(a.accent, b.accent, t)!,
       accentLight: Color.lerp(a.accentLight, b.accentLight, t)!,
+      secondary: Color.lerp(a.secondary, b.secondary, t)!,
       inactive: Color.lerp(a.inactive, b.inactive, t)!,
       white: Color.lerp(a.white, b.white, t)!,
     );
