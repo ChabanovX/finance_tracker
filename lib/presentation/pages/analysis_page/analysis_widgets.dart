@@ -93,13 +93,6 @@ class _CategoryTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(item.category.name, overflow: TextOverflow.ellipsis),
-                    if (item.last.comment != null)
-                      Text(item.last.comment!, overflow: TextOverflow.ellipsis)
-                    else
-                      Text(
-                        _fmt(item.last.transactionDate),
-                        overflow: TextOverflow.ellipsis,
-                      ),
                   ],
                 ),
               ),
