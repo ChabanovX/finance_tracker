@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-/// Domain‑level value object – no dependency leakage.
 class PieChartItem {
   const PieChartItem(this.label, this.value, {required this.color});
 
@@ -12,12 +11,6 @@ class PieChartItem {
   final Color color;
 }
 
-/// Animated donut‑style pie chart.
-///
-/// * Expands to the square height of whatever space its parent gives it.
-/// * Rotates 360° & cross‑fades when its data ([items]) changes.
-/// * Tapping a slice shows a tooltip badge with the value.
-/// * A dot‑and‑label legend sits to **the right** of the chart.
 class AnimatedPieChart extends StatefulWidget {
   const AnimatedPieChart({
     super.key,
@@ -70,7 +63,6 @@ class _AnimatedPieChartState extends State<AnimatedPieChart>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Reserve ~60‑70 % of the width for the chart, the rest for the legend.
         final chartSide = math.min(
           constraints.maxHeight,
           constraints.maxWidth * 0.65,
@@ -85,7 +77,6 @@ class _AnimatedPieChartState extends State<AnimatedPieChart>
             final t = _ctrl.value; // 0 → 1
             final angle = t * 2 * math.pi; // rotation 0° → 360°
 
-            // Choose dataset & opacity phase during cross‑fade.
             final firstHalf = t < 0.5 || _next == null;
             final items = firstHalf ? _current : _next!;
             final opacity =
@@ -128,8 +119,6 @@ class _AnimatedPieChartState extends State<AnimatedPieChart>
                 ),
 
                 const SizedBox(width: 16),
-
-                // ── legend ────────────────────────────────────────────────
                 Flexible(child: _Legend(items: items)),
               ],
             );
@@ -139,7 +128,6 @@ class _AnimatedPieChartState extends State<AnimatedPieChart>
     );
   }
 
-  // ── helper ────────────────────────────────────────────────────────────────
   List<PieChartSectionData> _toSections(
       List<PieChartItem> src, double radius) {
     return src.asMap().entries.map((entry) {
@@ -150,11 +138,9 @@ class _AnimatedPieChartState extends State<AnimatedPieChart>
       return PieChartSectionData(
         value: item.value,
         color: item.color,
-        // We purposely hide labels on the chart surface.
         title: '',
         showTitle: false,
         radius: radius,
-        // Tooltip badge using fl_chart ≥ 1.0 badge API
         badgeWidget: isTouched
             ? Container(
                 padding:
@@ -180,7 +166,6 @@ class _AnimatedPieChartState extends State<AnimatedPieChart>
   }
 }
 
-// ── legend widget ───────────────────────────────────────────────────────────
 class _Legend extends StatelessWidget {
   const _Legend({required this.items});
 
