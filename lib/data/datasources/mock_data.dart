@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:intl/intl.dart';
 import 'package:yndx_homework/domain/models/account.dart';
 import 'package:yndx_homework/domain/models/article.dart';
 import 'package:yndx_homework/domain/models/category.dart';
@@ -6,6 +9,8 @@ import 'package:yndx_homework/domain/models/transaction.dart';
 // ─────────────────────────────────────────────────────────────────────────────
 //  All mock objects start with id = 0 so that ObjectBox assigns real IDs.
 // ─────────────────────────────────────────────────────────────────────────────
+
+final _rnd = Random();
 
 // MOCK INCOME CATEGORIES
 final mockSalaryCategory = Category(
@@ -332,4 +337,29 @@ final List<Transaction> mockTransactions = [
     transactionDate: DateTime.now(),
     comment: 'Gaming subscription',
   ),
+  ...List.generate(180, (i) {
+    // Day 0 = today, Day 29 = 29 days ago (wrap every 30 items)
+    final date = DateTime.now().subtract(Duration(days: i % 30));
+
+    // Roughly every 7-th item is an “income”
+    final isIncome = i % 7 == 0;
+
+    final double amount = isIncome
+        // 15 000 ≤ amount ≤ 105 000
+        ? 15_000 + _rnd.nextDouble() * 90_000
+        // –500 ≥ amount ≥ –15 000
+        : -(500 + _rnd.nextDouble() * 14_500);
+
+    final category = mockCategories[_rnd.nextInt(mockCategories.length)];
+
+    return Transaction(
+      id: 0, // let DB auto-generate real IDs
+      account: mockAccount,
+      category: category,
+      amount: double.parse(amount.toStringAsFixed(2)),
+      transactionDate: date,
+      comment: 'Auto tx #${i + 1}  •  '
+          '${DateFormat('yyyy-MM-dd').format(date)}',
+    );
+  }),
 ];
