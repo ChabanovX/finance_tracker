@@ -323,7 +323,9 @@ class DecimalTextInputFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     // Regex:  optional leading sign, digits, optional (separator + digits)
-    final reg = RegExp('^\\d*(${RegExp.escape(_sep)}\\d*)?\$');
+        final pattern = '^\\-?\\d*(${RegExp.escape(_sep)}\\d*)?\$';
+    final reg = RegExp(pattern);
+
 
     final text = newValue.text;
 
