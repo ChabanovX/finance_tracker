@@ -49,6 +49,20 @@ class _TransactionsList extends StatelessWidget {
                         );
                       },
                     ),
+                onTap:
+                    () => showGeneralDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      barrierLabel: 'Edit Transaction',
+                      pageBuilder: (ctx, an1, an2) {
+                        return _TransactionModal(
+                          // Simply pass it without DI.
+                          isIncome: transaction.category.isIncome,
+                          initial: transaction,
+                          key: Key('_EditTransactionModal'),
+                        );
+                      },
+                    ),
               );
             },
           ),
@@ -313,23 +327,27 @@ class _TransactionModalState extends ConsumerState<_TransactionModal> {
 /// Allows only digits and **one** locale-aware decimal separator.
 class DecimalTextInputFormatter extends TextInputFormatter {
   DecimalTextInputFormatter(Locale locale)
-      : _sep = NumberFormat.decimalPattern(locale.toString())
-            .symbols
-            .DECIMAL_SEP; // "." for en, "," for ru, etc.
+    : _sep =
+          NumberFormat.decimalPattern(
+            locale.toString(),
+          ).symbols.DECIMAL_SEP; // "." for en, "," for ru, etc.
 
   final String _sep;
 
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    // Regex:  optional leading sign, digits, optional (separator + digits)
-    final reg = RegExp('^\\d*(${RegExp.escape(_sep)}\\d*)?\$');
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // Regex: optional leading sign, digits, optional (separator + digits)
+    final pattern = '^\\-?\\d*(${RegExp.escape(_sep)}\\d*)?\$';
+    final reg = RegExp(pattern);
 
     final text = newValue.text;
 
     // Block: anything that…
     final bool isInvalid =
-        !reg.hasMatch(text) ||                       // …doesn’t match pattern
+        !reg.hasMatch(text) || // …doesn’t match pattern
         text.indexOf(_sep) != text.lastIndexOf(_sep); // …contains >1 separator
 
     return isInvalid ? oldValue : newValue;
