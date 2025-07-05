@@ -1,0 +1,22 @@
+name: animated_pie_chart
+description: "Animated pie chart widget."
+version: 0.0.1
+publish_to: 'none'
+homepage: null
+
+environment:
+  sdk: ^3.8.1
+  flutter: ">=1.17.0"
+
+dependencies:
+  fl_chart: ^1.0.0
+  flutter:
+    sdk: flutter
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter: null

@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:animated_pie_chart/animated_pie_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yndx_homework/domain/models/category.dart';
@@ -50,7 +53,10 @@ class AnalysisPage extends ConsumerWidget {
           Divider(height: 1),
           SizedBox(
             height: 200,
-            child: Padding(padding: EdgeInsets.all(24), child: Placeholder()),
+            child: Padding(
+              padding: EdgeInsets.all(24),
+              child: _AnalysisChart(key: Key('_AnalysisChart'),),
+            ),
           ),
           Divider(height: 1),
           // And build listView of those
