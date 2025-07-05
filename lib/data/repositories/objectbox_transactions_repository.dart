@@ -67,11 +67,8 @@ class TransactionsObjectBoxRepository implements ITransactionsRepository {
 
   @override
   Future<void> addTransaction(Transaction transaction) async {
-    final acc = _ob.accountBox.get(transaction.account.id);
-    final cat = _ob.categoryBox.get(transaction.category.id);
-    if (acc == null || cat == null) {
-      throw StateError('Parent row missing when adding transaction');
-    }
+    final acc = transaction.account.toEntity();
+    final cat = transaction.category.toEntity();
 
     _ob.transactionBox.put(transaction.toEntity(acc, cat));
   }
