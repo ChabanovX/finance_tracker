@@ -49,6 +49,20 @@ class _TransactionsList extends StatelessWidget {
                         );
                       },
                     ),
+                onTap:
+                    () => showGeneralDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      barrierLabel: 'Edit Transaction',
+                      pageBuilder: (ctx, an1, an2) {
+                        return _TransactionModal(
+                          // Simply pass it without DI.
+                          isIncome: transaction.category.isIncome,
+                          initial: transaction,
+                          key: Key('_EditTransactionModal'),
+                        );
+                      },
+                    ),
               );
             },
           ),
