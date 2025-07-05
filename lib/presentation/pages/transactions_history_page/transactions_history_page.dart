@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '/domain/models/transaction.dart';
 import '/presentation/providers.dart';
@@ -92,44 +93,6 @@ class TransactionsHistoryPage extends ConsumerWidget {
     if (picked != null) {
       updateEndDate(ref, picked);
     }
-  }
-
-  Future<void> _pickRange(
-    BuildContext context,
-    WidgetRef ref,
-    DateTime start,
-    DateTime end,
-  ) async {
-    final picked = await _showRangePicker(context, start, end);
-    if (picked != null) {
-      updateRange(ref, picked.start, picked.end);
-    }
-  }
-
-  Future<DateTimeRange?> _showRangePicker(
-    BuildContext context,
-    DateTime start,
-    DateTime end,
-  ) {
-    final now = DateTime.now();
-    return showDateRangePicker(
-      context: context,
-      initialDateRange: DateTimeRange(start: start, end: end),
-      firstDate: DateTime(now.year - 3),
-      lastDate: DateTime(now.year + 3),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: context.colors.accent,
-              onPrimary: context.colors.white,
-              onSurface: Colors.black,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
   }
 
   Future<DateTime?> _showPicker(BuildContext context, DateTime initial) {

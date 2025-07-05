@@ -67,11 +67,8 @@ class TransactionsObjectBoxRepository implements ITransactionsRepository {
 
   @override
   Future<void> addTransaction(Transaction transaction) async {
-    final acc = _ob.accountBox.get(transaction.account.id);
-    final cat = _ob.categoryBox.get(transaction.category.id);
-    if (acc == null || cat == null) {
-      throw StateError('Parent row missing when adding transaction');
-    }
+    final acc = transaction.account.toEntity();
+    final cat = transaction.category.toEntity();
 
     _ob.transactionBox.put(transaction.toEntity(acc, cat));
   }
@@ -81,13 +78,23 @@ class TransactionsObjectBoxRepository implements ITransactionsRepository {
     final existing = _ob.transactionBox.get(transaction.id);
     if (existing == null) return; // might throw in future
 
+    final acc = _ob.accountBox.get(transaction.account.id);
+    final cat = _ob.categoryBox.get(transaction.category.id);
+
+    if (acc == null || cat == null) {
+      throw StateError('Parent row is missing in $runtimeType');
+    }
+
     existing
       ..amount = transaction.amount
       ..transactionDate = transaction.transactionDate
-      ..comment = transaction.comment;
+      ..comment = transaction.comment
+      ..account.target = acc
+      ..category.target = cat;
 
     _ob.transactionBox.put(existing);
   }
+
 
   @override
   Future<void> deleteTransaction(int transactionId) async {

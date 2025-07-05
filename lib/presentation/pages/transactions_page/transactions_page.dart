@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:yndx_homework/core/log.dart';
+import 'package:yndx_homework/domain/models/account.dart';
+import 'package:yndx_homework/domain/models/category.dart';
 
 import '/domain/models/transaction.dart';
 import '/presentation/providers.dart';
@@ -24,6 +28,24 @@ class TransactionsPage extends ConsumerWidget {
 
   /// Navigator 2.0 [Router]'s callback to show history.
   final VoidCallback onShowHistory;
+
+  Future<void> showTransactionModal(
+    BuildContext context, {
+    Transaction? initial,
+    required bool isIncomePage,
+  }) {
+    return showGeneralDialog(
+      barrierDismissible: true,
+      barrierLabel: 'Transaction Modal',
+      context: context,
+      pageBuilder:
+          (ctx, __, ___) => _TransactionModal(
+            key: const ValueKey('_TransactionModal'),
+            initial: initial,
+            isIncome: isIncomePage,
+          ),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,7 +77,7 @@ class TransactionsPage extends ConsumerWidget {
           color: context.colors.white,
           size: 15.56 * 2,
         ),
-        onPressed: () {},
+        onPressed: () => showTransactionModal(context, isIncomePage: isIncome),
       ),
     );
   }
