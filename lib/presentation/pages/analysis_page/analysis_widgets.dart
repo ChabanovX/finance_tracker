@@ -149,3 +149,29 @@ class _CategoryTransactionsPage extends StatelessWidget {
     );
   }
 }
+
+class _AnalysisChart extends ConsumerWidget {
+  const _AnalysisChart({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final groups = ref.watch(transactionsByCategoryProvider).entries.toList();
+
+    final items = <PieChartItem>[];
+    for (var i = 0; i < groups.length; i++) {
+      final entry = groups[i];
+      final total = entry.value.fold<double>(0, (s, t) => s + t.amount);
+
+      items.add(
+        PieChartItem(
+          entry.key.name,
+          total,
+          color: Colors.primaries[i % Colors.primaries.length],
+        ),
+      );
+    }
+
+    return Center(child: AnimatedPieChart(items: items));
+  }
+}
+
