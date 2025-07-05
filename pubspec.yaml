@@ -9,6 +9,7 @@ environment:
 dependencies:
   animated_pie_chart:
     path: packages/animated_pie_chart
+  fl_chart: ^1.0.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.6.1
