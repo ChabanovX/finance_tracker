@@ -1,4 +1,4 @@
-import 'package:yndx_homework/core/log.dart';
+import 'package:yndx_homework/util/log.dart';
 
 import '/data/datasources/local/mappers.dart';
 import '/data/datasources/local/objectbox.dart';
