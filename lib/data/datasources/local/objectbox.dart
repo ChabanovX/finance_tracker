@@ -1,5 +1,6 @@
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:yndx_homework/data/datasources/remote/mappers.dart';
 import 'package:yndx_homework/domain/models/category.dart';
 import 'objectbox.g.dart';
 
@@ -40,9 +41,12 @@ class ObjectBox {
 
   /// Populate mock data into database.
   static void _seed(ObjectBox ob) {
+    // TODO: add domain there.
+    final domains = mockCategories.map((e) => (e.toDomain())).toList();
+
     ob.store.runInTransaction(TxMode.write, () {
       // Parents first
-      final catEntities = mockCategories.map((c) => c.toEntity()).toList();
+      final catEntities = domains.map((c) => c.toEntity()).toList();
       ob.categoryBox.putMany(catEntities);
 
       final accEntiity = mockAccount.toEntity();
@@ -51,7 +55,7 @@ class ObjectBox {
       // Build Category -> Entity map by IDENTITY.
       final catMap = <Category, CategoryEntity>{};
       for (var i = 0; i < mockCategories.length; i++) {
-        catMap[mockCategories[i]] = catEntities[i];
+        catMap[domains[i]] = catEntities[i];
       }
 
       // Then children

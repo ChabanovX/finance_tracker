@@ -47,14 +47,6 @@ class BalancePage extends ConsumerWidget {
           const Expanded(child: _BalanceChart()),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.add_rounded,
-          color: context.colors.white,
-          size: 15.56 * 2,
-        ),
-        onPressed: () {},
-      ),
     );
   }
 
