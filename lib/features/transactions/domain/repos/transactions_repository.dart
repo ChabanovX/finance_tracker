@@ -8,6 +8,7 @@ abstract interface class ITransactionsRepository {
   Future<List<Transaction>> getTransactionsForPeriod(
     DateTime start,
     DateTime end,
+    int accountId,
   );
 
   /// Adds a new transaction.

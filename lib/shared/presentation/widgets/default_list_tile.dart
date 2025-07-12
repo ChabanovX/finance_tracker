@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yndx_homework/features/transactions/domain/models/transaction.dart';
-import 'package:yndx_homework/util/theme/app_theme.dart';
+import 'package:yndx_homework/core/theme/app_theme.dart';
 
 
 class DefaultListTile extends StatelessWidget {

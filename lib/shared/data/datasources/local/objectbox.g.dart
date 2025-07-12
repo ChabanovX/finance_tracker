@@ -17,6 +17,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 import '../../../../features/account/data/models/local/account_entity.dart';
 import '../../../../features/transactions/data/models/local/category_entity.dart';
 import '../../../../features/transactions/data/models/local/transaction_entity.dart';
+import '../../../../shared/data/datasources/local/sync_metadata_entity.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -139,6 +140,35 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(4, 4345505401020882309),
+    name: 'SyncMetadataEntity',
+    lastPropertyId: const obx_int.IdUid(3, 3844165702076429480),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 2045375035835550368),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 1163314820196992394),
+        name: 'key',
+        type: 9,
+        flags: 2080,
+        indexId: const obx_int.IdUid(3, 7979456958841227592),
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 3844165702076429480),
+        name: 'value',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -179,8 +209,8 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(3, 6589889748139525854),
-    lastIndexId: const obx_int.IdUid(2, 7218867096032702561),
+    lastEntityId: const obx_int.IdUid(4, 4345505401020882309),
+    lastIndexId: const obx_int.IdUid(3, 7979456958841227592),
     lastRelationId: const obx_int.IdUid(0, 0),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
@@ -335,6 +365,40 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    SyncMetadataEntity: obx_int.EntityDefinition<SyncMetadataEntity>(
+      model: _entities[3],
+      toOneRelations: (SyncMetadataEntity object) => [],
+      toManyRelations: (SyncMetadataEntity object) => {},
+      getId: (SyncMetadataEntity object) => object.id,
+      setId: (SyncMetadataEntity object, int id) {
+        object.id = id;
+      },
+      objectToFB: (SyncMetadataEntity object, fb.Builder fbb) {
+        final keyOffset = fbb.writeString(object.key);
+        final valueOffset = fbb.writeString(object.value);
+        fbb.startTable(4);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, keyOffset);
+        fbb.addOffset(2, valueOffset);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+
+        final object = SyncMetadataEntity()
+          ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+          ..key = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 6, '')
+          ..value = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 8, '');
+
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -418,5 +482,23 @@ class TransactionEntity_ {
   /// See [TransactionEntity.comment].
   static final comment = obx.QueryStringProperty<TransactionEntity>(
     _entities[2].properties[5],
+  );
+}
+
+/// [SyncMetadataEntity] entity fields to define ObjectBox queries.
+class SyncMetadataEntity_ {
+  /// See [SyncMetadataEntity.id].
+  static final id = obx.QueryIntegerProperty<SyncMetadataEntity>(
+    _entities[3].properties[0],
+  );
+
+  /// See [SyncMetadataEntity.key].
+  static final key = obx.QueryStringProperty<SyncMetadataEntity>(
+    _entities[3].properties[1],
+  );
+
+  /// See [SyncMetadataEntity.value].
+  static final value = obx.QueryStringProperty<SyncMetadataEntity>(
+    _entities[3].properties[2],
   );
 }

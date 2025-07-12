@@ -1,3 +1,6 @@
+import 'package:yndx_homework/features/account/data/models/local/account_entity.dart';
+import 'package:yndx_homework/features/transactions/data/models/local/category_entity.dart';
+import 'package:yndx_homework/features/transactions/domain/repos/transactions_local_datasource.dart';
 import 'package:yndx_homework/util/log.dart';
 
 import '../../../../shared/data/datasources/local/mappers.dart';
@@ -5,12 +8,11 @@ import '../../../../shared/data/datasources/local/objectbox.dart';
 import '../../../../shared/data/datasources/local/objectbox.g.dart';
 import '../models/local/transaction_entity.dart';
 import '../../domain/models/transaction.dart';
-import '../../domain/repos/transactions_repository.dart';
 
-class TransactionsObjectBoxRepository implements ITransactionsRepository {
+class TransactionsLocalDatasource implements ITransactionsLocalDataSource {
   final ObjectBox _ob;
 
-  TransactionsObjectBoxRepository(this._ob);
+  TransactionsLocalDatasource(this._ob);
 
   /// Crushes if something goes wrong.
   Transaction _map(TransactionEntity entity) {
@@ -95,9 +97,43 @@ class TransactionsObjectBoxRepository implements ITransactionsRepository {
     _ob.transactionBox.put(existing);
   }
 
-
   @override
   Future<void> deleteTransaction(int transactionId) async {
     _ob.transactionBox.remove(transactionId);
+  }
+
+  @override
+  Future<void> clearTransactions() async {
+    _ob.transactionBox.removeAll();
+  }
+
+  @override
+  Future<void> saveTransactions(List<Transaction> transactions) async {
+    _ob.store.runInTransaction(TxMode.write, () {
+      final accountCache = <int, AccountEntity>{};
+      final categoryCache = <int, CategoryEntity>{};
+
+      final entities = <TransactionEntity>[];
+
+      for (final t in transactions) {
+        final accId = t.account.id;
+        final accEntity = accountCache.putIfAbsent(
+          accId,
+          () => t.account.toEntity(),
+        );
+        _ob.accountBox.put(accEntity);
+
+        final catId = t.category.id;
+        final catEntity = categoryCache.putIfAbsent(
+          catId,
+          () => t.category.toEntity(),
+        );
+        _ob.categoryBox.put(catEntity);
+
+        entities.add(t.toEntity(accEntity, catEntity));
+      }
+
+      _ob.transactionBox.putMany(entities);
+    });
   }
 }

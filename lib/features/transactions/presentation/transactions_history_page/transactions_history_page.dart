@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:yndx_homework/features/transactions/presentation/transactions_page/transactions_page.dart';
 import 'package:yndx_homework/features/transactions/providers.dart';
 
 import '../../domain/models/transaction.dart';
 import '../../../../shared/presentation/widgets/default_list_tile.dart';
-import '../../../../util/theme/app_theme.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/presentation/widgets/default_app_bar.dart';
 import '../../../../shared/presentation/widgets/default_header_list_tile.dart';
 

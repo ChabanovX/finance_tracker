@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:yndx_homework/util/theme/app_theme.dart';
+import 'package:yndx_homework/core/theme/app_theme.dart';
 
 class DefaultHeaderListTile extends StatelessWidget {
   const DefaultHeaderListTile({

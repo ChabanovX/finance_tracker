@@ -7,3 +7,16 @@ abstract interface class IAccountRepository {
   /// Updates the user's account
   Future<void> updateAccount(Account account);
 }
+
+abstract interface class IAccountRemoteDataSource {
+  Future<Account> getAccount();
+  Future<Account> updateAccount(Account account);
+}
+
+abstract interface class IAccountLocalDataSource {
+  Future<Account?> getAccount();
+  Future<void> saveAccount(Account account);
+  Future<void> updateAccount(Account account);
+  Future<DateTime?> getLastSyncTime();
+  Future<void> setLastSyncTime(DateTime time);
+}

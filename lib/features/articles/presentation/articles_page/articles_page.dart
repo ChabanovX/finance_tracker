@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yndx_homework/features/articles/providers.dart';
 import 'package:yndx_homework/shared/presentation/widgets/default_app_bar.dart';
-import 'package:yndx_homework/util/theme/app_theme.dart';
+import 'package:yndx_homework/core/theme/app_theme.dart';
 
 
 part 'articles_widgets.dart';

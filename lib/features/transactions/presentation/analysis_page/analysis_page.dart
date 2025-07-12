@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 import 'package:yndx_homework/features/transactions/domain/models/category.dart';
+import 'package:yndx_homework/features/transactions/presentation/transactions_page/transactions_page.dart';
 import 'package:yndx_homework/features/transactions/providers.dart';
 import 'package:yndx_homework/shared/presentation/widgets/default_list_tile.dart';
-import 'package:yndx_homework/util/theme/app_theme.dart';
+import 'package:yndx_homework/core/theme/app_theme.dart';
 
 import '../../domain/models/transaction.dart';
 import '../../../../shared/presentation/widgets/default_app_bar.dart';

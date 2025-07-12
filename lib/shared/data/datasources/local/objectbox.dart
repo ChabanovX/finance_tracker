@@ -1,5 +1,6 @@
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:yndx_homework/shared/data/datasources/local/sync_metadata_entity.dart';
 import 'package:yndx_homework/shared/data/datasources/remote/mappers.dart';
 import 'package:yndx_homework/features/transactions/domain/models/category.dart';
 import 'objectbox.g.dart';
@@ -16,11 +17,13 @@ class ObjectBox {
   late final Box<AccountEntity> accountBox;
   late final Box<CategoryEntity> categoryBox;
   late final Box<TransactionEntity> transactionBox;
+  late final Box<SyncMetadataEntity> syncMetadataBox;
 
   ObjectBox._create(this.store) {
     accountBox = store.box<AccountEntity>();
     categoryBox = store.box<CategoryEntity>();
     transactionBox = store.box<TransactionEntity>();
+    syncMetadataBox = store.box<SyncMetadataEntity>(); // Add this
   }
 
   /// Opens the store and loads initial data if boxes are empty.
@@ -33,7 +36,6 @@ class ObjectBox {
 
     final ob = ObjectBox._create(store);
 
-    // Prepopulate with mock data if boxes are empty.
     if (ob.categoryBox.isEmpty()) _seed(ob);
 
     return ob;
@@ -49,8 +51,8 @@ class ObjectBox {
       final catEntities = domains.map((c) => c.toEntity()).toList();
       ob.categoryBox.putMany(catEntities);
 
-      final accEntiity = mockAccount.toEntity();
-      ob.accountBox.put(accEntiity);
+      final accEntity = mockAccount.toEntity();
+      ob.accountBox.put(accEntity);
 
       // Build Category -> Entity map by IDENTITY.
       final catMap = <Category, CategoryEntity>{};
@@ -63,7 +65,7 @@ class ObjectBox {
           mockTransactions.map((t) {
             // Not by id, but by identity. (ids invalid at this point)
             final cat = catMap[t.category]!;
-            return t.toEntity(accEntiity, cat);
+            return t.toEntity(accEntity, cat);
           }).toList();
       ob.transactionBox.putMany(txEntities);
     });
