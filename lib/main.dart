@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yndx_homework/shared/providers/objectbox_provider.dart';
 
 import 'util/log.dart';
-import '/data/datasources/local/objectbox.dart';
-import '/presentation/providers.dart';
-import '/presentation/app.dart' show MainApp;
+import 'shared/data/datasources/local/objectbox.dart';
+import 'app.dart' show MainApp;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +14,7 @@ Future<void> main() async {
 
   runApp(
     ProviderScope(
-      overrides: [objectBoxProvider.overrideWithValue(objectBox)],
+      overrides: [objectboxProvider.overrideWithValue(objectBox)],
       child: MainApp(),
     ),
   );

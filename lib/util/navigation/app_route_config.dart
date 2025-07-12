@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:yndx_homework/presentation/pages/analysis_page/analysis_page.dart';
-import 'package:yndx_homework/presentation/pages/articles_page/articles_page.dart';
-import 'package:yndx_homework/presentation/pages/balance_page/balance_page.dart';
+import 'package:yndx_homework/features/transactions/presentation/analysis_page/analysis_page.dart';
+import 'package:yndx_homework/features/articles/presentation/articles_page/articles_page.dart';
+import 'package:yndx_homework/features/balance/presentation/balance_page/balance_page.dart';
+import 'package:yndx_homework/features/transactions/providers.dart';
 
-import '/presentation/pages/transactions_history_page/transactions_history_page.dart';
-import '/presentation/pages/transactions_page/transactions_page.dart';
-import '/presentation/theme/app_theme.dart';
-import '/presentation/providers.dart' show isIncomeProvider;
+import '../../features/transactions/presentation/transactions_history_page/transactions_history_page.dart';
+import '../../features/transactions/presentation/transactions_page/transactions_page.dart';
+import '../theme/app_theme.dart';
+import '../../providers.dart' show isIncomeProvider;
 
 /// Shortcut for [NavigationDestination].
 class _NavigationItem {

@@ -42,7 +42,7 @@ dev_dependencies:
   objectbox_generator: any
 
 objectbox:
-  output_dir: data/datasources/local
+  output_dir: shared/data/datasources/local
 
 # —— Launcher icon ——————————————————————————
 flutter_launcher_icons:
