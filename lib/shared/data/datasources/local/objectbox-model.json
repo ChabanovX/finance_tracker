@@ -105,10 +105,36 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "4:4345505401020882309",
+      "lastPropertyId": "3:3844165702076429480",
+      "name": "SyncMetadataEntity",
+      "properties": [
+        {
+          "id": "1:2045375035835550368",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1163314820196992394",
+          "name": "key",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "3:7979456958841227592"
+        },
+        {
+          "id": "3:3844165702076429480",
+          "name": "value",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "3:6589889748139525854",
-  "lastIndexId": "2:7218867096032702561",
+  "lastEntityId": "4:4345505401020882309",
+  "lastIndexId": "3:7979456958841227592",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

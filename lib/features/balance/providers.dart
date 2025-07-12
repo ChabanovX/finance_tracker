@@ -108,6 +108,7 @@ class ChartModeState extends _$ChartModeState {
 @riverpod
 Future<List<Transaction>> chartTransactions(Ref ref) async {
   final repo = ref.watch(transactionsRepositoryProvider);
+  final accountId = (await ref.watch(accountProvider.future)).id;
 
   final now = DateTime.now();
   final start = DateTime(now.year, now.month - 5, 1);
@@ -119,7 +120,7 @@ Future<List<Transaction>> chartTransactions(Ref ref) async {
     now.day + 1,
   ).subtract(const Duration(microseconds: 1));
 
-  return repo.getTransactionsForPeriod(startDay, endDay);
+  return repo.getTransactionsForPeriod(startDay, endDay, accountId);
 }
 
 @riverpod

@@ -54,6 +54,106 @@ final class ArticlesRepositoryProvider
 String _$articlesRepositoryHash() =>
     r'0a4ffcff32e7041669e08b291376f490ca65386f';
 
+@ProviderFor(transactionsLocalDatasource)
+const transactionsLocalDatasourceProvider =
+    TransactionsLocalDatasourceProvider._();
+
+final class TransactionsLocalDatasourceProvider
+    extends
+        $FunctionalProvider<
+          ITransactionsLocalDataSource,
+          ITransactionsLocalDataSource,
+          ITransactionsLocalDataSource
+        >
+    with $Provider<ITransactionsLocalDataSource> {
+  const TransactionsLocalDatasourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'transactionsLocalDatasourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$transactionsLocalDatasourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<ITransactionsLocalDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ITransactionsLocalDataSource create(Ref ref) {
+    return transactionsLocalDatasource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ITransactionsLocalDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ITransactionsLocalDataSource>(value),
+    );
+  }
+}
+
+String _$transactionsLocalDatasourceHash() =>
+    r'9d05c2380f9b344548c92a9185a6b4af12e03cdc';
+
+@ProviderFor(transactionsRemoteDatasource)
+const transactionsRemoteDatasourceProvider =
+    TransactionsRemoteDatasourceProvider._();
+
+final class TransactionsRemoteDatasourceProvider
+    extends
+        $FunctionalProvider<
+          ITransactionsRemoteDataSource,
+          ITransactionsRemoteDataSource,
+          ITransactionsRemoteDataSource
+        >
+    with $Provider<ITransactionsRemoteDataSource> {
+  const TransactionsRemoteDatasourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'transactionsRemoteDatasourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$transactionsRemoteDatasourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<ITransactionsRemoteDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ITransactionsRemoteDataSource create(Ref ref) {
+    return transactionsRemoteDatasource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ITransactionsRemoteDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ITransactionsRemoteDataSource>(
+        value,
+      ),
+    );
+  }
+}
+
+String _$transactionsRemoteDatasourceHash() =>
+    r'c71d30475a929b1d85c290e269b43a98f40c8e82';
+
 @ProviderFor(transactionsRepository)
 const transactionsRepositoryProvider = TransactionsRepositoryProvider._();
 
@@ -100,7 +200,103 @@ final class TransactionsRepositoryProvider
 }
 
 String _$transactionsRepositoryHash() =>
-    r'54850d2f75813796f6d8690e4bb83ab16704ffc4';
+    r'dff8ac854ca16267aee6ddc4dc5d8460fd25d661';
+
+@ProviderFor(accountLocalDatasource)
+const accountLocalDatasourceProvider = AccountLocalDatasourceProvider._();
+
+final class AccountLocalDatasourceProvider
+    extends
+        $FunctionalProvider<
+          IAccountLocalDataSource,
+          IAccountLocalDataSource,
+          IAccountLocalDataSource
+        >
+    with $Provider<IAccountLocalDataSource> {
+  const AccountLocalDatasourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'accountLocalDatasourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$accountLocalDatasourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<IAccountLocalDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  IAccountLocalDataSource create(Ref ref) {
+    return accountLocalDatasource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(IAccountLocalDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<IAccountLocalDataSource>(value),
+    );
+  }
+}
+
+String _$accountLocalDatasourceHash() =>
+    r'ede236da652fcc2b4166840ac7060299d5195dde';
+
+@ProviderFor(accountRemoteDatasource)
+const accountRemoteDatasourceProvider = AccountRemoteDatasourceProvider._();
+
+final class AccountRemoteDatasourceProvider
+    extends
+        $FunctionalProvider<
+          IAccountRemoteDataSource,
+          IAccountRemoteDataSource,
+          IAccountRemoteDataSource
+        >
+    with $Provider<IAccountRemoteDataSource> {
+  const AccountRemoteDatasourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'accountRemoteDatasourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$accountRemoteDatasourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<IAccountRemoteDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  IAccountRemoteDataSource create(Ref ref) {
+    return accountRemoteDatasource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(IAccountRemoteDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<IAccountRemoteDataSource>(value),
+    );
+  }
+}
+
+String _$accountRemoteDatasourceHash() =>
+    r'e29753f274099329670a1b8f30adaf96208a23e3';
 
 @ProviderFor(accountRepository)
 const accountRepositoryProvider = AccountRepositoryProvider._();
@@ -147,7 +343,104 @@ final class AccountRepositoryProvider
   }
 }
 
-String _$accountRepositoryHash() => r'8ec12ebe966844b2e5977863aaf097b78c46263c';
+String _$accountRepositoryHash() => r'a5bf531c9299963000f552c3454913f436108c69';
+
+@ProviderFor(categoriesLocalDatasource)
+const categoriesLocalDatasourceProvider = CategoriesLocalDatasourceProvider._();
+
+final class CategoriesLocalDatasourceProvider
+    extends
+        $FunctionalProvider<
+          ICategoriesLocalDataSource,
+          ICategoriesLocalDataSource,
+          ICategoriesLocalDataSource
+        >
+    with $Provider<ICategoriesLocalDataSource> {
+  const CategoriesLocalDatasourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'categoriesLocalDatasourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$categoriesLocalDatasourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<ICategoriesLocalDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ICategoriesLocalDataSource create(Ref ref) {
+    return categoriesLocalDatasource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ICategoriesLocalDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ICategoriesLocalDataSource>(value),
+    );
+  }
+}
+
+String _$categoriesLocalDatasourceHash() =>
+    r'b72c62f8c7ad8994afe36cc5d5771acfc180ef3f';
+
+@ProviderFor(categoriesRemoteDatasource)
+const categoriesRemoteDatasourceProvider =
+    CategoriesRemoteDatasourceProvider._();
+
+final class CategoriesRemoteDatasourceProvider
+    extends
+        $FunctionalProvider<
+          ICategoriesRemoteDataSource,
+          ICategoriesRemoteDataSource,
+          ICategoriesRemoteDataSource
+        >
+    with $Provider<ICategoriesRemoteDataSource> {
+  const CategoriesRemoteDatasourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'categoriesRemoteDatasourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$categoriesRemoteDatasourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<ICategoriesRemoteDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ICategoriesRemoteDataSource create(Ref ref) {
+    return categoriesRemoteDatasource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ICategoriesRemoteDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ICategoriesRemoteDataSource>(value),
+    );
+  }
+}
+
+String _$categoriesRemoteDatasourceHash() =>
+    r'a69dbf736903960f31737febea9d373bc696d475';
 
 @ProviderFor(categoriesRepository)
 const categoriesRepositoryProvider = CategoriesRepositoryProvider._();
@@ -195,7 +488,7 @@ final class CategoriesRepositoryProvider
 }
 
 String _$categoriesRepositoryHash() =>
-    r'a44fd5c9795f79f45a84c17335053911cc231175';
+    r'45affa7d1c8b4aef190ee02ffdcce4bb2be1d56e';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

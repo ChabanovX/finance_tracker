@@ -143,7 +143,24 @@ class _CategoryTransactionsPage extends StatelessWidget {
         separatorBuilder: (_, __) => const Divider(height: 1),
         itemBuilder: (ctx, index) {
           final t = transactions[index];
-          return DefaultListTile(transaction: t, isFirstInList: index == 0);
+          return DefaultListTile(
+            transaction: t,
+            isFirstInList: index == 0,
+            onTap:
+                () => showGeneralDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  barrierLabel: 'Edit Transaction',
+                  pageBuilder: (ctx, an1, an2) {
+                    return TransactionModal(
+                      // Simply pass it without DI.
+                      isIncome: t.category.isIncome,
+                      initial: t,
+                      key: Key('_EditTransactionModal'),
+                    );
+                  },
+                ),
+          );
         },
       ),
     );
@@ -175,4 +192,3 @@ class _AnalysisChart extends ConsumerWidget {
     return Center(child: AnimatedPieChart(items: items));
   }
 }
-

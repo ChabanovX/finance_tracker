@@ -186,7 +186,7 @@ final class ChartTransactionsProvider
   }
 }
 
-String _$chartTransactionsHash() => r'18c15b85878c6801f6c730693ee48f64ffe130ff';
+String _$chartTransactionsHash() => r'39693929673a18328bc0f2a7978c3fca2c0ab2ed';
 
 @ProviderFor(dailyHistory)
 const dailyHistoryProvider = DailyHistoryProvider._();

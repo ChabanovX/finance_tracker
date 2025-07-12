@@ -5,11 +5,11 @@ import 'package:yndx_homework/features/transactions/presentation/analysis_page/a
 import 'package:yndx_homework/features/articles/presentation/articles_page/articles_page.dart';
 import 'package:yndx_homework/features/balance/presentation/balance_page/balance_page.dart';
 import 'package:yndx_homework/features/transactions/providers.dart';
+import 'package:yndx_homework/shared/providers/network_provider.dart';
 
 import '../../features/transactions/presentation/transactions_history_page/transactions_history_page.dart';
 import '../../features/transactions/presentation/transactions_page/transactions_page.dart';
 import '../theme/app_theme.dart';
-import '../../providers.dart' show isIncomeProvider;
 
 /// Shortcut for [NavigationDestination].
 class _NavigationItem {
@@ -64,31 +64,25 @@ class AppRouterDelegate extends RouterDelegate<int>
       overrides: [isIncomeProvider.overrideWithValue(false)],
       child: Navigator(
         key: key,
-        onGenerateRoute:
-            (_) => MaterialPageRoute(
-              builder:
-                  (_) => TransactionsPage(
-                    isIncome: false,
-                    onShowHistory:
-                        () => key.currentState?.push(
-                          MaterialPageRoute(
-                            builder:
-                                (_) => TransactionsHistoryPage(
-                                  isIncome: false,
-                                  onShowAnalysis:
-                                      () => key.currentState?.push(
-                                        MaterialPageRoute(
-                                          builder:
-                                              (_) => const AnalysisPage(
-                                                isIncome: false,
-                                              ),
-                                        ),
-                                      ),
-                                ),
-                          ),
-                        ),
+        onGenerateRoute: (_) => MaterialPageRoute(
+          builder: (_) => TransactionsPage(
+            isIncome: false,
+            onShowHistory: () => key.currentState?.push(
+              MaterialPageRoute(
+                builder: (_) => TransactionsHistoryPage(
+                  isIncome: false,
+                  onShowAnalysis: () => key.currentState?.push(
+                    MaterialPageRoute(
+                      builder: (_) => const AnalysisPage(
+                        isIncome: false,
+                      ),
+                    ),
                   ),
+                ),
+              ),
             ),
+          ),
+        ),
       ),
     );
   }
@@ -99,30 +93,25 @@ class AppRouterDelegate extends RouterDelegate<int>
       overrides: [isIncomeProvider.overrideWithValue(true)],
       child: Navigator(
         key: key,
-        onGenerateRoute:
-            (_) => MaterialPageRoute(
-              builder:
-                  (_) => TransactionsPage(
-                    isIncome: true,
-                    onShowHistory:
-                        () => key.currentState?.push(
-                          MaterialPageRoute(
-                            builder:
-                                (_) => TransactionsHistoryPage(
-                                  isIncome: true,
-                                  onShowAnalysis: () => key.currentState?.push(
-                                        MaterialPageRoute(
-                                          builder:
-                                              (_) => const AnalysisPage(
-                                                isIncome: true,
-                                              ),
-                                        ),
-                                      ),
-                                ),
-                          ),
-                        ),
+        onGenerateRoute: (_) => MaterialPageRoute(
+          builder: (_) => TransactionsPage(
+            isIncome: true,
+            onShowHistory: () => key.currentState?.push(
+              MaterialPageRoute(
+                builder: (_) => TransactionsHistoryPage(
+                  isIncome: true,
+                  onShowAnalysis: () => key.currentState?.push(
+                    MaterialPageRoute(
+                      builder: (_) => const AnalysisPage(
+                        isIncome: true,
+                      ),
+                    ),
                   ),
+                ),
+              ),
             ),
+          ),
+        ),
       ),
     );
   }
@@ -155,13 +144,12 @@ class AppRouterDelegate extends RouterDelegate<int>
             item.iconAsset,
             width: 24,
             height: 24,
-            colorFilter:
-                _selectedIndex == index
-                    ? null
-                    : ColorFilter.mode(
-                      context.colors.inactive,
-                      BlendMode.srcIn,
-                    ),
+            colorFilter: _selectedIndex == index
+                ? null
+                : ColorFilter.mode(
+                    context.colors.inactive,
+                    BlendMode.srcIn,
+                  ),
           ),
         );
       }),
@@ -184,13 +172,110 @@ class AppRouterDelegate extends RouterDelegate<int>
           key: ValueKey('root_scaffold'),
           child: SafeArea(
             top: false,
-            child: Scaffold(
-              body: IndexedStack(index: _selectedIndex, children: _tabs),
-              bottomNavigationBar: _buildNavigationBar(context),
+            child: _ScaffoldWithOfflineBanner(
+              selectedIndex: _selectedIndex,
+              tabs: _tabs,
+              navigationBar: _buildNavigationBar(context),
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+// Separate widget for cleaner structure
+class _ScaffoldWithOfflineBanner extends ConsumerWidget {
+  final int selectedIndex;
+  final List<Widget> tabs;
+  final Widget navigationBar;
+
+  const _ScaffoldWithOfflineBanner({
+    required this.selectedIndex,
+    required this.tabs,
+    required this.navigationBar,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final networkState = ref.watch(networkStateProvider);
+
+    return Scaffold(
+      body: Column(
+        children: [
+          // Offline banner
+          networkState.when(
+            data: (isConnected) {
+              if (!isConnected) {
+                return _buildOfflineBanner();
+              }
+              return const SizedBox.shrink();
+            },
+            loading: () => const SizedBox.shrink(),
+            error: (e, __) => _buildErrorBanner(e.toString()),
+          ),
+          // Main content
+          Expanded(
+            child: IndexedStack(
+              index: selectedIndex,
+              children: tabs,
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: navigationBar,
+    );
+  }
+
+  Widget _buildOfflineBanner() {
+    return Container(
+      width: double.infinity,
+      color: Colors.red,
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.wifi_off,
+            color: Colors.white,
+            size: 16,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            'Режим офлайн',
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorBanner(String errMessage) {
+    return Container(
+      width: double.infinity,
+      color: Colors.orange,
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.warning,
+            color: Colors.white,
+            size: 16,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            errMessage,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

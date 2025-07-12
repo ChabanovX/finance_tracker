@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:yndx_homework/features/balance/providers.dart';
 import 'package:yndx_homework/features/transactions/domain/models/category.dart';
 import 'package:yndx_homework/features/transactions/domain/models/transaction.dart';
 import 'package:yndx_homework/shared/providers/repository_providers.dart';
@@ -81,7 +82,6 @@ class TxRange extends _$TxRange {
     );
   }
 
-  // TODO: Add safety.
   void updateStart(DateTime newStart) => state = DateRange(newStart, state.end);
   void updateEnd(DateTime newEnd) => state = DateRange(state.start, newEnd);
 
@@ -130,7 +130,9 @@ class Transactions extends _$Transactions {
       range.start.day + 1,
     ).subtract(const Duration(microseconds: 1));
 
-    final list = await repo.getTransactionsForPeriod(start, end);
+    final accountId = (await ref.watch(accountProvider.future)).id;
+
+    final list = await repo.getTransactionsForPeriod(start, end, accountId);
     return list.where((e) => e.category.isIncome == isIncome).toList();
   }
 }

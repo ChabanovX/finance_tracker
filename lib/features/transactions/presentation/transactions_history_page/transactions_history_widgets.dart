@@ -66,6 +66,7 @@ class _SortTile extends StatelessWidget {
   }
 }
 
+@Dependencies([Transactions])
 class _HistoryList extends StatelessWidget {
   const _HistoryList(this.transactions);
 
@@ -84,6 +85,20 @@ class _HistoryList extends StatelessWidget {
         return DefaultListTile(
           transaction: t,
           isFirstInList: index == 0,
+          onTap:
+                    () => showGeneralDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      barrierLabel: 'Edit Transaction',
+                      pageBuilder: (ctx, an1, an2) {
+                        return TransactionModal(
+                          // Simply pass it without DI.
+                          isIncome: t.category.isIncome,
+                          initial: t,
+                          key: Key('_EditTransactionModal'),
+                        );
+                      },
+                    )
         );
       },
     );

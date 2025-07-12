@@ -42,7 +42,7 @@ class _TransactionsList extends StatelessWidget {
                       barrierDismissible: true,
                       barrierLabel: 'Edit Transaction',
                       pageBuilder: (ctx, an1, an2) {
-                        return _TransactionModal(
+                        return TransactionModal(
                           // Simply pass it without DI.
                           isIncome: transaction.category.isIncome,
                           initial: transaction,
@@ -60,8 +60,8 @@ class _TransactionsList extends StatelessWidget {
 }
 
 @Dependencies([Transactions])
-class _TransactionModal extends ConsumerStatefulWidget {
-  const _TransactionModal({
+class TransactionModal extends ConsumerStatefulWidget {
+  const TransactionModal({
     super.key,
     required this.initial,
     required this.isIncome,
@@ -72,10 +72,10 @@ class _TransactionModal extends ConsumerStatefulWidget {
   final bool isIncome;
 
   @override
-  ConsumerState<_TransactionModal> createState() => _TransactionModalState();
+  ConsumerState<TransactionModal> createState() => _TransactionModalState();
 }
 
-class _TransactionModalState extends ConsumerState<_TransactionModal> {
+class _TransactionModalState extends ConsumerState<TransactionModal> {
   late final bool isEditing = widget.initial != null;
 
   /// Stored date (today by default).
@@ -107,6 +107,7 @@ class _TransactionModalState extends ConsumerState<_TransactionModal> {
   void initState() {
     super.initState();
     _category = widget.initial?.category;
+    _categoryId = widget.initial?.category.id;
     _account = widget.initial?.account;
 
     // fetch selected [Account].
@@ -147,7 +148,7 @@ class _TransactionModalState extends ConsumerState<_TransactionModal> {
       return;
     }
 
-    if (_category == null) {
+    if (_categoryId == null) {
       _snack('Выберите Категорию');
       return;
     }
@@ -157,9 +158,9 @@ class _TransactionModalState extends ConsumerState<_TransactionModal> {
       return;
     }
 
-    final category = ((_category ?? widget.initial!.category).copyWith(
-      isIncome: widget.isIncome,
-    ));
+    // Find the category by ID
+    final allCats = await ref.read(categoryProvider.future);
+    final category = allCats.firstWhere((cat) => cat.id == _categoryId);
 
     // Build a [Transaction] copy or a new one.
     final tx =
@@ -202,50 +203,62 @@ class _TransactionModalState extends ConsumerState<_TransactionModal> {
   Widget _buildAccountRef() => ref
       .watch(accountProvider)
       .when(
-        data:
-            (acc) => DropdownButtonFormField<Account>(
-              value: _account ?? acc,
-              items:
-                  [acc]
-                      .map(
-                        (a) => DropdownMenuItem(value: a, child: Text(a.name)),
-                      )
-                      .toList(),
-              onChanged: (a) => setState(() => _account = a),
-              decoration: const InputDecoration(labelText: 'Account'),
-            ),
+        data: (acc) {
+          if (_account == null || _account!.id == acc.id) {
+            _account = acc;
+          }
+          return DropdownButtonFormField<Account>(
+            value: acc,
+            items:
+                [acc]
+                    .map((a) => DropdownMenuItem(value: a, child: Text(a.name)))
+                    .toList(),
+            onChanged: (a) => setState(() => _account = a),
+            decoration: const InputDecoration(labelText: 'Account'),
+          );
+        },
         loading: () => const CircularProgressIndicator(),
         error: (e, _) => Text('Error: $e'),
       );
 
-  /// THIS LOOKS AWFUL too.
-  Widget _buildCategoryRef() => ref
-      .watch(categoryProvider)
-      .when(
-        data:
-            (cats) => DropdownButtonFormField(
-              value: _category,
-              items:
-                  cats
-                      .map(
-                        (cat) => DropdownMenuItem(
-                          value: cat,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [Text(cat.name), Text(cat.emoji)],
-                          ),
-                        ),
-                      )
-                      .toList(),
-              onChanged:
-                  (c) => setState(() {
-                    _category = c;
-                  }),
-              decoration: const InputDecoration(labelText: 'Category'),
+  int? _categoryId;
+
+Widget _buildCategoryRef() {
+  return ref.watch(categoryProvider).when(
+    data: (allCats) {
+      // Filter categories based on modal type
+      final filteredCats = allCats
+          .where((cat) => cat.isIncome == widget.isIncome)
+          .toList();
+
+      // Reset _categoryId if it doesn't match the modal type
+      if (_categoryId != null) {
+        final currentCat = allCats.firstWhereOrNull((cat) => cat.id == _categoryId);
+        if (currentCat == null || currentCat.isIncome != widget.isIncome) {
+          _categoryId = null;
+        }
+      }
+
+      return DropdownButtonFormField<int>(
+        value: _categoryId,
+        items: filteredCats.map((cat) {
+          return DropdownMenuItem<int>(
+            value: cat.id,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [Text(cat.name), Text(cat.emoji)],
             ),
-        error: (err, _) => Center(child: Text(err.toString())),
-        loading: () => const CircularProgressIndicator(),
+          );
+        }).toList(),
+        onChanged: (id) => setState(() => _categoryId = id),
+        decoration: const InputDecoration(labelText: 'Category'),
       );
+    },
+    loading: () => const CircularProgressIndicator(),
+    error: (e, _) => Text('Error: $e'),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {

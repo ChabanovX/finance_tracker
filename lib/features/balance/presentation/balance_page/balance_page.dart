@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:yndx_homework/features/balance/providers.dart';
 import 'package:yndx_homework/shared/presentation/widgets/default_app_bar.dart';
 import 'package:yndx_homework/shared/presentation/widgets/default_header_list_tile.dart';
-import 'package:yndx_homework/util/theme/app_theme.dart';
+import 'package:yndx_homework/core/theme/app_theme.dart';
 
 part 'balance_widgets.dart';
 

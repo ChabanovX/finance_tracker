@@ -18,6 +18,7 @@ class MockTransactionsRepository implements ITransactionsRepository {
   Future<List<Transaction>> getTransactionsForPeriod(
     DateTime start,
     DateTime end,
+    int accountId,
   ) async {
     await Future.delayed(_ioDuration);
     return mockTransactions

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 import 'package:yndx_homework/features/balance/providers.dart';
 import 'package:yndx_homework/features/transactions/providers.dart';
+import 'package:yndx_homework/shared/providers/error_providers.dart';
 import 'package:yndx_homework/shared/providers/repository_providers.dart';
 import 'package:yndx_homework/util/log.dart';
 import 'package:yndx_homework/features/account/domain/models/account.dart';
@@ -14,7 +16,7 @@ import '../../domain/models/transaction.dart';
 import '../../../../shared/presentation/widgets/default_app_bar.dart';
 import '../../../../shared/presentation/widgets/default_header_list_tile.dart';
 import '../../../../shared/presentation/widgets/default_list_tile.dart';
-import '../../../../util/theme/app_theme.dart';
+import '../../../../core/theme/app_theme.dart';
 
 part 'transactions_loading_widgets.dart';
 part 'transactions_widgets.dart';
@@ -43,7 +45,7 @@ class TransactionsPage extends ConsumerWidget {
       barrierLabel: 'Transaction Modal',
       context: context,
       pageBuilder:
-          (ctx, __, ___) => _TransactionModal(
+          (ctx, __, ___) => TransactionModal(
             key: const ValueKey('_TransactionModal'),
             initial: initial,
             isIncome: isIncomePage,
@@ -54,6 +56,26 @@ class TransactionsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final transactionsAsync = ref.watch(transactionsProvider);
+
+    // Listen for errors - using ACTUAL Riverpod methods
+    ref.listen(transactionsProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, stackTrace) {
+          Log.error('Transactions error: $error');
+
+          // This is the REAL way to show errors
+          ref
+              .read(errorHandlerProvider.notifier)
+              .showError(
+                error.toString(),
+                title:
+                    isIncome
+                        ? 'Ошибка загрузки доходов'
+                        : 'Ошибка загрузки расходов',
+              );
+        },
+      );
+    });
 
     return Scaffold(
       appBar: DefaultAppBar(
@@ -68,7 +90,10 @@ class TransactionsPage extends ConsumerWidget {
         ],
       ),
       body: transactionsAsync.when(
-        data: (data) => _TransactionsList(data),
+        data: (data) {
+          print(data);
+          return _TransactionsList(data);
+        },
         loading: () => _LoadingTransactionsList(),
         error: (error, _) {
           Log.error(error.toString());
