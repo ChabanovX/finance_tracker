@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:yndx_homework/core/network/isolate_deserializer_interceptor.dart';
 
 import 'retry_interceptor.dart';
 
@@ -40,6 +41,8 @@ class NetworkClient {
       requestBody: true,
       responseBody: true,
     ));
+
+    _dio.interceptors.add(IsolateDeserializerInterceptor());
   }
   
   Dio get dio => _dio;

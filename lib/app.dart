@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yndx_homework/shared/providers/network_provider.dart';
 
 import 'core/navigation/app_route_config.dart' show AppRouterDelegate;
 import 'core/theme/app_theme.dart' show appTheme, appDarkTheme;
@@ -15,8 +16,10 @@ class MainApp extends ConsumerStatefulWidget {
 class _MainAppState extends ConsumerState<MainApp> {
   late final AppRouterDelegate _routerDelegate;
 
+
   @override
   void initState() {
+    print('Current network state: ${ref.read(networkStateProvider)}');
     super.initState();
     _routerDelegate = AppRouterDelegate();
   }
