@@ -101,7 +101,6 @@ class TransactionsRepository implements ITransactionsRepository {
     int accountId,
   ) async {
     try {
-      Log.info('getTransactionsForPeriod()');
       await _syncPendingOperations();
 
       if (await _networkClient.isConnected) {

@@ -223,37 +223,42 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
 
   int? _categoryId;
 
-  /// THIS LOOKS AWFUL too.
-  Widget _buildCategoryRef() {
-    return ref
-        .watch(categoryProvider)
-        .when(
-          data: (cats) {
-            return DropdownButtonFormField(
-              value: _categoryId,
-              items:
-                  cats
-                      .map(
-                        (cat) => DropdownMenuItem(
-                          value: cat.id,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [Text(cat.name), Text(cat.emoji)],
-                          ),
-                        ),
-                      )
-                      .toList(),
-              onChanged:
-                  (id) => setState(() {
-                    _categoryId = id;
-                  }),
-              decoration: const InputDecoration(labelText: 'Category'),
-            );
-          },
-          error: (err, _) => Center(child: Text(err.toString())),
-          loading: () => const CircularProgressIndicator(),
-        );
-  }
+Widget _buildCategoryRef() {
+  return ref.watch(categoryProvider).when(
+    data: (allCats) {
+      // Filter categories based on modal type
+      final filteredCats = allCats
+          .where((cat) => cat.isIncome == widget.isIncome)
+          .toList();
+
+      // Reset _categoryId if it doesn't match the modal type
+      if (_categoryId != null) {
+        final currentCat = allCats.firstWhereOrNull((cat) => cat.id == _categoryId);
+        if (currentCat == null || currentCat.isIncome != widget.isIncome) {
+          _categoryId = null;
+        }
+      }
+
+      return DropdownButtonFormField<int>(
+        value: _categoryId,
+        items: filteredCats.map((cat) {
+          return DropdownMenuItem<int>(
+            value: cat.id,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [Text(cat.name), Text(cat.emoji)],
+            ),
+          );
+        }).toList(),
+        onChanged: (id) => setState(() => _categoryId = id),
+        decoration: const InputDecoration(labelText: 'Category'),
+      );
+    },
+    loading: () => const CircularProgressIndicator(),
+    error: (e, _) => Text('Error: $e'),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
