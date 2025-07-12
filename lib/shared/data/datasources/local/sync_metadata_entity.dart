@@ -1,4 +1,3 @@
-// lib/shared/data/datasources/local/entities/sync_metadata_entity.dart
 import 'package:objectbox/objectbox.dart';
 
 @Entity()

@@ -85,8 +85,8 @@ class TransactionsRepository implements ITransactionsRepository {
     // Try to sync immediately if online
     if (await _networkClient.isConnected) {
       try {
-        await _remoteDataSource.createTransaction(transaction);
-        await _backupManager.removeOperation(_backupCategory, operation.id);
+        _remoteDataSource.createTransaction(transaction);
+        _backupManager.removeOperation(_backupCategory, operation.id);
       } catch (e) {
         // Will sync later
         print('Failed to sync immediately: $e');

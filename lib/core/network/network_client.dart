@@ -6,8 +6,8 @@ import 'retry_interceptor.dart';
 
 class NetworkClient {
   static const String _baseUrl = 'https://shmr-finance.ru/api/v1/';
-  static const Duration _connectTimeout = Duration(seconds: 30);
-  static const Duration _receiveTimeout = Duration(seconds: 30);
+  static const Duration _connectTimeout = Duration(seconds: 5);
+  static const Duration _receiveTimeout = Duration(seconds: 5);
   
   late final Dio _dio;
   final String _authToken;
