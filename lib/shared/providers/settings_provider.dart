@@ -5,7 +5,7 @@ import 'package:yndx_homework/core/network/backup_manager.dart';
 part 'settings_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-Future<SharedPreferences> asd (Ref ref) async {
+Future<SharedPreferences> sharedPrefs (Ref ref) async {
   return await SharedPreferences.getInstance();
 }
 

@@ -33,7 +33,7 @@ class TransactionsLocalDatasource implements ITransactionsLocalDataSource {
     final c = e.category.target;
 
     if (a == null || c == null) {
-      Log.error('Missing link on transaction id=${e.id}');
+      Log.error('Missing link on transaction id=${e.id}: $runtimeType');
       return null;
     }
 
@@ -44,6 +44,7 @@ class TransactionsLocalDatasource implements ITransactionsLocalDataSource {
   @override
   Future<List<Transaction>> getTransactions() async {
     final transactionEntities = _ob.transactionBox.getAll();
+    Log.info('txs $transactionEntities');
     return transactionEntities.map(_tryMap).whereType<Transaction>().toList();
   }
 
@@ -64,7 +65,9 @@ class TransactionsLocalDatasource implements ITransactionsLocalDataSource {
     final result = query.find();
     query.close();
 
-    return result.map(_map).toList();
+    final list = result.map(_map).toList();
+    Log.info('LOCAL DS $list');
+    return list;
   }
 
   @override
@@ -73,6 +76,7 @@ class TransactionsLocalDatasource implements ITransactionsLocalDataSource {
     final cat = transaction.category.toEntity();
 
     _ob.transactionBox.put(transaction.toEntity(acc, cat));
+    Log.info('addTransaction($transaction): $runtimeType');
   }
 
   @override

@@ -12,6 +12,7 @@ part of 'account.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$Account {
 
@@ -22,6 +23,8 @@ mixin _$Account {
 @pragma('vm:prefer-inline')
 $AccountCopyWith<Account> get copyWith => _$AccountCopyWithImpl<Account>(this as Account, _$identity);
 
+  /// Serializes this Account to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -29,7 +32,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is Account&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.currency, currency) || other.currency == currency));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,id,name,balance,currency);
 
@@ -77,11 +80,11 @@ as String,
 
 
 /// @nodoc
-
+@JsonSerializable()
 
 class _Account implements Account {
   const _Account({required this.id, required this.name, required this.balance, required this.currency});
-  
+  factory _Account.fromJson(Map<String, dynamic> json) => _$AccountFromJson(json);
 
 @override final  int id;
 @override final  String name;
@@ -94,14 +97,17 @@ class _Account implements Account {
 @pragma('vm:prefer-inline')
 _$AccountCopyWith<_Account> get copyWith => __$AccountCopyWithImpl<_Account>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$AccountToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _Account&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.currency, currency) || other.currency == currency));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,id,name,balance,currency);
 

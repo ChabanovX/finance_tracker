@@ -1,6 +1,19 @@
 import 'package:logging/logging.dart';
 import 'package:flutter/foundation.dart';
 
+const _reset = '\x1B[0m';
+const _red = '\x1B[31m';
+const _yellow = '\x1B[33m';
+const _green = '\x1B[32m';
+const _grey = '\x1B[90m';
+
+String _colorFor(Level level) {
+  if (level >= Level.SEVERE) return _red; // errors
+  if (level >= Level.WARNING) return _yellow; // warnings
+  if (level >= Level.INFO) return _green; // info
+  return _grey; // fine/finer/fine-st
+}
+
 /// Simple wrapper over the [logging] package.
 class Log {
   Log._();
@@ -26,11 +39,14 @@ class Log {
   static void init() {
     Logger.root.level = Level.ALL;
     Logger.root.onRecord.listen((record) {
-      debugPrint(
-        '${record.time.toIso8601String()} [${record.level.name}] ${record.message}',
-      );
-      if (record.error != null) debugPrint('Error: ${record.error}');
-      if (record.stackTrace != null) debugPrint(record.stackTrace.toString());
+      final color = _colorFor(record.level);
+      final ts = record.time.toIso8601String();
+      final msg =
+          '$color$ts [${record.level.name.padRight(7)} ${record.message}$_reset]';
+
+      debugPrint(msg);
+      if (record.error != null) debugPrint('Error: ${record.error}$_reset');
+      if (record.stackTrace != null) debugPrint('$color${record.stackTrace}$_reset');
     });
   }
 }

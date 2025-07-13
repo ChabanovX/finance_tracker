@@ -19,8 +19,5 @@ class MockAccountRepository implements IAccountRepository {
     await Future.delayed(_ioDuration);
     // Just replace mock instance.
     mockAccount = account;
-    print(
-      'Account updated to: ${account.name} with balance ${account.balance}',
-    );
   }
 }

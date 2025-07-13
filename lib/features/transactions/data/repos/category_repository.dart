@@ -3,6 +3,7 @@ import 'package:yndx_homework/features/transactions/domain/models/category.dart'
 import 'package:yndx_homework/features/transactions/domain/repos/category_local_datasource.dart';
 import 'package:yndx_homework/features/transactions/domain/repos/category_remote_datasource.dart';
 import 'package:yndx_homework/features/transactions/domain/repos/category_repository.dart';
+import 'package:yndx_homework/util/log.dart';
 
 class CategoryRepository implements ICategoryRepository {
   final ICategoriesLocalDataSource _localDataSource;
@@ -39,11 +40,11 @@ class CategoryRepository implements ICategoryRepository {
           return remoteCategories;
         } catch (e) {
           // Network error, fall back to local data
-          print('Failed to sync categories: $e');
+          Log.error('Failed to sync categories: $runtimeType', error: e);
         }
       }
     } catch (e) {
-      print('Error in getAllCategories: $e');
+      Log.error('Error in getAllCategories: $runtimeType', error: e);
     }
     // Return local data
     return await _localDataSource.getAllCategories();

@@ -25,11 +25,6 @@ import 'objectbox_provider.dart';
 part 'repository_providers.g.dart';
 
 @riverpod
-IArticlesRepository articlesRepository(Ref ref) {
-  return MockArticlesRepository();
-}
-
-@riverpod
 ITransactionsLocalDataSource transactionsLocalDatasource(Ref ref) {
   final ob = ref.watch(objectboxProvider);
   return TransactionsLocalDatasource(ob);
@@ -103,4 +98,9 @@ ICategoryRepository categoriesRepository(Ref ref) {
     remoteDataSource,
     networkClient,
   );
+}
+
+@riverpod
+IArticlesRepository articlesRepository(Ref ref) {
+  return MockArticlesRepository();
 }

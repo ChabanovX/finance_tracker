@@ -12,6 +12,7 @@ part of 'transaction.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$Transaction {
 
@@ -22,6 +23,8 @@ mixin _$Transaction {
 @pragma('vm:prefer-inline')
 $TransactionCopyWith<Transaction> get copyWith => _$TransactionCopyWithImpl<Transaction>(this as Transaction, _$identity);
 
+  /// Serializes this Transaction to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -29,7 +32,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is Transaction&&(identical(other.id, id) || other.id == id)&&(identical(other.account, account) || other.account == account)&&(identical(other.category, category) || other.category == category)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.transactionDate, transactionDate) || other.transactionDate == transactionDate)&&(identical(other.comment, comment) || other.comment == comment));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,id,account,category,amount,transactionDate,comment);
 
@@ -97,11 +100,11 @@ $CategoryCopyWith<$Res> get category {
 
 
 /// @nodoc
-
+@JsonSerializable()
 
 class _Transaction implements Transaction {
   const _Transaction({required this.id, required this.account, required this.category, required this.amount, required this.transactionDate, required this.comment});
-  
+  factory _Transaction.fromJson(Map<String, dynamic> json) => _$TransactionFromJson(json);
 
 @override final  int id;
 @override final  Account account;
@@ -116,14 +119,17 @@ class _Transaction implements Transaction {
 @pragma('vm:prefer-inline')
 _$TransactionCopyWith<_Transaction> get copyWith => __$TransactionCopyWithImpl<_Transaction>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$TransactionToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _Transaction&&(identical(other.id, id) || other.id == id)&&(identical(other.account, account) || other.account == account)&&(identical(other.category, category) || other.category == category)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.transactionDate, transactionDate) || other.transactionDate == transactionDate)&&(identical(other.comment, comment) || other.comment == comment));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,id,account,category,amount,transactionDate,comment);
 

@@ -220,6 +220,7 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
         error: (e, _) => Text('Error: $e'),
       );
 
+  // todo: remove id and choose category
   int? _categoryId;
 
   Widget _buildCategoryRef() {

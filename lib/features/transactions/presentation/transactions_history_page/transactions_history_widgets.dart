@@ -86,19 +86,19 @@ class _HistoryList extends StatelessWidget {
           transaction: t,
           isFirstInList: index == 0,
           onTap:
-                    () => showGeneralDialog(
-                      context: context,
-                      barrierDismissible: true,
-                      barrierLabel: 'Edit Transaction',
-                      pageBuilder: (ctx, an1, an2) {
-                        return TransactionModal(
-                          // Simply pass it without DI.
-                          isIncome: t.category.isIncome,
-                          initial: t,
-                          key: Key('_EditTransactionModal'),
-                        );
-                      },
-                    )
+              () => showGeneralDialog(
+                context: context,
+                barrierDismissible: true,
+                barrierLabel: 'Edit Transaction',
+                pageBuilder: (ctx, an1, an2) {
+                  return TransactionModal(
+                    // Simply pass it without DI.
+                    isIncome: t.category.isIncome,
+                    initial: t,
+                    key: Key('_EditTransactionModal'),
+                  );
+                },
+              ),
         );
       },
     );

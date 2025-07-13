@@ -6,8 +6,8 @@ import 'retry_interceptor.dart';
 
 class NetworkClient {
   static const String _baseUrl = 'https://shmr-finance.ru/api/v1/';
-  static const Duration _connectTimeout = Duration(seconds: 5);
-  static const Duration _receiveTimeout = Duration(seconds: 5);
+  static const Duration _connectTimeout = Duration(seconds: 3);
+  static const Duration _receiveTimeout = Duration(seconds: 3);
   
   late final Dio _dio;
   final String _authToken;
@@ -31,16 +31,21 @@ class NetworkClient {
       RetryInterceptor(
         dio: _dio,
         options: const RetryOptions(
-          retries: 3,
+          retries: 1,
           retryInterval: Duration(seconds: 1),
         ),
       ),
     );
     
-    _dio.interceptors.add(LogInterceptor(
-      requestBody: true,
-      responseBody: true,
-    ));
+    // TODO: add later
+    // _dio.interceptors.add(LogInterceptor(
+    //   request: false,
+    //   requestHeader: false,
+    //   requestBody: false,
+    //   responseHeader: false,
+    //   responseBody: false,
+    //   error: false
+    // ));
 
     _dio.interceptors.add(IsolateDeserializerInterceptor());
   }

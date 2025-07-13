@@ -57,11 +57,10 @@ class TransactionsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final transactionsAsync = ref.watch(transactionsProvider);
 
-    // Listen for errors - using ACTUAL Riverpod methods
     ref.listen(transactionsProvider, (previous, next) {
       next.whenOrNull(
         error: (error, stackTrace) {
-          Log.error('Transactions error: $error');
+          Log.error('Transactions error: $runtimeType', error: error);
 
           // This is the REAL way to show errors
           ref
@@ -91,13 +90,13 @@ class TransactionsPage extends ConsumerWidget {
       ),
       body: transactionsAsync.when(
         data: (data) {
-          print(data);
+          Log.info('TX page DATA: $data');
           return _TransactionsList(data);
         },
         loading: () => _LoadingTransactionsList(),
         error: (error, _) {
-          Log.error(error.toString());
-          return Center(child: Text("Error occured: $error"));
+          Log.error('Transactions Loading Error: $runtimeType', error: error);
+          return Center(child: Text("Error occurred: $error"));
         },
       ),
       floatingActionButton: FloatingActionButton(

@@ -12,6 +12,7 @@ part of 'category.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$Category {
 
@@ -22,6 +23,8 @@ mixin _$Category {
 @pragma('vm:prefer-inline')
 $CategoryCopyWith<Category> get copyWith => _$CategoryCopyWithImpl<Category>(this as Category, _$identity);
 
+  /// Serializes this Category to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -29,7 +32,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is Category&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.emoji, emoji) || other.emoji == emoji)&&(identical(other.isIncome, isIncome) || other.isIncome == isIncome));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,id,name,emoji,isIncome);
 
@@ -77,11 +80,11 @@ as bool,
 
 
 /// @nodoc
-
+@JsonSerializable()
 
 class _Category implements Category {
   const _Category({required this.id, required this.name, required this.emoji, required this.isIncome});
-  
+  factory _Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
 
 @override final  int id;
 @override final  String name;
@@ -94,14 +97,17 @@ class _Category implements Category {
 @pragma('vm:prefer-inline')
 _$CategoryCopyWith<_Category> get copyWith => __$CategoryCopyWithImpl<_Category>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$CategoryToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _Category&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.emoji, emoji) || other.emoji == emoji)&&(identical(other.isIncome, isIncome) || other.isIncome == isIncome));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,id,name,emoji,isIncome);
 

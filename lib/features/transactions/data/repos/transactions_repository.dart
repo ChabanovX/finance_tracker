@@ -1,12 +1,11 @@
+
 import 'package:yndx_homework/core/network/backup_manager.dart';
 import 'package:yndx_homework/core/network/network_client.dart';
 import 'package:yndx_homework/features/transactions/data/models/mappers.dart';
-import 'package:yndx_homework/features/transactions/data/models/remote/transaction_response_dto.dart';
 import 'package:yndx_homework/features/transactions/domain/models/transaction.dart';
 import 'package:yndx_homework/features/transactions/domain/repos/transactions_local_datasource.dart';
 import 'package:yndx_homework/features/transactions/domain/repos/transactions_remote_datasource.dart';
 import 'package:yndx_homework/features/transactions/domain/repos/transactions_repository.dart';
-import 'package:yndx_homework/shared/data/mappers.dart';
 import 'package:yndx_homework/util/log.dart';
 
 class TransactionsRepository implements ITransactionsRepository {
@@ -27,19 +26,19 @@ class TransactionsRepository implements ITransactionsRepository {
   @override
   Future<List<Transaction>> getTransactions() async {
     // First, try to sync pending operations.
-    try {
-      await _syncPendingOperations();
+    // try {
+    //   await _syncPendingOperations();
 
-      if (await _networkClient.isConnected) {
-        final remoteTransactions = await _remoteDataSource.getTransactions();
-        await _localDataSource.clearTransactions();
-        await _localDataSource.saveTransactions(remoteTransactions);
-        return remoteTransactions;
-      }
-    } catch (e) {
-      // Network error, fall back to local state.
-      print('Network error: $e');
-    }
+    //   if (await _networkClient.isConnected) {
+    //     final remoteTransactions = await _remoteDataSource.getTransactions();
+    //     await _localDataSource.clearTransactions();
+    //     await _localDataSource.saveTransactions(remoteTransactions);
+    //     return remoteTransactions;
+    //   }
+    // } catch (e) {
+    //   // Network error, fall back to local state.
+    //   Log.error('Network error $runtimeType', error: e);
+    // }
 
     return await _localDataSource.getTransactions();
   }
@@ -47,22 +46,22 @@ class TransactionsRepository implements ITransactionsRepository {
   @override
   Future<void> deleteTransaction(int transactionId) async {
     await _localDataSource.deleteTransaction(transactionId);
-    
+
     final operation = BackupOperation<int>(
       id: transactionId.toString(),
       type: OperationType.delete,
       data: transactionId,
       timestamp: DateTime.now(),
     );
-    
+
     await _backupManager.addOperation(_backupCategory, operation);
-    
+
     if (await _networkClient.isConnected) {
       try {
         await _remoteDataSource.deleteTransaction(transactionId);
         await _backupManager.removeOperation(_backupCategory, operation.id);
       } catch (e) {
-        print('Failed to sync immediately: $e');
+        Log.error('Failed to sync immediately: $runtimeType', error: e);
       }
     }
   }
@@ -76,7 +75,7 @@ class TransactionsRepository implements ITransactionsRepository {
     final operation = BackupOperation<Map>(
       id: transaction.id.toString(),
       type: OperationType.create,
-      data: transaction.toDto().toJson(),
+      data: transaction.toJson(),
       timestamp: DateTime.now(),
     );
 
@@ -89,7 +88,7 @@ class TransactionsRepository implements ITransactionsRepository {
         _backupManager.removeOperation(_backupCategory, operation.id);
       } catch (e) {
         // Will sync later
-        print('Failed to sync immediately: $e');
+        Log.error('Failed to sync immediately: $runtimeType', error: e);
       }
     }
   }
@@ -100,17 +99,19 @@ class TransactionsRepository implements ITransactionsRepository {
     DateTime end,
     int accountId,
   ) async {
-    try {
-      await _syncPendingOperations();
+    // try {
+    //   await _syncPendingOperations();
 
-      if (await _networkClient.isConnected) {
-        final remoteTransactions = await _remoteDataSource
-            .getTransactionsForPeriod(start, end, accountId);
-        return remoteTransactions;
-      }
-    } catch (e) {
-      print('Network error: $e');
-    }
+    //   if (await _networkClient.isConnected) {
+    //     final remoteTransactions = await _remoteDataSource
+    //         .getTransactionsForPeriod(start, end, accountId);
+    //     return remoteTransactions;
+    //   }
+    // } catch (e) {
+    //   Log.error('Network error: $runtimeType', error: e);
+    // } finally {
+    //   Log.info('returning daily local: $runtimeType');
+    // }
 
     return await _localDataSource.getTransactionsForPeriod(start, end);
   }
@@ -118,22 +119,22 @@ class TransactionsRepository implements ITransactionsRepository {
   @override
   Future<void> updateTransaction(Transaction transaction) async {
     await _localDataSource.updateTransaction(transaction);
-    
+
     final operation = BackupOperation<Map>(
       id: transaction.id.toString(),
       type: OperationType.update,
-      data: transaction.toDto().toJson(),
+      data: transaction.toJson(),
       timestamp: DateTime.now(),
     );
-    
+
     await _backupManager.addOperation(_backupCategory, operation);
-    
+
     if (await _networkClient.isConnected) {
       try {
         await _remoteDataSource.updateTransaction(transaction);
         await _backupManager.removeOperation(_backupCategory, operation.id);
       } catch (e) {
-        print('Failed to sync immediately: $e');
+        Log.error('Failed to sync immediately: $runtimeType', error: e);
       }
     }
   }
@@ -154,16 +155,17 @@ class TransactionsRepository implements ITransactionsRepository {
         try {
           switch (operation.type) {
             case OperationType.create:
-              final transaction = TransactionResponseDto.fromJson(
+              final transaction = Transaction.fromJson(
                 operation.data,
               );
-              await _remoteDataSource.createTransaction(transaction.toDomain());
+              await _remoteDataSource.createTransaction(transaction);
               break;
             case OperationType.update:
-              final transaction = TransactionResponseDto.fromJson(
+              final transaction = Transaction.fromJson(
                 operation.data,
               );
-              await _remoteDataSource.updateTransaction(transaction.toDomain());
+              Log.info(transaction.toString());
+              await _remoteDataSource.updateTransaction(transaction);
               break;
             case OperationType.delete:
               await _remoteDataSource.deleteTransaction(operation.data as int);
@@ -173,11 +175,14 @@ class TransactionsRepository implements ITransactionsRepository {
           await _backupManager.removeOperation(_backupCategory, operation.id);
         } catch (e) {
           // Skip this operation and continue with others
-          print('Failed to sync operation ${operation.id}: $e');
+          Log.error(
+            'Failed to sync operation [${operation.id} ${operation.type}]: $runtimeType',
+            error: e,
+          );
         }
       }
     } catch (e) {
-      print('Failed to sync operations: $e');
+      Log.error('Failed to sync operations: $runtimeType', error: e);
       rethrow;
     }
   }

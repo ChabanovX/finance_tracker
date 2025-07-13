@@ -3,6 +3,7 @@ import '../../../account/domain/models/account.dart';
 import 'category.dart';
 
 part 'transaction.freezed.dart';
+part 'transaction.g.dart';
 
 @freezed
 abstract class Transaction with _$Transaction {
@@ -14,4 +15,7 @@ abstract class Transaction with _$Transaction {
     required DateTime transactionDate,
     required String? comment,
   }) = _Transaction;
+
+  factory Transaction.fromJson(Map<String, dynamic> json) =>
+      _$TransactionFromJson(json);
 }

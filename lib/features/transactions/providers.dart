@@ -3,6 +3,7 @@ import 'package:yndx_homework/features/balance/providers.dart';
 import 'package:yndx_homework/features/transactions/domain/models/category.dart';
 import 'package:yndx_homework/features/transactions/domain/models/transaction.dart';
 import 'package:yndx_homework/shared/providers/repository_providers.dart';
+import 'package:yndx_homework/util/log.dart';
 
 part 'providers.g.dart';
 
@@ -133,6 +134,7 @@ class Transactions extends _$Transactions {
     final accountId = (await ref.watch(accountProvider.future)).id;
 
     final list = await repo.getTransactionsForPeriod(start, end, accountId);
+    Log.info('riverp $list');
     return list.where((e) => e.category.isIncome == isIncome).toList();
   }
 }

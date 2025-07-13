@@ -6,7 +6,7 @@ part of 'settings_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-@ProviderFor(asd)
+@ProviderFor(sharedPrefs)
 const asdProvider = AsdProvider._();
 
 final class AsdProvider
@@ -41,7 +41,7 @@ final class AsdProvider
 
   @override
   FutureOr<SharedPreferences> create(Ref ref) {
-    return asd(ref);
+    return sharedPrefs(ref);
   }
 }
 

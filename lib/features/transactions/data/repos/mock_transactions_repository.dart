@@ -3,6 +3,7 @@
 import 'package:yndx_homework/shared/data/datasources/mock_data.dart';
 import 'package:yndx_homework/features/transactions/domain/models/transaction.dart';
 import 'package:yndx_homework/features/transactions/domain/repos/transactions_repository.dart';
+import 'package:yndx_homework/util/log.dart';
 
 class MockTransactionsRepository implements ITransactionsRepository {
   /// Duration of fake async call.
@@ -37,7 +38,7 @@ class MockTransactionsRepository implements ITransactionsRepository {
     final index = mockTransactions.indexWhere((t) => t.id == transaction.id);
     if (index != -1) {
       mockTransactions[index] = transaction;
-      print('Transaction updated: ${transaction.id}');
+      Log.info('Transaction updated: ${transaction.id}');
     }
   }
 

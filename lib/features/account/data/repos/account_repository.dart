@@ -2,6 +2,7 @@
 import 'package:yndx_homework/core/network/network_client.dart';
 import 'package:yndx_homework/features/account/domain/models/account.dart';
 import 'package:yndx_homework/features/account/domain/repos/account_repository.dart';
+import 'package:yndx_homework/util/log.dart';
 
 class AccountRepository implements IAccountRepository {
   final IAccountLocalDataSource _localDataSource;
@@ -24,7 +25,7 @@ class AccountRepository implements IAccountRepository {
         return remoteAccount;
       }
     } catch (e) {
-      print('Failed to sync account: $e');
+      Log.error('Failed to sync account: $runtimeType', error: e);
     }
     
     final localAccount = await _localDataSource.getAccount();
@@ -43,7 +44,7 @@ class AccountRepository implements IAccountRepository {
         await _remoteDataSource.updateAccount(account);
         await _localDataSource.setLastSyncTime(DateTime.now());
       } catch (e) {
-        print('Failed to sync account update: $e');
+        Log.error('Failed to sync account update: $runtimeType', error: e);
       }
     }
   }
