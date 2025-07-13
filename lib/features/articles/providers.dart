@@ -2,6 +2,7 @@ import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:yndx_homework/features/articles/domain/models/article.dart';
 import 'package:yndx_homework/shared/providers/repository_providers.dart';
+import 'package:yndx_homework/util/log.dart';
 
 part 'providers.g.dart';
 
@@ -19,16 +20,16 @@ Future<List<Article>> articles(Ref ref) {
 }
 
 @riverpod
-List<Article> filteredArticles(Ref ref) {
+Future<List<Article>> filteredArticles(Ref ref) async {
   final query = ref.watch(articleSearchQueryProvider);
-  final List<Article> list = ref
-      .watch(articlesProvider)
-      .maybeWhen(orElse: () => []);
+  Log.info('qe $query');
+  final List<Article> list = await ref.watch(articlesProvider.future);
 
   if (query.isEmpty) return list;
 
-  return extractAll(
+  return extractTop(
     query: query,
+    limit: list.length,
     choices: list,
     getter: (obj) => obj.text,
   ).map((e) => e.choice).toList();

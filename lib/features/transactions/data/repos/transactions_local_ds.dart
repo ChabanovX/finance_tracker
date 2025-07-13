@@ -64,7 +64,7 @@ class TransactionsLocalDatasource implements ITransactionsLocalDataSource {
             .build();
     try {
       final list = query.find().map(_map).toList();
-      // Log.info('LOCAL DS $list');
+      Log.info('$runtimeType($start, $end) $list');
       return list;
     } finally {
       query.close();

@@ -171,35 +171,36 @@ class _CategoryTransactionsPage extends StatelessWidget {
   }
 }
 
-@Dependencies([txByCategory])
+@Dependencies([transactionsByCategory])
 class _AnalysisChart extends ConsumerWidget {
   const _AnalysisChart({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final groups = ref.watch(
-      transactionsViewProvider(
-        isIncome: isIncome,
-        start: start,
-        end: end,
-      ).select((v) => v.value?.byCategory),
+    final asyncGroups = ref.watch(transactionsByCategoryProvider);
+
+    return asyncGroups.when(
+      data: (groups) {
+        final listedGroups = groups.entries.toList();
+
+        final items = <PieChartItem>[];
+        for (var i = 0; i < listedGroups.length; i++) {
+          final entry = listedGroups[i];
+          final total = entry.value.fold<double>(0, (s, t) => s + t.amount);
+
+          items.add(
+            PieChartItem(
+              entry.key.name,
+              total,
+              color: Colors.primaries[i % Colors.primaries.length],
+            ),
+          );
+        }
+
+        return Center(child: AnimatedPieChart(items: items));
+      },
+      error: (e, _) => Center(child: Text('Упс: $e')),
+      loading: () => Center(child: CircularProgressIndicator.adaptive()),
     );
-    final groups = ref.watch(txByCategoryProvider).entries.toList();
-
-    final items = <PieChartItem>[];
-    for (var i = 0; i < groups.length; i++) {
-      final entry = groups[i];
-      final total = entry.value.fold<double>(0, (s, t) => s + t.amount);
-
-      items.add(
-        PieChartItem(
-          entry.key.name,
-          total,
-          color: Colors.primaries[i % Colors.primaries.length],
-        ),
-      );
-    }
-
-    return Center(child: AnimatedPieChart(items: items));
   }
 }

@@ -7,6 +7,7 @@ import 'package:yndx_homework/features/transactions/data/models/remote/transacti
 import 'package:yndx_homework/features/transactions/domain/models/transaction.dart';
 import 'package:yndx_homework/features/transactions/domain/repos/transactions_remote_datasource.dart';
 import 'package:yndx_homework/shared/data/mappers.dart';
+import 'package:yndx_homework/util/log.dart';
 
 class TransactionsRemoteDataSource implements ITransactionsRemoteDataSource {
   final NetworkClient _networkClient;
@@ -39,6 +40,7 @@ class TransactionsRemoteDataSource implements ITransactionsRemoteDataSource {
           'end': end.toIso8601String(),
         },
       );
+      Log.info('$response');
       final List<dynamic> data = response.data;
       final dtos =
           data.map((json) => TransactionResponseDto.fromJson(json));

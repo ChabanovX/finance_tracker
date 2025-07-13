@@ -113,7 +113,7 @@ class TransactionsRepository implements ITransactionsRepository {
     }
 
     final txs = await _localDataSource.getTransactionsForPeriod(start, end);
-    // Log.info('PERIOD: $runtimeType, $start|$end, $txs');
+    Log.info('PERIOD: $runtimeType, $start|$end, $txs');
     return txs;
   }
 

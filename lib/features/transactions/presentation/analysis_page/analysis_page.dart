@@ -2,7 +2,6 @@ import 'package:animated_pie_chart/animated_pie_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:yndx_homework/features/transactions/domain/models/category.dart';
 import 'package:yndx_homework/features/transactions/presentation/transactions_page/transactions_page.dart';
 import 'package:yndx_homework/features/transactions/providers.dart';
@@ -15,7 +14,12 @@ import '../../../../shared/presentation/widgets/default_header_list_tile.dart';
 
 part 'analysis_widgets.dart';
 
-@Dependencies([transactionsView, isIncome])
+@Dependencies([
+  totalAmount,
+  transactionsByCategory,
+  isIncome,
+  TransactionsForPeriod,
+])
 class AnalysisPage extends ConsumerWidget {
   const AnalysisPage({super.key, required this.isIncome});
 
@@ -25,12 +29,10 @@ class AnalysisPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bg = Theme.of(context).colorScheme.surface;
 
-    final start = ref.watch(historyStartProvider(isIncome));
-    final end = ref.watch(historyEndProvider(isIncome));
+    final txRange = ref.watch(transactionsRangeProvider(isIncome));
 
-    final asyncTxs = ref.watch(
-      transactionsViewProvider(isIncome: isIncome, start: start, end: end),
-    );
+    final txsTotal = ref.watch(totalAmountProvider);
+    final asyncTxsCategories = ref.watch(transactionsByCategoryProvider);
 
     return Scaffold(
       appBar: AppBar(backgroundColor: bg, title: Text('Анализ')),
@@ -38,26 +40,22 @@ class AnalysisPage extends ConsumerWidget {
         children: [
           _DateTile(
             label: 'Период: начало',
-            date: start,
-            onTap: () => _pickStart(context, ref, start),
+            date: txRange.start,
+            onTap: () => _pickStart(context, ref, txRange.start),
             backgroundColor: bg,
           ),
           Divider(height: 1),
           _DateTile(
             label: 'Период: конец',
-            date: end,
-            onTap: () => _pickEnd(context, ref, end),
+            date: txRange.end,
+            onTap: () => _pickEnd(context, ref, txRange.end),
             backgroundColor: bg,
           ),
           Divider(height: 1),
           DefaultHeaderListTile(
             backgroundColor: bg,
             leading: Text('Сумма'),
-            trailing: asyncTxs.when(
-              loading: () => Text('Loading...'),
-              error: (_, _) => Text('Error 😢'),
-              data: (view) => Text('${view.total}₽'),
-            ),
+            trailing: Text(txsTotal.isLoading ? 'loading...' : '${txsTotal.value}₽'),
           ),
           Divider(height: 1),
           SizedBox(
@@ -70,19 +68,15 @@ class AnalysisPage extends ConsumerWidget {
           Divider(height: 1),
           // And build listView of those
           Expanded(
-            child: asyncTxs.when(
-              data: (view) {
-                final groupsEntries = view.byCategory.entries;
-                final groupsItems =
-                    groupsEntries
+            child: asyncTxsCategories.when(
+              data:
+                  (data) => _CategoryList(
+                    data.entries
                         .map((e) => _CategoryGroup(e.key, e.value))
-                        .toList();
-
-                groupsItems.sort((a, b) => b.total.compareTo(a.total));
-                return _CategoryList(groupsItems);
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, _) => Center(child: Text('Error occurred: $err')),
+                        .toList(),
+                  ),
+              error: (error, stackTrace) => Center(child: Text('Упc: $error')),
+              loading: () => Center(child: CircularProgressIndicator.adaptive()),
             ),
           ),
         ],
@@ -100,7 +94,7 @@ Future<void> _pickStart(
   final picked = await _showPicker(context, initial);
   if (picked != null) {
     final isIncome = ref.watch(isIncomeProvider);
-    ref.read(txRangeProvider(isIncome).notifier).updateStart(picked);
+    ref.read(transactionsRangeProvider(isIncome).notifier).updateStart(picked);
   }
 }
 
@@ -113,7 +107,7 @@ Future<void> _pickEnd(
   final picked = await _showPicker(context, initial);
   if (picked != null) {
     final isIncome = ref.watch(isIncomeProvider);
-    ref.read(txRangeProvider(isIncome).notifier).updateEnd(picked);
+    ref.read(transactionsRangeProvider(isIncome).notifier).updateEnd(picked);
   }
 }
 

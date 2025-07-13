@@ -23,6 +23,19 @@ enum Currency {
   eur,
   usd;
 
+  static Currency fromString(String raw) {
+    switch (raw.toUpperCase()) {
+      case 'RUB':
+        return Currency.rub;
+      case 'EUR':
+        return Currency.eur;
+      case 'USD':
+        return Currency.usd;
+      default:
+        throw ArgumentError('Unknown currency: $raw');
+    }
+  }
+
   @override
   String toString() {
     switch (this) {
@@ -70,9 +83,11 @@ class Balance extends _$Balance {
   @override
   BalanceState build() {
     // Initial state.
+    final account = ref.watch(accountProvider).value;
+
     final initial = BalanceState(
-      amount: 42_420,
-      currency: Currency.eur,
+      amount: account != null ? account.balance : 0,
+      currency: account?.currency != null ? Currency.fromString(account!.currency) : Currency.usd,
       visible: true,
     );
 
@@ -136,7 +151,7 @@ Future<List<Transaction>> chartTransactions(Ref ref) async {
     now.day + 1,
   ).subtract(const Duration(microseconds: 1));
 
-  return repo.getTransactionsForPeriod(startDay, endDay, accountId);
+  return repo.getTransactions();
 }
 
 @riverpod

@@ -103,8 +103,13 @@ String _$articlesHash() => r'77a83085b23cc66ef94086feff671726dbb77cc6';
 const filteredArticlesProvider = FilteredArticlesProvider._();
 
 final class FilteredArticlesProvider
-    extends $FunctionalProvider<List<Article>, List<Article>, List<Article>>
-    with $Provider<List<Article>> {
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Article>>,
+          List<Article>,
+          FutureOr<List<Article>>
+        >
+    with $FutureModifier<List<Article>>, $FutureProvider<List<Article>> {
   const FilteredArticlesProvider._()
     : super(
         from: null,
@@ -121,24 +126,17 @@ final class FilteredArticlesProvider
 
   @$internal
   @override
-  $ProviderElement<List<Article>> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $FutureProviderElement<List<Article>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
-  List<Article> create(Ref ref) {
+  FutureOr<List<Article>> create(Ref ref) {
     return filteredArticles(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<Article> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<List<Article>>(value),
-    );
   }
 }
 
-String _$filteredArticlesHash() => r'093e5d0753c2f0d4821fd576adad6df9afe93621';
+String _$filteredArticlesHash() => r'd6b7cfcad48609cd0ddb8f583701e159013828b1';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

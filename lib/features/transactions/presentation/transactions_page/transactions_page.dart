@@ -56,9 +56,19 @@ class TransactionsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final transactionsAsync = ref.watch(transactionsProvider);
+    // Show daily transactions.
+    final now = DateTime.now();
+    final provider = transactionsForPeriodProvider(
+      DateTime(now.year, now.month, now.day),
+      DateTime(
+        now.year,
+        now.month,
+        now.day + 1,
+      ).subtract(Duration(microseconds: 1)),
+    );
 
-    ref.listen(transactionsProvider, (previous, next) {
+    final transactionsAsync = ref.watch(provider);
+    ref.listen(provider, (previous, next) {
       next.whenOrNull(
         error: (error, stackTrace) {
           Log.error('Transactions error: $runtimeType', error: error);
@@ -91,6 +101,9 @@ class TransactionsPage extends ConsumerWidget {
       ),
       body: transactionsAsync.when(
         data: (data) {
+          if (data.isEmpty) {
+            return Center(child: Text('Ничего не нашлось...'));
+          }
           // Log.info('TX page DATA: $data');
           return _TransactionsList(data);
         },

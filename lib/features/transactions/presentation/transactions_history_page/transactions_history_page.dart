@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:yndx_homework/features/transactions/presentation/transactions_page/transactions_page.dart';
 import 'package:yndx_homework/features/transactions/providers.dart';
 
@@ -28,20 +27,28 @@ class TransactionsHistoryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final start = ref.watch(historyStartProvider(isIncome));
-    final end = ref.watch(historyEndProvider(isIncome));
+    final range = ref.watch(transactionsRangeProvider(isIncome));
+
     final total = ref.watch(totalAmountProvider);
-    final transactionsAsync = ref.watch(transactionsProvider);
     final sortBy = ref.watch(sortByProvider);
+    final asyncSorted = ref.watch(sortedTransactionsProvider);
 
     return Scaffold(
       appBar: DefaultAppBar(
         title: isIncome ? 'История доходов' : 'История расходов',
         actions: [
-          IconButton(
-            onPressed: onShowAnalysis,
-            padding: EdgeInsets.all(12),
-            icon: Icon(Icons.pending_actions, size: 24),
+          asyncSorted.when(
+            data:
+                (data) =>
+                    data.isNotEmpty
+                        ? IconButton(
+                          onPressed: onShowAnalysis,
+                          padding: EdgeInsets.all(12),
+                          icon: Icon(Icons.pending_actions, size: 24),
+                        )
+                        : SizedBox.shrink(),
+            error: (_, __) => SizedBox.shrink(),
+            loading: () => SizedBox.shrink(),
           ),
         ],
       ),
@@ -49,14 +56,14 @@ class TransactionsHistoryPage extends ConsumerWidget {
         children: [
           _DateTile(
             label: 'Начало',
-            date: start,
-            onTap: () => _pickStart(context, ref, start),
+            date: range.start,
+            onTap: () => _pickStart(context, ref, range.start),
           ),
           const Divider(height: 1),
           _DateTile(
             label: 'Конец',
-            date: end,
-            onTap: () => _pickEnd(context, ref, end),
+            date: range.end,
+            onTap: () => _pickEnd(context, ref, range.end),
           ),
           const Divider(height: 1),
           _SortTile(
@@ -66,16 +73,16 @@ class TransactionsHistoryPage extends ConsumerWidget {
           const Divider(height: 1),
           DefaultHeaderListTile(
             leading: Text('Сумма'),
-            trailing: Text('${total.toString()} ₽'),
+            trailing: Text(total.isLoading ? 'Loading...' : '${total.value!} ₽'),
           ),
           Expanded(
-            child: transactionsAsync.when(
+            child: asyncSorted.when(
               data:
-                  (_) => _HistoryList(
-                    ref.watch(sortedTransactionsProvider(isIncome)),
-                  ),
-              loading: () => const _HistoryLoading(),
-              error: (err, _) => Center(child: Text('Error occured: $err')),
+                  (data) =>
+                      data.isNotEmpty ? _HistoryList(data) : Center(child: Text('Ничего не нашлось...'),),
+              error: (_, __) => SizedBox.shrink(),
+              loading:
+                  () => Center(child: CircularProgressIndicator.adaptive()),
             ),
           ),
         ],
@@ -90,7 +97,9 @@ class TransactionsHistoryPage extends ConsumerWidget {
   ) async {
     final picked = await _showPicker(context, initial);
     if (picked != null) {
-      ref.read(txRangeProvider(isIncome).notifier).updateStart(picked);
+      ref
+          .read(transactionsRangeProvider(isIncome).notifier)
+          .updateStart(picked);
     }
   }
 
@@ -101,7 +110,7 @@ class TransactionsHistoryPage extends ConsumerWidget {
   ) async {
     final picked = await _showPicker(context, initial);
     if (picked != null) {
-      ref.read(txRangeProvider(isIncome).notifier).updateEnd(picked);
+      ref.read(transactionsRangeProvider(isIncome).notifier).updateEnd(picked);
     }
   }
 

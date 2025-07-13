@@ -89,19 +89,35 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
     text: widget.initial?.comment ?? '',
   );
 
+  late DateTime _dateTime = widget.initial?.transactionDate ?? DateTime.now();
+
   Category? _category;
   Account? _account;
 
   Future<void> _pickDate() async {
-    final picked = await showDatePicker(
+    final pickedDate = await showDatePicker(
       context: context,
-      initialDate: _date,
+      initialDate: _dateTime,
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
     );
-    if (picked != null && picked != _date) {
-      setState(() => _date = picked);
-    }
+    if (pickedDate == null) return;
+
+    if (!mounted) return;
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(_dateTime),
+    );
+
+    final newDateTime = DateTime(
+      pickedDate.year,
+      pickedDate.month,
+      pickedDate.day,
+      pickedTime?.hour ?? _dateTime.hour,
+      pickedTime?.minute ?? _dateTime.minute,
+    );
+
+    if (mounted) setState(() => _dateTime = newDateTime);
   }
 
   @override
@@ -161,6 +177,7 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
         isEditing
             ? widget.initial!.copyWith(
               amount: raw,
+              transactionDate: _date,
               comment: _commentCtrl.text.isEmpty ? null : _commentCtrl.text,
               category: category,
               account: _account ?? widget.initial!.account,
@@ -184,7 +201,7 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
     }
 
     // Refresh UI and close.
-    ref.invalidate(transactionsProvider);
+    ref.invalidate(transactionsForPeriodProvider);
     if (!mounted) return;
     Navigator.of(context).pop();
   }
@@ -303,22 +320,20 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                   decoration: const InputDecoration(labelText: 'Commentary'),
                 ),
                 const SizedBox(height: 8),
-                if (!isEditing) ...[
-                  GestureDetector(
-                    onTap: _pickDate,
-                    child: InputDecorator(
-                      decoration: const InputDecoration(labelText: 'Date'),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(DateFormat.yMMMd().format(_date)),
-                          const Icon(Icons.calendar_today_outlined, size: 20),
-                        ],
-                      ),
+                GestureDetector(
+                  onTap: _pickDate,
+                  child: InputDecorator(
+                    decoration: const InputDecoration(labelText: 'Date'),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(DateFormat.yMMMd().format(_date)),
+                        const Icon(Icons.calendar_today_outlined, size: 20),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                ],
+                ),
+                const SizedBox(height: 8),
                 _buildCategoryRef(),
                 const SizedBox(height: 8),
                 _buildAccountRef(),

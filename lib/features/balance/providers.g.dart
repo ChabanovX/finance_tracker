@@ -70,7 +70,7 @@ final class BalanceProvider extends $NotifierProvider<Balance, BalanceState> {
   }
 }
 
-String _$balanceHash() => r'c01f9317689b4beb6c4c10fa98256d4f20bf937a';
+String _$balanceHash() => r'3bdc377aee31f549413d316c09da79873dbe2a24';
 
 abstract class _$Balance extends $Notifier<BalanceState> {
   BalanceState build();

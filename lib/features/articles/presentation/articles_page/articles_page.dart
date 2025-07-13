@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yndx_homework/features/articles/providers.dart';
 import 'package:yndx_homework/shared/presentation/widgets/default_app_bar.dart';
 import 'package:yndx_homework/core/theme/app_theme.dart';
-
+import 'package:yndx_homework/util/log.dart';
 
 part 'articles_widgets.dart';
 
@@ -12,7 +12,9 @@ class ArticlesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final articles = ref.watch(filteredArticlesProvider);
+    final asyncArticles = ref.watch(filteredArticlesProvider);
+    Log.info('arts: $asyncArticles');
+
     return Scaffold(
       appBar: DefaultAppBar(title: 'Мои статьи'),
       body: Column(
@@ -46,20 +48,22 @@ class ArticlesPage extends ConsumerWidget {
             ),
           ),
           Expanded(
-            child:
-                articles.isEmpty
-                    ? const Center(child: Text('Ничего не найдено'))
-                    : ListView.separated(
-                      itemCount: articles.length,
-                      separatorBuilder: (_, __) => const Divider(height: 1),
-                      itemBuilder: (ctx, index) {
-                        final article = articles[index];
-                        return _ArticleTile(
-                          emoji: article.emoji,
-                          name: article.text,
-                        );
-                      },
-                    ),
+            child: asyncArticles.when(
+              data:
+                  (data) => ListView.separated(
+                    itemCount: data.length,
+                    separatorBuilder: (_, __) => const Divider(height: 1),
+                    itemBuilder: (ctx, index) {
+                      final article = data[index];
+                      return _ArticleTile(
+                        emoji: article.emoji,
+                        name: article.text,
+                      );
+                    },
+                  ),
+              error: (_, __) => SizedBox.shrink(),
+              loading: () => SizedBox.shrink(),
+            ),
           ),
         ],
       ),

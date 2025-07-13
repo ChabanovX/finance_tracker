@@ -137,34 +137,185 @@ final class CategoryProvider
 
 String _$categoryHash() => r'5be9f1cae5d545ceaa4dc3d312e355faacc0d3d0';
 
-@ProviderFor(TxRange)
-const txRangeProvider = TxRangeFamily._();
+@ProviderFor(totalAmount)
+const totalAmountProvider = TotalAmountProvider._();
 
-final class TxRangeProvider extends $NotifierProvider<TxRange, DateRange> {
-  const TxRangeProvider._({
-    required TxRangeFamily super.from,
+final class TotalAmountProvider
+    extends $FunctionalProvider<AsyncValue<double>, double, FutureOr<double>>
+    with $FutureModifier<double>, $FutureProvider<double> {
+  const TotalAmountProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'totalAmountProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[
+          isIncomeProvider,
+          transactionsForPeriodProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          TotalAmountProvider.$allTransitiveDependencies0,
+          TotalAmountProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = isIncomeProvider;
+  static const $allTransitiveDependencies1 = transactionsForPeriodProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$totalAmountHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<double> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<double> create(Ref ref) {
+    return totalAmount(ref);
+  }
+}
+
+String _$totalAmountHash() => r'5913e5cd95a8ac031712fcf26b4e29bdfd2f6b67';
+
+/// Used in analysis.
+@ProviderFor(transactionsByCategory)
+const transactionsByCategoryProvider = TransactionsByCategoryProvider._();
+
+/// Used in analysis.
+final class TransactionsByCategoryProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Map<Category, List<Transaction>>>,
+          Map<Category, List<Transaction>>,
+          FutureOr<Map<Category, List<Transaction>>>
+        >
+    with
+        $FutureModifier<Map<Category, List<Transaction>>>,
+        $FutureProvider<Map<Category, List<Transaction>>> {
+  /// Used in analysis.
+  const TransactionsByCategoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'transactionsByCategoryProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[
+          isIncomeProvider,
+          transactionsForPeriodProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          TransactionsByCategoryProvider.$allTransitiveDependencies0,
+          TransactionsByCategoryProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = isIncomeProvider;
+  static const $allTransitiveDependencies1 = transactionsForPeriodProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$transactionsByCategoryHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<Map<Category, List<Transaction>>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Map<Category, List<Transaction>>> create(Ref ref) {
+    return transactionsByCategory(ref);
+  }
+}
+
+String _$transactionsByCategoryHash() =>
+    r'ceea8c745fb7df9e839839f078f3005aade60b6d';
+
+/// Used in history.
+@ProviderFor(sortedTransactions)
+const sortedTransactionsProvider = SortedTransactionsProvider._();
+
+/// Used in history.
+final class SortedTransactionsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Transaction>>,
+          List<Transaction>,
+          FutureOr<List<Transaction>>
+        >
+    with
+        $FutureModifier<List<Transaction>>,
+        $FutureProvider<List<Transaction>> {
+  /// Used in history.
+  const SortedTransactionsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sortedTransactionsProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[
+          isIncomeProvider,
+          transactionsForPeriodProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          SortedTransactionsProvider.$allTransitiveDependencies0,
+          SortedTransactionsProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = isIncomeProvider;
+  static const $allTransitiveDependencies1 = transactionsForPeriodProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$sortedTransactionsHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<Transaction>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<Transaction>> create(Ref ref) {
+    return sortedTransactions(ref);
+  }
+}
+
+String _$sortedTransactionsHash() =>
+    r'fb7e3b1b24e3d6d795771577ee53fb7ea9e10823';
+
+@ProviderFor(TransactionsRange)
+const transactionsRangeProvider = TransactionsRangeFamily._();
+
+final class TransactionsRangeProvider
+    extends $NotifierProvider<TransactionsRange, DateRange> {
+  const TransactionsRangeProvider._({
+    required TransactionsRangeFamily super.from,
     required bool super.argument,
   }) : super(
          retry: null,
-         name: r'txRangeProvider',
+         name: r'transactionsRangeProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
 
   @override
-  String debugGetCreateSourceHash() => _$txRangeHash();
+  String debugGetCreateSourceHash() => _$transactionsRangeHash();
 
   @override
   String toString() {
-    return r'txRangeProvider'
+    return r'transactionsRangeProvider'
         ''
         '($argument)';
   }
 
   @$internal
   @override
-  TxRange create() => TxRange();
+  TransactionsRange create() => TransactionsRange();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(DateRange value) {
@@ -176,7 +327,7 @@ final class TxRangeProvider extends $NotifierProvider<TxRange, DateRange> {
 
   @override
   bool operator ==(Object other) {
-    return other is TxRangeProvider && other.argument == argument;
+    return other is TransactionsRangeProvider && other.argument == argument;
   }
 
   @override
@@ -185,27 +336,34 @@ final class TxRangeProvider extends $NotifierProvider<TxRange, DateRange> {
   }
 }
 
-String _$txRangeHash() => r'c87a9d462f968e7cdaeb0eeca9ab865052439778';
+String _$transactionsRangeHash() => r'b78ddcde787eca001ca7f50d42c7d19f8b1089b9';
 
-final class TxRangeFamily extends $Family
-    with $ClassFamilyOverride<TxRange, DateRange, DateRange, DateRange, bool> {
-  const TxRangeFamily._()
+final class TransactionsRangeFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          TransactionsRange,
+          DateRange,
+          DateRange,
+          DateRange,
+          bool
+        > {
+  const TransactionsRangeFamily._()
     : super(
         retry: null,
-        name: r'txRangeProvider',
+        name: r'transactionsRangeProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
       );
 
-  TxRangeProvider call(bool isIncome) =>
-      TxRangeProvider._(argument: isIncome, from: this);
+  TransactionsRangeProvider call(bool isIncome) =>
+      TransactionsRangeProvider._(argument: isIncome, from: this);
 
   @override
-  String toString() => r'txRangeProvider';
+  String toString() => r'transactionsRangeProvider';
 }
 
-abstract class _$TxRange extends $Notifier<DateRange> {
+abstract class _$TransactionsRange extends $Notifier<DateRange> {
   late final _$args = ref.$arg as bool;
   bool get isIncome => _$args;
 
@@ -220,294 +378,6 @@ abstract class _$TxRange extends $Notifier<DateRange> {
             as $ClassProviderElement<
               AnyNotifier<DateRange, DateRange>,
               DateRange,
-              Object?,
-              Object?
-            >;
-    element.handleValue(ref, created);
-  }
-}
-
-@ProviderFor(transactionsView)
-const transactionsViewProvider = TransactionsViewFamily._();
-
-final class TransactionsViewProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<TransactionView>,
-          AsyncValue<TransactionView>,
-          AsyncValue<TransactionView>
-        >
-    with $Provider<AsyncValue<TransactionView>> {
-  const TransactionsViewProvider._({
-    required TransactionsViewFamily super.from,
-    required ({bool isIncome, DateTime start, DateTime end}) super.argument,
-  }) : super(
-         retry: null,
-         name: r'transactionsViewProvider',
-         isAutoDispose: true,
-         dependencies: null,
-         $allTransitiveDependencies: null,
-       );
-
-  static const $allTransitiveDependencies0 = transactionsForPeriodProvider;
-  static const $allTransitiveDependencies1 =
-      TransactionsForPeriodProvider.$allTransitiveDependencies0;
-
-  @override
-  String debugGetCreateSourceHash() => _$transactionsViewHash();
-
-  @override
-  String toString() {
-    return r'transactionsViewProvider'
-        ''
-        '$argument';
-  }
-
-  @$internal
-  @override
-  $ProviderElement<AsyncValue<TransactionView>> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
-
-  @override
-  AsyncValue<TransactionView> create(Ref ref) {
-    final argument =
-        this.argument as ({bool isIncome, DateTime start, DateTime end});
-    return transactionsView(
-      ref,
-      isIncome: argument.isIncome,
-      start: argument.start,
-      end: argument.end,
-    );
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AsyncValue<TransactionView> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<AsyncValue<TransactionView>>(value),
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is TransactionsViewProvider && other.argument == argument;
-  }
-
-  @override
-  int get hashCode {
-    return argument.hashCode;
-  }
-}
-
-String _$transactionsViewHash() => r'3fcd2ccb386f1c5c0db1cebaf80f2e1d4bc97f0b';
-
-final class TransactionsViewFamily extends $Family
-    with
-        $FunctionalFamilyOverride<
-          AsyncValue<TransactionView>,
-          ({bool isIncome, DateTime start, DateTime end})
-        > {
-  const TransactionsViewFamily._()
-    : super(
-        retry: null,
-        name: r'transactionsViewProvider',
-        dependencies: const <ProviderOrFamily>[transactionsForPeriodProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
-          TransactionsViewProvider.$allTransitiveDependencies0,
-          TransactionsViewProvider.$allTransitiveDependencies1,
-        ],
-        isAutoDispose: true,
-      );
-
-  TransactionsViewProvider call({
-    required bool isIncome,
-    required DateTime start,
-    required DateTime end,
-  }) => TransactionsViewProvider._(
-    argument: (isIncome: isIncome, start: start, end: end),
-    from: this,
-  );
-
-  @override
-  String toString() => r'transactionsViewProvider';
-}
-
-@ProviderFor(HistoryStart)
-const historyStartProvider = HistoryStartFamily._();
-
-final class HistoryStartProvider
-    extends $NotifierProvider<HistoryStart, DateTime> {
-  const HistoryStartProvider._({
-    required HistoryStartFamily super.from,
-    required bool super.argument,
-  }) : super(
-         retry: null,
-         name: r'historyStartProvider',
-         isAutoDispose: true,
-         dependencies: null,
-         $allTransitiveDependencies: null,
-       );
-
-  @override
-  String debugGetCreateSourceHash() => _$historyStartHash();
-
-  @override
-  String toString() {
-    return r'historyStartProvider'
-        ''
-        '($argument)';
-  }
-
-  @$internal
-  @override
-  HistoryStart create() => HistoryStart();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(DateTime value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<DateTime>(value),
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is HistoryStartProvider && other.argument == argument;
-  }
-
-  @override
-  int get hashCode {
-    return argument.hashCode;
-  }
-}
-
-String _$historyStartHash() => r'4e3f80a33436811d677317076e329b6d7bcac76f';
-
-final class HistoryStartFamily extends $Family
-    with
-        $ClassFamilyOverride<HistoryStart, DateTime, DateTime, DateTime, bool> {
-  const HistoryStartFamily._()
-    : super(
-        retry: null,
-        name: r'historyStartProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
-        isAutoDispose: true,
-      );
-
-  HistoryStartProvider call(bool isIncome) =>
-      HistoryStartProvider._(argument: isIncome, from: this);
-
-  @override
-  String toString() => r'historyStartProvider';
-}
-
-abstract class _$HistoryStart extends $Notifier<DateTime> {
-  late final _$args = ref.$arg as bool;
-  bool get isIncome => _$args;
-
-  DateTime build(bool isIncome);
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    final created = build(_$args);
-    final ref = this.ref as $Ref<DateTime, DateTime>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<DateTime, DateTime>,
-              DateTime,
-              Object?,
-              Object?
-            >;
-    element.handleValue(ref, created);
-  }
-}
-
-@ProviderFor(HistoryEnd)
-const historyEndProvider = HistoryEndFamily._();
-
-final class HistoryEndProvider extends $NotifierProvider<HistoryEnd, DateTime> {
-  const HistoryEndProvider._({
-    required HistoryEndFamily super.from,
-    required bool super.argument,
-  }) : super(
-         retry: null,
-         name: r'historyEndProvider',
-         isAutoDispose: true,
-         dependencies: null,
-         $allTransitiveDependencies: null,
-       );
-
-  @override
-  String debugGetCreateSourceHash() => _$historyEndHash();
-
-  @override
-  String toString() {
-    return r'historyEndProvider'
-        ''
-        '($argument)';
-  }
-
-  @$internal
-  @override
-  HistoryEnd create() => HistoryEnd();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(DateTime value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<DateTime>(value),
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is HistoryEndProvider && other.argument == argument;
-  }
-
-  @override
-  int get hashCode {
-    return argument.hashCode;
-  }
-}
-
-String _$historyEndHash() => r'd9cb94d9360ba15141b36c97815bbe795c8c6dba';
-
-final class HistoryEndFamily extends $Family
-    with $ClassFamilyOverride<HistoryEnd, DateTime, DateTime, DateTime, bool> {
-  const HistoryEndFamily._()
-    : super(
-        retry: null,
-        name: r'historyEndProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
-        isAutoDispose: true,
-      );
-
-  HistoryEndProvider call(bool isIncome) =>
-      HistoryEndProvider._(argument: isIncome, from: this);
-
-  @override
-  String toString() => r'historyEndProvider';
-}
-
-abstract class _$HistoryEnd extends $Notifier<DateTime> {
-  late final _$args = ref.$arg as bool;
-  bool get isIncome => _$args;
-
-  DateTime build(bool isIncome);
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    final created = build(_$args);
-    final ref = this.ref as $Ref<DateTime, DateTime>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<DateTime, DateTime>,
-              DateTime,
               Object?,
               Object?
             >;
@@ -559,7 +429,7 @@ final class TransactionsForPeriodProvider
 }
 
 String _$transactionsForPeriodHash() =>
-    r'6e67af7c69fdfeb2b28b0e5ec8b86fba65462ce6';
+    r'25b7c9d52c9e47253ab03705f04aa6c52b829821';
 
 final class TransactionsForPeriodFamily extends $Family
     with
