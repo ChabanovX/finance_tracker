@@ -21,7 +21,7 @@ import '../../../../core/theme/app_theme.dart';
 part 'transactions_loading_widgets.dart';
 part 'transactions_widgets.dart';
 
-@Dependencies([Transactions])
+@Dependencies([TransactionsForPeriod])
 class TransactionsPage extends ConsumerWidget {
   const TransactionsPage({
     super.key,
@@ -41,7 +41,8 @@ class TransactionsPage extends ConsumerWidget {
     required bool isIncomePage,
   }) {
     return showGeneralDialog(
-      barrierDismissible: true,useRootNavigator: false,
+      barrierDismissible: true,
+      useRootNavigator: false,
       barrierLabel: 'Transaction Modal',
       context: context,
       pageBuilder:

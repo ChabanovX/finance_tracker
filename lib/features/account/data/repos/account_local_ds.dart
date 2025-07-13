@@ -4,6 +4,7 @@ import 'package:yndx_homework/features/account/domain/models/account.dart';
 import 'package:yndx_homework/features/account/domain/repos/account_repository.dart';
 import 'package:yndx_homework/shared/data/datasources/local/objectbox.g.dart';
 import 'package:yndx_homework/shared/data/datasources/local/sync_metadata_entity.dart';
+import 'package:yndx_homework/util/log.dart';
 
 class AccountObjectBoxRepository implements IAccountLocalDataSource {
   final ObjectBox _ob;
@@ -12,8 +13,16 @@ class AccountObjectBoxRepository implements IAccountLocalDataSource {
 
   @override
   Future<Account> getAccount() async {
-    final first = _ob.accountBox.getAll().first;
-    return first.toDomain();
+    final accounts = _ob.accountBox.getAll();
+
+    if (accounts.isEmpty) {
+      // return a dummy account for offline usage.
+      Log.info('No accounts were found in data.');
+      Log.info('Using a dummy account now.');
+      return Account(id: 0, name: 'Dummy', balance: 0, currency: 'EUR');
+    }
+
+    return accounts.first.toDomain();
   }
 
   @override

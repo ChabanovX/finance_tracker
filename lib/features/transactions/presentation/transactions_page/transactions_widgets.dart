@@ -1,6 +1,6 @@
 part of 'transactions_page.dart';
 
-@Dependencies([Transactions])
+@Dependencies([TransactionsForPeriod])
 class _TransactionsList extends StatelessWidget {
   const _TransactionsList(this.transactions);
 
@@ -60,7 +60,7 @@ class _TransactionsList extends StatelessWidget {
   }
 }
 
-@Dependencies([Transactions])
+@Dependencies([TransactionsForPeriod])
 class TransactionModal extends ConsumerStatefulWidget {
   const TransactionModal({
     super.key,
@@ -177,7 +177,6 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
             );
 
     // Save and update state.
-    // I do not await those, sort of optimistic UI.
     if (isEditing) {
       await repo.updateTransaction(tx);
     } else {
@@ -280,59 +279,62 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
     final locale = Localizations.localeOf(context);
     final title = isEditing ? 'Edit Transaction' : 'New Transaction';
 
-    return Center(
-      child: Material(
-        child: Container(
-          padding: EdgeInsets.fromLTRB(16, 16, 16, 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(title),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _amountCtrl,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Amount'),
-                inputFormatters: [DecimalTextInputFormatter(locale)],
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _commentCtrl,
-                keyboardType: TextInputType.text,
-                decoration: const InputDecoration(labelText: 'Commentary'),
-              ),
-              const SizedBox(height: 8),
-              if (!isEditing) ...[
-                GestureDetector(
-                  onTap: _pickDate,
-                  child: InputDecorator(
-                    decoration: const InputDecoration(labelText: 'Date'),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(DateFormat.yMMMd().format(_date)),
-                        const Icon(Icons.calendar_today_outlined, size: 20),
-                      ],
-                    ),
-                  ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+      child: Center(
+        child: Material(
+          child: Container(
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(title),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _amountCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: 'Amount'),
+                  inputFormatters: [DecimalTextInputFormatter(locale)],
                 ),
                 const SizedBox(height: 8),
-              ],
-              _buildCategoryRef(),
-              const SizedBox(height: 8),
-              _buildAccountRef(),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
+                TextField(
+                  controller: _commentCtrl,
+                  keyboardType: TextInputType.text,
+                  decoration: const InputDecoration(labelText: 'Commentary'),
+                ),
+                const SizedBox(height: 8),
+                if (!isEditing) ...[
+                  GestureDetector(
+                    onTap: _pickDate,
+                    child: InputDecorator(
+                      decoration: const InputDecoration(labelText: 'Date'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(DateFormat.yMMMd().format(_date)),
+                          const Icon(Icons.calendar_today_outlined, size: 20),
+                        ],
+                      ),
+                    ),
                   ),
-                  ElevatedButton(onPressed: _save, child: const Text('Save')),
+                  const SizedBox(height: 8),
                 ],
-              ),
-            ],
+                _buildCategoryRef(),
+                const SizedBox(height: 8),
+                _buildAccountRef(),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Cancel'),
+                    ),
+                    ElevatedButton(onPressed: _save, child: const Text('Save')),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -13,7 +13,7 @@ import '../../../../shared/presentation/widgets/default_header_list_tile.dart';
 
 part 'transactions_history_widgets.dart';
 
-@Dependencies([totalAmount, Transactions, sortedTransactions])
+@Dependencies([totalAmount, TransactionsForPeriod, sortedTransactions])
 class TransactionsHistoryPage extends ConsumerWidget {
   const TransactionsHistoryPage({
     super.key,

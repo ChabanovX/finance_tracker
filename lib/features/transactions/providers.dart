@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:yndx_homework/features/balance/providers.dart';
 import 'package:yndx_homework/features/transactions/domain/models/category.dart';
 import 'package:yndx_homework/features/transactions/domain/models/transaction.dart';
+import 'package:yndx_homework/features/transactions/domain/models/transaction_view.dart';
 import 'package:yndx_homework/shared/providers/repository_providers.dart';
 import 'package:yndx_homework/util/log.dart';
 
@@ -37,41 +38,6 @@ Future<List<Category>> category(Ref ref) async {
   return repo.getAllCategories();
 }
 
-@Riverpod(dependencies: [isIncome, sortedTransactions])
-double totalAmount(Ref ref) {
-  final isIncome = ref.watch(isIncomeProvider);
-  return ref
-      .watch(sortedTransactionsProvider(isIncome))
-      .fold(0.0, (sum, t) => sum + t.amount);
-}
-
-@Riverpod(dependencies: [Transactions])
-Map<Category, List<Transaction>> txByCategory(Ref ref) {
-  final List<Transaction> list = ref.watch(transactionsProvider).value ?? [];
-
-  final map = <Category, List<Transaction>>{};
-  for (final t in list) {
-    map.putIfAbsent(t.category, () => []).add(t);
-  }
-  return map;
-}
-
-@Riverpod(dependencies: [Transactions])
-List<Transaction> sortedTransactions(Ref ref, bool isIncome) {
-  final sortBy = ref.watch(sortByProvider);
-  final List<Transaction> list = ref.watch(transactionsProvider).value ?? [];
-
-  final copy = [...list];
-  switch (sortBy) {
-    case SortByEnum.amount:
-      copy.sort((a, b) => b.amount.compareTo(a.amount));
-      break;
-    case SortByEnum.date:
-      copy.sort((a, b) => b.transactionDate.compareTo(a.transactionDate));
-  }
-  return copy;
-}
-
 @riverpod
 class TxRange extends _$TxRange {
   @override
@@ -87,6 +53,51 @@ class TxRange extends _$TxRange {
   void updateEnd(DateTime newEnd) => state = DateRange(state.start, newEnd);
 
   void update(DateTime start, DateTime end) => state = DateRange(start, end);
+}
+
+@Riverpod(dependencies: [TransactionsForPeriod])
+AsyncValue<TransactionView> transactionsView(
+  Ref ref, {
+  required bool isIncome,
+  required DateTime start,
+  required DateTime end,
+}) {
+  final sortBy = ref.watch(sortByProvider);
+
+  final asyncTx = ref.watch(transactionsForPeriodProvider(start, end));
+
+  return asyncTx.when(
+    loading: () => AsyncLoading(),
+    error: (error, stackTrace) => AsyncError(error, stackTrace),
+    data: (txList) {
+      // Sorted and cleared txs.
+      final cleared =
+          txList.where((tx) => tx.category.isIncome == isIncome).toList();
+      switch (sortBy) {
+        case (SortByEnum.amount):
+          cleared.sort((a, b) => b.amount.compareTo(a.amount));
+          break;
+        default:
+          cleared.sort(
+            (a, b) => b.transactionDate.compareTo(a.transactionDate),
+          );
+          break;
+      }
+
+      // Total.
+      final total = cleared.fold(0.0, (val, t) => val + t.amount);
+
+      // Group by category.
+      final byCat = <Category, List<Transaction>>{};
+      for (final tx in cleared) {
+        byCat.putIfAbsent(tx.category, () => []).add(tx);
+      }
+
+      return AsyncData(
+        TransactionView(sorted: cleared, total: total, byCategory: byCat),
+      );
+    },
+  );
 }
 
 @riverpod
@@ -112,29 +123,16 @@ class HistoryEnd extends _$HistoryEnd {
 }
 
 @Riverpod(dependencies: [isIncome])
-class Transactions extends _$Transactions {
+class TransactionsForPeriod extends _$TransactionsForPeriod {
   /// Returns a list of daily transactions.
   @override
-  Future<List<Transaction>> build() async {
+  Future<List<Transaction>> build(DateTime start, DateTime end) async {
     final isIncome = ref.watch(isIncomeProvider);
     final repo = ref.watch(transactionsRepositoryProvider);
-    final now = DateTime.now();
-
-    final start = DateTime(
-      now.year,
-      now.month,
-      now.day,
-    );
-    final end = DateTime(
-      now.year,
-      now.month,
-      now.day + 1,
-    ).subtract(const Duration(microseconds: 1));
-
     final accountId = (await ref.watch(accountProvider.future)).id;
 
     final list = await repo.getTransactionsForPeriod(start, end, accountId);
-    // Log.info('riverp $list');
+    Log.info('TransactionsForPeriod: $list');
     return list.where((e) => e.category.isIncome == isIncome).toList();
   }
 }

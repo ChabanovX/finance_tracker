@@ -1,4 +1,3 @@
-
 import 'package:animated_pie_chart/animated_pie_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +15,7 @@ import '../../../../shared/presentation/widgets/default_header_list_tile.dart';
 
 part 'analysis_widgets.dart';
 
-@Dependencies([Transactions, totalAmount, isIncome, txByCategory])
+@Dependencies([transactionsView, isIncome])
 class AnalysisPage extends ConsumerWidget {
   const AnalysisPage({super.key, required this.isIncome});
 
@@ -24,11 +23,14 @@ class AnalysisPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bg = Theme.of(context).colorScheme.surface;
+
     final start = ref.watch(historyStartProvider(isIncome));
     final end = ref.watch(historyEndProvider(isIncome));
-    final transactionsAsync = ref.watch(transactionsProvider);
-    final total = ref.watch(totalAmountProvider);
-    final bg = Theme.of(context).colorScheme.surface;
+
+    final asyncTxs = ref.watch(
+      transactionsViewProvider(isIncome: isIncome, start: start, end: end),
+    );
 
     return Scaffold(
       appBar: AppBar(backgroundColor: bg, title: Text('Анализ')),
@@ -51,7 +53,11 @@ class AnalysisPage extends ConsumerWidget {
           DefaultHeaderListTile(
             backgroundColor: bg,
             leading: Text('Сумма'),
-            trailing: Text('$total₽'),
+            trailing: asyncTxs.when(
+              loading: () => Text('Loading...'),
+              error: (_, _) => Text('Error 😢'),
+              data: (view) => Text('${view.total}₽'),
+            ),
           ),
           Divider(height: 1),
           SizedBox(
@@ -64,19 +70,19 @@ class AnalysisPage extends ConsumerWidget {
           Divider(height: 1),
           // And build listView of those
           Expanded(
-            child: transactionsAsync.when(
-              data: (_) {
-                final groups =
-                    ref
-                        .watch(txByCategoryProvider)
-                        .entries
+            child: asyncTxs.when(
+              data: (view) {
+                final groupsEntries = view.byCategory.entries;
+                final groupsItems =
+                    groupsEntries
                         .map((e) => _CategoryGroup(e.key, e.value))
                         .toList();
-                groups.sort((a, b) => b.total.compareTo(a.total));
-                return _CategoryList(groups);
+
+                groupsItems.sort((a, b) => b.total.compareTo(a.total));
+                return _CategoryList(groupsItems);
               },
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, _) => Center(child: Text('Error occured: $err')),
+              error: (err, _) => Center(child: Text('Error occurred: $err')),
             ),
           ),
         ],

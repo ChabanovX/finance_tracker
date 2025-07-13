@@ -1,12 +1,8 @@
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:yndx_homework/shared/data/datasources/local/sync_metadata_entity.dart';
-import 'package:yndx_homework/shared/data/datasources/remote/mappers.dart';
-import 'package:yndx_homework/features/transactions/domain/models/category.dart';
 import 'objectbox.g.dart';
 
-import 'mappers.dart';
-import '../mock_data.dart';
 import '../../../../features/account/data/models/local/account_entity.dart';
 import '../../../../features/transactions/data/models/local/category_entity.dart';
 import '../../../../features/transactions/data/models/local/transaction_entity.dart';
@@ -43,31 +39,31 @@ class ObjectBox {
 
   /// Populate mock data into database.
   static void _seed(ObjectBox ob) {
-    // TODO: add domain there.
-    final domains = mockCategories.map((e) => (e.toDomain())).toList();
+    //   // TODO: add domain there.
+    //   final domains = mockCategories.map((e) => (e.toDomain())).toList();
 
-    ob.store.runInTransaction(TxMode.write, () {
-      // Parents first
-      final catEntities = domains.map((c) => c.toEntity()).toList();
-      ob.categoryBox.putMany(catEntities);
+    //   ob.store.runInTransaction(TxMode.write, () {
+    //     // Parents first
+    //     final catEntities = domains.map((c) => c.toEntity()).toList();
+    //     ob.categoryBox.putMany(catEntities);
 
-      final accEntity = mockAccount.toEntity();
-      ob.accountBox.put(accEntity);
+    //     final accEntity = mockAccount.toEntity();
+    //     ob.accountBox.put(accEntity);
 
-      // Build Category -> Entity map by IDENTITY.
-      final catMap = <Category, CategoryEntity>{};
-      for (var i = 0; i < mockCategories.length; i++) {
-        catMap[domains[i]] = catEntities[i];
-      }
+    //     // Build Category -> Entity map by IDENTITY.
+    //     final catMap = <Category, CategoryEntity>{};
+    //     for (var i = 0; i < mockCategories.length; i++) {
+    //       catMap[domains[i]] = catEntities[i];
+    //     }
 
-      // Then children
-      final txEntities =
-          mockTransactions.map((t) {
-            // Not by id, but by identity. (ids invalid at this point)
-            final cat = catMap[t.category]!;
-            return t.toEntity(accEntity, cat);
-          }).toList();
-      ob.transactionBox.putMany(txEntities);
-    });
+    //     // Then children
+    //     final txEntities =
+    //         mockTransactions.map((t) {
+    //           // Not by id, but by identity. (ids invalid at this point)
+    //           final cat = catMap[t.category]!;
+    //           return t.toEntity(accEntity, cat);
+    //         }).toList();
+    //     ob.transactionBox.putMany(txEntities);
+    //   });
   }
 }

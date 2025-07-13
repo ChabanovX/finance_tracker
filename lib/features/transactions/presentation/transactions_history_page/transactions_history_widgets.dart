@@ -66,7 +66,7 @@ class _SortTile extends StatelessWidget {
   }
 }
 
-@Dependencies([Transactions])
+@Dependencies([TransactionsForPeriod])
 class _HistoryList extends StatelessWidget {
   const _HistoryList(this.transactions);
 

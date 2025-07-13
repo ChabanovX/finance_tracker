@@ -37,6 +37,7 @@ class _DateTile extends StatelessWidget {
   }
 }
 
+@Dependencies([TransactionsForPeriod])
 class _CategoryList extends StatelessWidget {
   const _CategoryList(this.items);
 
@@ -58,7 +59,7 @@ class _CategoryList extends StatelessWidget {
   }
 }
 
-@Dependencies([Transactions])
+@Dependencies([TransactionsForPeriod])
 class _CategoryTile extends StatelessWidget {
   const _CategoryTile({required this.item, required this.isFirst});
 
@@ -126,7 +127,7 @@ class _CategoryGroup {
   late final Transaction last;
 }
 
-@Dependencies([Transactions])
+@Dependencies([TransactionsForPeriod])
 class _CategoryTransactionsPage extends StatelessWidget {
   const _CategoryTransactionsPage({
     required this.category,
@@ -176,6 +177,13 @@ class _AnalysisChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final groups = ref.watch(
+      transactionsViewProvider(
+        isIncome: isIncome,
+        start: start,
+        end: end,
+      ).select((v) => v.value?.byCategory),
+    );
     final groups = ref.watch(txByCategoryProvider).entries.toList();
 
     final items = <PieChartItem>[];

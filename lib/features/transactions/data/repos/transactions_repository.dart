@@ -23,7 +23,6 @@ class TransactionsRepository implements ITransactionsRepository {
 
   @override
   Future<List<Transaction>> getTransactions() async {
-    // First, try to sync pending operations.
     try {
       await _syncPendingOperations();
 
@@ -31,6 +30,7 @@ class TransactionsRepository implements ITransactionsRepository {
         final remoteTransactions = await _remoteDataSource.getTransactions();
         await _localDataSource.clearTransactions();
         await _localDataSource.saveTransactions(remoteTransactions);
+        Log.info('remote txs: $remoteTransactions');
         return remoteTransactions;
       }
     } catch (e) {
@@ -39,7 +39,6 @@ class TransactionsRepository implements ITransactionsRepository {
     }
 
     final txs = await _localDataSource.getTransactions();
-    // Log.info('Get: $runtimeType, $txs');
     return txs;
   }
 

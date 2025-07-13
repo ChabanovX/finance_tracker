@@ -44,7 +44,7 @@ class TransactionsLocalDatasource implements ITransactionsLocalDataSource {
   @override
   Future<List<Transaction>> getTransactions() async {
     final transactionEntities = _ob.transactionBox.getAll();
-    // Log.info('txs $transactionEntities');
+    Log.info('local txs: $transactionEntities');
     return transactionEntities.map(_tryMap).whereType<Transaction>().toList();
   }
 
