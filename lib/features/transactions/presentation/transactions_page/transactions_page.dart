@@ -90,7 +90,7 @@ class TransactionsPage extends ConsumerWidget {
       ),
       body: transactionsAsync.when(
         data: (data) {
-          Log.info('TX page DATA: $data');
+          // Log.info('TX page DATA: $data');
           return _TransactionsList(data);
         },
         loading: () => _LoadingTransactionsList(),

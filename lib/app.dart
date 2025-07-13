@@ -17,10 +17,9 @@ class MainApp extends ConsumerStatefulWidget {
 class _MainAppState extends ConsumerState<MainApp> {
   late final AppRouterDelegate _routerDelegate;
 
-
   @override
   void initState() {
-    Log.info('Current network state: ${ref.read(networkStateProvider)}');
+    // Log.info('Current network state: ${ref.read(networkStateProvider)}');
     super.initState();
     _routerDelegate = AppRouterDelegate();
   }

@@ -39,7 +39,7 @@ class TransactionsRepository implements ITransactionsRepository {
     }
 
     final txs = await _localDataSource.getTransactions();
-    Log.info('Get: $runtimeType, $txs');
+    // Log.info('Get: $runtimeType, $txs');
     return txs;
   }
 
@@ -110,11 +110,11 @@ class TransactionsRepository implements ITransactionsRepository {
     } catch (e) {
       Log.error('Network error: $runtimeType', error: e);
     } finally {
-      Log.info('returning daily local: $runtimeType');
+      // Log.info('returning daily local: $runtimeType');
     }
 
     final txs = await _localDataSource.getTransactionsForPeriod(start, end);
-    Log.info('PERIOD: $runtimeType, $start|$end, $txs');
+    // Log.info('PERIOD: $runtimeType, $start|$end, $txs');
     return txs;
   }
 
@@ -162,7 +162,7 @@ class TransactionsRepository implements ITransactionsRepository {
               break;
             case OperationType.update:
               final transaction = Transaction.fromJson(operation.data);
-              Log.info(transaction.toString());
+              // Log.info(transaction.toString());
               await _remoteDataSource.updateTransaction(transaction);
               break;
             case OperationType.delete:

@@ -1,6 +1,5 @@
 part of 'balance_page.dart';
 
-/// Currently it is dummy widget. Updates only local state.
 class _BalanceHeader extends ConsumerWidget {
   const _BalanceHeader({super.key, required this.onEdit});
 

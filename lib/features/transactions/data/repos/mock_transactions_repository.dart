@@ -38,7 +38,7 @@ class MockTransactionsRepository implements ITransactionsRepository {
     final index = mockTransactions.indexWhere((t) => t.id == transaction.id);
     if (index != -1) {
       mockTransactions[index] = transaction;
-      Log.info('Transaction updated: ${transaction.id}');
+      // Log.info('Transaction updated: ${transaction.id}');
     }
   }
 

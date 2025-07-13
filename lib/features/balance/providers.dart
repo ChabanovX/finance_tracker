@@ -18,7 +18,23 @@ Future<Account> account(Ref ref) async {
   return await repo.getAccount();
 }
 
-enum Currency { rub, eur, usd }
+enum Currency {
+  rub,
+  eur,
+  usd;
+
+  @override
+  String toString() {
+    switch (this) {
+      case Currency.rub:
+        return '₽';
+      case Currency.eur:
+        return '€';
+      case Currency.usd:
+        return '\$';
+    }
+  }
+}
 
 enum ChartMode { day, month }
 

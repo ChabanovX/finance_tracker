@@ -134,7 +134,7 @@ class Transactions extends _$Transactions {
     final accountId = (await ref.watch(accountProvider.future)).id;
 
     final list = await repo.getTransactionsForPeriod(start, end, accountId);
-    Log.info('riverp $list');
+    // Log.info('riverp $list');
     return list.where((e) => e.category.isIncome == isIncome).toList();
   }
 }
