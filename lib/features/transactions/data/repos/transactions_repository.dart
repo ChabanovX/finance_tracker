@@ -1,7 +1,5 @@
-
 import 'package:yndx_homework/core/network/backup_manager.dart';
 import 'package:yndx_homework/core/network/network_client.dart';
-import 'package:yndx_homework/features/transactions/data/models/mappers.dart';
 import 'package:yndx_homework/features/transactions/domain/models/transaction.dart';
 import 'package:yndx_homework/features/transactions/domain/repos/transactions_local_datasource.dart';
 import 'package:yndx_homework/features/transactions/domain/repos/transactions_remote_datasource.dart';
@@ -26,21 +24,23 @@ class TransactionsRepository implements ITransactionsRepository {
   @override
   Future<List<Transaction>> getTransactions() async {
     // First, try to sync pending operations.
-    // try {
-    //   await _syncPendingOperations();
+    try {
+      await _syncPendingOperations();
 
-    //   if (await _networkClient.isConnected) {
-    //     final remoteTransactions = await _remoteDataSource.getTransactions();
-    //     await _localDataSource.clearTransactions();
-    //     await _localDataSource.saveTransactions(remoteTransactions);
-    //     return remoteTransactions;
-    //   }
-    // } catch (e) {
-    //   // Network error, fall back to local state.
-    //   Log.error('Network error $runtimeType', error: e);
-    // }
+      if (await _networkClient.isConnected) {
+        final remoteTransactions = await _remoteDataSource.getTransactions();
+        await _localDataSource.clearTransactions();
+        await _localDataSource.saveTransactions(remoteTransactions);
+        return remoteTransactions;
+      }
+    } catch (e) {
+      // Network error, fall back to local state.
+      Log.error('Network error $runtimeType', error: e);
+    }
 
-    return await _localDataSource.getTransactions();
+    final txs = await _localDataSource.getTransactions();
+    Log.info('Get: $runtimeType, $txs');
+    return txs;
   }
 
   @override
@@ -99,21 +99,23 @@ class TransactionsRepository implements ITransactionsRepository {
     DateTime end,
     int accountId,
   ) async {
-    // try {
-    //   await _syncPendingOperations();
+    try {
+      await _syncPendingOperations();
 
-    //   if (await _networkClient.isConnected) {
-    //     final remoteTransactions = await _remoteDataSource
-    //         .getTransactionsForPeriod(start, end, accountId);
-    //     return remoteTransactions;
-    //   }
-    // } catch (e) {
-    //   Log.error('Network error: $runtimeType', error: e);
-    // } finally {
-    //   Log.info('returning daily local: $runtimeType');
-    // }
+      if (await _networkClient.isConnected) {
+        final remoteTransactions = await _remoteDataSource
+            .getTransactionsForPeriod(start, end, accountId);
+        return remoteTransactions;
+      }
+    } catch (e) {
+      Log.error('Network error: $runtimeType', error: e);
+    } finally {
+      Log.info('returning daily local: $runtimeType');
+    }
 
-    return await _localDataSource.getTransactionsForPeriod(start, end);
+    final txs = await _localDataSource.getTransactionsForPeriod(start, end);
+    Log.info('PERIOD: $runtimeType, $txs');
+    return txs;
   }
 
   @override
@@ -155,15 +157,11 @@ class TransactionsRepository implements ITransactionsRepository {
         try {
           switch (operation.type) {
             case OperationType.create:
-              final transaction = Transaction.fromJson(
-                operation.data,
-              );
+              final transaction = Transaction.fromJson(operation.data);
               await _remoteDataSource.createTransaction(transaction);
               break;
             case OperationType.update:
-              final transaction = Transaction.fromJson(
-                operation.data,
-              );
+              final transaction = Transaction.fromJson(operation.data);
               Log.info(transaction.toString());
               await _remoteDataSource.updateTransaction(transaction);
               break;

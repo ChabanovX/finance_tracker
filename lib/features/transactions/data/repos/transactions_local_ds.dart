@@ -44,7 +44,7 @@ class TransactionsLocalDatasource implements ITransactionsLocalDataSource {
   @override
   Future<List<Transaction>> getTransactions() async {
     final transactionEntities = _ob.transactionBox.getAll();
-    Log.info('txs $transactionEntities');
+    // Log.info('txs $transactionEntities');
     return transactionEntities.map(_tryMap).whereType<Transaction>().toList();
   }
 
@@ -62,12 +62,13 @@ class TransactionsLocalDatasource implements ITransactionsLocalDataSource {
               ),
             )
             .build();
-    final result = query.find();
-    query.close();
-
-    final list = result.map(_map).toList();
-    Log.info('LOCAL DS $list');
-    return list;
+    try {
+      final list = query.find().map(_map).toList();
+      // Log.info('LOCAL DS $list');
+      return list;
+    } finally {
+      query.close();
+    }
   }
 
   @override
