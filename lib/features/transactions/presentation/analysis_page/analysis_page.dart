@@ -3,6 +3,7 @@ import 'package:animated_pie_chart/animated_pie_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:yndx_homework/features/transactions/domain/models/category.dart';
 import 'package:yndx_homework/features/transactions/presentation/transactions_page/transactions_page.dart';
 import 'package:yndx_homework/features/transactions/providers.dart';

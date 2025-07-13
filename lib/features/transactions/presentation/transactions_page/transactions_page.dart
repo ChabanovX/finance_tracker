@@ -41,7 +41,7 @@ class TransactionsPage extends ConsumerWidget {
     required bool isIncomePage,
   }) {
     return showGeneralDialog(
-      barrierDismissible: true,
+      barrierDismissible: true,useRootNavigator: false,
       barrierLabel: 'Transaction Modal',
       context: context,
       pageBuilder:

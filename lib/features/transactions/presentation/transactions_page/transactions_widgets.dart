@@ -40,6 +40,7 @@ class _TransactionsList extends StatelessWidget {
                     () => showGeneralDialog(
                       context: context,
                       barrierDismissible: true,
+                      useRootNavigator: false,
                       barrierLabel: 'Edit Transaction',
                       pageBuilder: (ctx, an1, an2) {
                         return TransactionModal(

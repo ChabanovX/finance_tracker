@@ -6,54 +6,6 @@ part of 'repository_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-@ProviderFor(articlesRepository)
-const articlesRepositoryProvider = ArticlesRepositoryProvider._();
-
-final class ArticlesRepositoryProvider
-    extends
-        $FunctionalProvider<
-          IArticlesRepository,
-          IArticlesRepository,
-          IArticlesRepository
-        >
-    with $Provider<IArticlesRepository> {
-  const ArticlesRepositoryProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'articlesRepositoryProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$articlesRepositoryHash();
-
-  @$internal
-  @override
-  $ProviderElement<IArticlesRepository> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
-
-  @override
-  IArticlesRepository create(Ref ref) {
-    return articlesRepository(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(IArticlesRepository value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<IArticlesRepository>(value),
-    );
-  }
-}
-
-String _$articlesRepositoryHash() =>
-    r'0a4ffcff32e7041669e08b291376f490ca65386f';
-
 @ProviderFor(transactionsLocalDatasource)
 const transactionsLocalDatasourceProvider =
     TransactionsLocalDatasourceProvider._();
@@ -489,6 +441,54 @@ final class CategoriesRepositoryProvider
 
 String _$categoriesRepositoryHash() =>
     r'45affa7d1c8b4aef190ee02ffdcce4bb2be1d56e';
+
+@ProviderFor(articlesRepository)
+const articlesRepositoryProvider = ArticlesRepositoryProvider._();
+
+final class ArticlesRepositoryProvider
+    extends
+        $FunctionalProvider<
+          IArticlesRepository,
+          IArticlesRepository,
+          IArticlesRepository
+        >
+    with $Provider<IArticlesRepository> {
+  const ArticlesRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'articlesRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$articlesRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<IArticlesRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  IArticlesRepository create(Ref ref) {
+    return articlesRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(IArticlesRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<IArticlesRepository>(value),
+    );
+  }
+}
+
+String _$articlesRepositoryHash() =>
+    r'0a4ffcff32e7041669e08b291376f490ca65386f';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

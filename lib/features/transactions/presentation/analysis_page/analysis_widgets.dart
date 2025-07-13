@@ -58,6 +58,7 @@ class _CategoryList extends StatelessWidget {
   }
 }
 
+@Dependencies([Transactions])
 class _CategoryTile extends StatelessWidget {
   const _CategoryTile({required this.item, required this.isFirst});
 
@@ -125,6 +126,7 @@ class _CategoryGroup {
   late final Transaction last;
 }
 
+@Dependencies([Transactions])
 class _CategoryTransactionsPage extends StatelessWidget {
   const _CategoryTransactionsPage({
     required this.category,
@@ -150,6 +152,7 @@ class _CategoryTransactionsPage extends StatelessWidget {
                 () => showGeneralDialog(
                   context: context,
                   barrierDismissible: true,
+                  useRootNavigator: false,
                   barrierLabel: 'Edit Transaction',
                   pageBuilder: (ctx, an1, an2) {
                     return TransactionModal(

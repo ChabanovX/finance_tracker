@@ -118,17 +118,17 @@ class Transactions extends _$Transactions {
   Future<List<Transaction>> build() async {
     final isIncome = ref.watch(isIncomeProvider);
     final repo = ref.watch(transactionsRepositoryProvider);
-    final range = ref.watch(txRangeProvider(isIncome));
+    final now = DateTime.now();
 
     final start = DateTime(
-      range.start.year,
-      range.start.month,
-      range.start.day,
+      now.year,
+      now.month,
+      now.day,
     );
     final end = DateTime(
-      range.start.year,
-      range.start.month,
-      range.start.day + 1,
+      now.year,
+      now.month,
+      now.day + 1,
     ).subtract(const Duration(microseconds: 1));
 
     final accountId = (await ref.watch(accountProvider.future)).id;

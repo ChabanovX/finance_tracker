@@ -7,9 +7,9 @@ part of 'settings_provider.dart';
 // **************************************************************************
 
 @ProviderFor(sharedPrefs)
-const asdProvider = AsdProvider._();
+const sharedPrefsProvider = SharedPrefsProvider._();
 
-final class AsdProvider
+final class SharedPrefsProvider
     extends
         $FunctionalProvider<
           AsyncValue<SharedPreferences>,
@@ -19,19 +19,19 @@ final class AsdProvider
     with
         $FutureModifier<SharedPreferences>,
         $FutureProvider<SharedPreferences> {
-  const AsdProvider._()
+  const SharedPrefsProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'asdProvider',
+        name: r'sharedPrefsProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$asdHash();
+  String debugGetCreateSourceHash() => _$sharedPrefsHash();
 
   @$internal
   @override
@@ -45,7 +45,7 @@ final class AsdProvider
   }
 }
 
-String _$asdHash() => r'a33a014ca43ae12d86bdbdf3bc29f83e2ccae6b8';
+String _$sharedPrefsHash() => r'c55d8922fdfe442b139e124c11dd2d7e8305501d';
 
 @ProviderFor(backupManager)
 const backupManagerProvider = BackupManagerProvider._();
