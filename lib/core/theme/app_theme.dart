@@ -127,3 +127,44 @@ final ThemeData appDarkTheme = ThemeData(
     indicatorColor: AppColors.kAccentLightDarkmode,
   ),
 );
+
+ThemeData buildAppTheme(Color accent) {
+  final accentLight = _lighten(accent, .4);
+  return ThemeData(
+    colorSchemeSeed: accent,
+    useMaterial3: true,
+    extensions: [AppColorsTheme(colors: AppColors.light.copyWith(accent: accent, accentLight: accentLight))],
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: accent,
+      shape: const CircleBorder(),
+    ),
+    appBarTheme: AppBarTheme(backgroundColor: accent),
+    navigationBarTheme: NavigationBarThemeData(
+      indicatorColor: accentLight,
+    ),
+  );
+}
+
+ThemeData buildAppDarkTheme(Color accent) {
+  final accentLight = _lighten(accent, .2);
+  return ThemeData(
+    brightness: Brightness.dark,
+    colorSchemeSeed: accent,
+    useMaterial3: true,
+    extensions: [AppColorsTheme(colors: AppColors.dark.copyWith(accent: accent, accentLight: accentLight))],
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: accent,
+      shape: const CircleBorder(),
+    ),
+    appBarTheme: AppBarTheme(backgroundColor: accent),
+    navigationBarTheme: NavigationBarThemeData(
+      indicatorColor: accentLight,
+    ),
+  );
+}
+
+Color _lighten(Color color, [double amount = .2]) {
+  final hsl = HSLColor.fromColor(color);
+  final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+  return hslLight.toColor();
+}

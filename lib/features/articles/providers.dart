@@ -22,7 +22,6 @@ Future<List<Article>> articles(Ref ref) {
 @riverpod
 Future<List<Article>> filteredArticles(Ref ref) async {
   final query = ref.watch(articleSearchQueryProvider);
-  Log.info('qe $query');
   final List<Article> list = await ref.watch(articlesProvider.future);
 
   if (query.isEmpty) return list;
