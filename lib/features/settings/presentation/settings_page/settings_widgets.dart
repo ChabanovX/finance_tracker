@@ -14,7 +14,10 @@ class _SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(child: ListTile(title: Text(title), trailing: trailing));
+    return InkWell(
+      onTap: onPressed,
+      child: ListTile(title: Text(title), trailing: trailing),
+    );
   }
 }
 
@@ -80,7 +83,7 @@ class _ColorPicker extends ConsumerWidget {
     return tintColorAsync.when(
       data:
           (color) => InkWell(
-            child: CircleAvatar(backgroundColor: color, radius: 16,),
+            child: CircleAvatar(backgroundColor: color, radius: 16),
             onTap: () => _pickColor(context, ref, color),
           ),
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -97,9 +100,18 @@ class _HapticsSwitcher extends ConsumerWidget {
     final enabled = ref.watch(hapticsProvider);
     final notifier = ref.watch(hapticsProvider.notifier);
 
-    return Switch(
-      value: enabled,
-      onChanged: notifier.set,
-    );
+    return Switch(value: enabled, onChanged: notifier.set);
+  }
+}
+
+class _BiometricSwitcher extends ConsumerWidget {
+  const _BiometricSwitcher({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final enabled = ref.watch(biometricEnabledProvider);
+    final notifier = ref.watch(biometricEnabledProvider.notifier);
+
+    return Switch(value: enabled, onChanged: notifier.set);
   }
 }
