@@ -115,3 +115,36 @@ class _BiometricSwitcher extends ConsumerWidget {
     return Switch(value: enabled, onChanged: notifier.set);
   }
 }
+
+class _LanguagePicker extends ConsumerWidget {
+  const _LanguagePicker({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
+    return InkWell(
+      onTap: () async {
+        final result = await showModalBottomSheet<Locale>(
+          context: context,
+          builder: (ctx) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: const Text('English'),
+                onTap: () => Navigator.pop(ctx, const Locale('en')),
+              ),
+              ListTile(
+                title: const Text('Русский'),
+                onTap: () => Navigator.pop(ctx, const Locale('ru')),
+              ),
+            ],
+          ),
+        );
+        if (result != null) {
+          ref.read(localeProvider.notifier).set(result);
+        }
+      },
+      child: Text(locale.languageCode.toUpperCase()),
+    );
+  }
+}

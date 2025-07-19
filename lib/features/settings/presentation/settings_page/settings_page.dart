@@ -38,7 +38,7 @@ class SettingsPage extends ConsumerWidget {
             const Divider(height: 1),
             _SettingsTile(title: 'FaceID/TouchID', trailing: _BiometricSwitcher(),),
             const Divider(height: 1),
-            _SettingsTile(title: 'Язык', onPressed: () {}),
+            _SettingsTile(title: 'Язык', trailing: _LanguagePicker(),),
             const Divider(height: 1),
             _SettingsTile(title: 'О программе', onPressed: () {}),
             const Divider(height: 1),

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yndx_homework/features/settings/haptics_service.dart';
+import 'package:yndx_homework/features/settings/language_service.dart';
 
 import 'package:yndx_homework/features/settings/theme_service.dart';
 import 'package:yndx_homework/features/settings/tint_color_service.dart';
@@ -61,6 +62,28 @@ class HapticsNotifier extends Notifier<bool> {
     if (state != stored) state = stored;
   }
 }
+
+class LocaleNotifier extends Notifier<Locale> {
+  @override
+  Locale build() {
+    unawaited(_init());
+    return const Locale('en');
+  }
+
+  void set(Locale locale) {
+    state = locale;
+    LanguageService.set(locale.languageCode);
+  }
+
+  Future<void> _init() async {
+    final code = await LanguageService.get();
+    state = Locale(code);
+  }
+}
+
+final localeProvider = NotifierProvider<LocaleNotifier, Locale>(
+  LocaleNotifier.new,
+);
 
 final hapticsProvider = NotifierProvider<HapticsNotifier, bool>(
   HapticsNotifier.new,

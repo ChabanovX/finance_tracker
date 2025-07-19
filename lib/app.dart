@@ -50,18 +50,20 @@ class _MainAppState extends ConsumerState<MainApp> with WidgetsBindingObserver {
         .watch(tintColorProvider)
         .maybeWhen(data: (c) => c, orElse: () => AppColors.kAccent);
 
-    return RouterErrorHandler(
+    final locale = ref.watch(localeProvider);
+
+    return MaterialApp.router(
+    title: 'Finance Tracker',
+    theme: buildAppTheme(tintColor),
+    darkTheme: buildAppDarkTheme(tintColor),
+    themeMode: isSystem ? ThemeMode.system : ThemeMode.light,
+    debugShowCheckedModeBanner: false,
+    routerDelegate: _routerDelegate,
+    builder: (context, child) => RouterErrorHandler(
       routerDelegate: _routerDelegate,
       child: Stack(
         children: [
-          MaterialApp.router(
-            title: 'Finance Tracker',
-            theme: buildAppTheme(tintColor),
-            darkTheme: buildAppDarkTheme(tintColor),
-            themeMode: isSystem ? ThemeMode.system : ThemeMode.light,
-            debugShowCheckedModeBanner: false,
-            routerDelegate: _routerDelegate,
-          ),
+          child!,                                // ← само содержимое маршрутов
           if (_isBlurred)
             Positioned.fill(
               child: BackdropFilter(
@@ -71,6 +73,7 @@ class _MainAppState extends ConsumerState<MainApp> with WidgetsBindingObserver {
             ),
         ],
       ),
-    );
+    ),
+  );
   }
 }
