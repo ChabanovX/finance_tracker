@@ -17,9 +17,9 @@ import '../theme/app_theme.dart';
 /// Shortcut for [NavigationDestination].
 class _NavigationItem {
   final String iconAsset;
-  final String label;
+  final String labelKey;
 
-  const _NavigationItem({required this.iconAsset, required this.label});
+  const _NavigationItem({required this.iconAsset, required this.labelKey});
 }
 
 class AppRouterDelegate extends RouterDelegate<int>
@@ -138,11 +138,11 @@ class AppRouterDelegate extends RouterDelegate<int>
 
   /// Shortcut labels for [NavigationDestination].
   static const List<_NavigationItem> _navItems = [
-    _NavigationItem(iconAsset: 'assets/icons/expenses.svg', label: 'Расходы'),
-    _NavigationItem(iconAsset: 'assets/icons/incomes.svg', label: 'Доходы'),
-    _NavigationItem(iconAsset: 'assets/icons/account.svg', label: 'Счет'),
-    _NavigationItem(iconAsset: 'assets/icons/articles.svg', label: 'Статьи'),
-    _NavigationItem(iconAsset: 'assets/icons/settings.svg', label: 'Настройки'),
+    _NavigationItem(iconAsset: 'assets/icons/expenses.svg', labelKey: 'nav_expenses'),
+    _NavigationItem(iconAsset: 'assets/icons/incomes.svg', labelKey: 'nav_incomes'),
+    _NavigationItem(iconAsset: 'assets/icons/account.svg', labelKey: 'nav_account'),
+    _NavigationItem(iconAsset: 'assets/icons/articles.svg', labelKey: 'nav_articles'),
+    _NavigationItem(iconAsset: 'assets/icons/settings.svg', labelKey: 'nav_settings'),
   ];
 
   /// Listeners notifier.
@@ -220,7 +220,7 @@ class _ScaffoldWithOfflineBanner extends ConsumerWidget {
         ) {
           final item = AppRouterDelegate._navItems[index];
           return NavigationDestination(
-            label: item.label,
+            label: item.labelKey,
             icon: SvgPicture.asset(
               item.iconAsset,
               width: 24,

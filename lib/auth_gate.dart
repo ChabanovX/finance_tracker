@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yndx_homework/features/auth/providers.dart';
 import 'features/auth/biometric_service.dart';
 import 'features/auth/presentation/pin_code_page.dart';
 import 'app.dart';
 
-class AuthGate extends StatefulWidget {
-  final String? initialPin;
-  const AuthGate({super.key, this.initialPin});
+class AuthGate extends ConsumerStatefulWidget {
+  const AuthGate({super.key});
 
   @override
-  State<AuthGate> createState() => _AuthGateState();
+  ConsumerState<AuthGate> createState() => _AuthGateState();
 }
 
-class _AuthGateState extends State<AuthGate> {
+class _AuthGateState extends ConsumerState<AuthGate> {
   bool _unlocked = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.initialPin == null) {
-      _unlocked = true;
-    } else {
-      _tryBiometric();
-    }
-  }
+  bool _biometricAttempted = false;
 
   Future<void> _tryBiometric() async {
     final enabled = await BiometricService.isEnabled();
@@ -36,17 +28,35 @@ class _AuthGateState extends State<AuthGate> {
 
   void _unlock() => setState(() => _unlocked = true);
 
-  @override
+ @override
   Widget build(BuildContext context) {
-    if (!_unlocked && widget.initialPin != null) {
-      return MaterialApp(
+    final pinAsync = ref.watch(pinCodeProvider);
+
+    return pinAsync.when(
+      loading: () => const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: PinCodePage(
-          mode: PinPageMode.verify,
-          onSuccess: _unlock,
-        ),
-      );
-    }
-    return const MainApp();
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
+      ),
+      error: (e, _) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(body: Center(child: Text('Error: $e'))),
+      ),
+      data: (pin) {
+        if (pin != null && !_unlocked) {
+          if (!_biometricAttempted) {
+            _biometricAttempted = true;
+            _tryBiometric();
+          }
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: PinCodePage(
+              mode: PinPageMode.verify,
+              onSuccess: _unlock,
+            ),
+          );
+        }
+        return const MainApp();
+      },
+    );
   }
 }
