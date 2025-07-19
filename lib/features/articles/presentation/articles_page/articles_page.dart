@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yndx_homework/features/articles/providers.dart';
 import 'package:yndx_homework/shared/presentation/widgets/default_app_bar.dart';
 import 'package:yndx_homework/core/theme/app_theme.dart';
-import 'package:yndx_homework/util/log.dart';
 
 part 'articles_widgets.dart';
 
@@ -13,8 +12,6 @@ class ArticlesPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncArticles = ref.watch(filteredArticlesProvider);
-    Log.info('arts: $asyncArticles');
-
     return Scaffold(
       appBar: DefaultAppBar(title: 'Мои статьи'),
       body: Column(

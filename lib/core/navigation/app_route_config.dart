@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:yndx_homework/features/settings/presentation/settings_page/settings_page.dart';
 import 'package:yndx_homework/features/transactions/presentation/analysis_page/analysis_page.dart';
 import 'package:yndx_homework/features/articles/presentation/articles_page/articles_page.dart';
 import 'package:yndx_homework/features/balance/presentation/balance_page/balance_page.dart';
@@ -27,7 +28,7 @@ class AppRouterDelegate extends RouterDelegate<int>
       _buildIncomesNavigator(),
       _simpleNavigator(const BalancePage(), 2),
       _simpleNavigator(const ArticlesPage(), 3),
-      _simpleNavigator(const Center(child: Text('Настройки')), 4),
+      _simpleNavigator(const SettingsPage(), 4),
     ];
   }
 

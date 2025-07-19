@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yndx_homework/shared/providers/network_provider.dart';
-import 'package:yndx_homework/util/log.dart';
+import 'package:yndx_homework/features/settings/providers.dart';
 
 import 'core/navigation/app_route_config.dart' show AppRouterDelegate;
-import 'core/theme/app_theme.dart' show appTheme, appDarkTheme;
+import 'core/theme/app_theme.dart';
 import 'core/widgets/router_error_handler.dart';
 
 class MainApp extends ConsumerStatefulWidget {
@@ -32,13 +31,18 @@ class _MainAppState extends ConsumerState<MainApp> {
 
   @override
   Widget build(BuildContext context) {
+    final isSystem = ref.watch(isSystemModeProvider);
+    final tintColor = ref
+        .watch(tintColorProvider)
+        .maybeWhen(data: (c) => c, orElse: () => context.colors.accent);
+
     return RouterErrorHandler(
       routerDelegate: _routerDelegate,
       child: MaterialApp.router(
         title: 'Finance Tracker',
-        theme: appTheme,
-        darkTheme: appDarkTheme,
-        themeMode: ThemeMode.system,
+        theme: buildAppTheme(tintColor),
+        darkTheme: buildAppDarkTheme(tintColor),
+        themeMode: isSystem ? ThemeMode.system : ThemeMode.light,
         debugShowCheckedModeBanner: false,
         routerDelegate: _routerDelegate,
       ),
