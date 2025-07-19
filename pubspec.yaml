@@ -16,7 +16,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_colorpicker: ^1.1.0
-  flutter_localization: ^0.3.3
+  flutter_localizations:
+    sdk: flutter
   flutter_riverpod: ^3.0.0-dev.16
   flutter_secure_storage: ^9.2.4
   flutter_svg: ^2.1.0
@@ -82,4 +83,5 @@ flutter_native_splash:
 flutter:
   assets:
     - assets/icons/
+    - assets/lang/
   uses-material-design: true

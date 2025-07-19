@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:yndx_homework/features/settings/presentation/settings_page/settings_page.dart';
 import 'package:yndx_homework/features/settings/providers.dart';
 import 'package:yndx_homework/features/transactions/presentation/analysis_page/analysis_page.dart';
 import 'package:yndx_homework/features/articles/presentation/articles_page/articles_page.dart';
 import 'package:yndx_homework/features/balance/presentation/balance_page/balance_page.dart';
 import 'package:yndx_homework/features/transactions/providers.dart';
+import 'package:yndx_homework/l10n/app_localizations.dart';
 import 'package:yndx_homework/shared/providers/network_provider.dart';
 
 import '../../features/transactions/presentation/transactions_history_page/transactions_history_page.dart';

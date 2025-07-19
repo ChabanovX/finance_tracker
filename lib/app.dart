@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yndx_homework/features/settings/providers.dart';
+import 'package:yndx_homework/l10n/app_localizations.dart';
 
 import 'core/navigation/app_route_config.dart' show AppRouterDelegate;
 import 'core/theme/app_theme.dart';
@@ -53,27 +55,28 @@ class _MainAppState extends ConsumerState<MainApp> with WidgetsBindingObserver {
     final locale = ref.watch(localeProvider);
 
     return MaterialApp.router(
-    title: 'Finance Tracker',
-    theme: buildAppTheme(tintColor),
-    darkTheme: buildAppDarkTheme(tintColor),
-    themeMode: isSystem ? ThemeMode.system : ThemeMode.light,
-    debugShowCheckedModeBanner: false,
-    routerDelegate: _routerDelegate,
-    builder: (context, child) => RouterErrorHandler(
+      title: 'Finance Tracker',
+      theme: buildAppTheme(tintColor),
+      darkTheme: buildAppDarkTheme(tintColor),
+      themeMode: isSystem ? ThemeMode.system : ThemeMode.light,
+      debugShowCheckedModeBanner: false,
       routerDelegate: _routerDelegate,
-      child: Stack(
-        children: [
-          child!,                                // ← само содержимое маршрутов
-          if (_isBlurred)
-            Positioned.fill(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                child: Container(color: Colors.transparent),
-              ),
+      builder:
+          (context, child) => RouterErrorHandler(
+            routerDelegate: _routerDelegate,
+            child: Stack(
+              children: [
+                child!,
+                if (_isBlurred)
+                  Positioned.fill(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                      child: Container(color: Colors.transparent),
+                    ),
+                  ),
+              ],
             ),
-        ],
-      ),
-    ),
-  );
+          ),
+    );
   }
 }
