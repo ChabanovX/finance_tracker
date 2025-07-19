@@ -22,7 +22,7 @@ class SettingsPage extends ConsumerWidget {
             const Divider(height: 1,),
             _SettingsTile(title: 'Основной цвет', trailing: _ColorPicker()),
             const Divider(height: 1, ),
-            _SettingsTile(title: 'Хаптики',onPressed: () {}),
+            _SettingsTile(title: 'Хаптики',trailing: _HapticsSwitcher(),),
             const Divider(height: 1,),
             _SettingsTile(title: 'Код пароль', onPressed: () {}),
             const Divider(height: 1,),

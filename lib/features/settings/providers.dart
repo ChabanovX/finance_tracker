@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yndx_homework/features/settings/haptics_service.dart';
 
 import 'package:yndx_homework/features/settings/theme_service.dart';
 import 'package:yndx_homework/features/settings/tint_color_service.dart';
@@ -40,6 +41,30 @@ class IsSystemModeNotifier extends Notifier<bool> {
     if (state != stored) state = stored;
   }
 }
+
+class HapticsNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    unawaited(_init());
+    return true;
+  }
+
+  void set(bool value) {
+    state = value;
+    HapticsService.saveEnabled(value);
+  }
+
+  void toggle() => set(!state);
+
+  Future<void> _init() async {
+    final stored = await HapticsService.isEnabled();
+    if (state != stored) state = stored;
+  }
+}
+
+final hapticsProvider = NotifierProvider<HapticsNotifier, bool>(
+  HapticsNotifier.new,
+);
 
 final isSystemModeProvider = NotifierProvider<IsSystemModeNotifier, bool>(
   IsSystemModeNotifier.new,

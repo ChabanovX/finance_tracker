@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:yndx_homework/features/settings/presentation/settings_page/settings_page.dart';
+import 'package:yndx_homework/features/settings/providers.dart';
 import 'package:yndx_homework/features/transactions/presentation/analysis_page/analysis_page.dart';
 import 'package:yndx_homework/features/articles/presentation/articles_page/articles_page.dart';
 import 'package:yndx_homework/features/balance/presentation/balance_page/balance_page.dart';
@@ -65,25 +67,31 @@ class AppRouterDelegate extends RouterDelegate<int>
       overrides: [isIncomeProvider.overrideWithValue(false)],
       child: Navigator(
         key: key,
-        onGenerateRoute: (_) => MaterialPageRoute(
-          builder: (_) => TransactionsPage(
-            isIncome: false,
-            onShowHistory: () => key.currentState?.push(
-              MaterialPageRoute(
-                builder: (_) => TransactionsHistoryPage(
-                  isIncome: false,
-                  onShowAnalysis: () => key.currentState?.push(
-                    MaterialPageRoute(
-                      builder: (_) => const AnalysisPage(
-                        isIncome: false,
-                      ),
-                    ),
+        onGenerateRoute:
+            (_) => MaterialPageRoute(
+              builder:
+                  (_) => TransactionsPage(
+                    isIncome: false,
+                    onShowHistory:
+                        () => key.currentState?.push(
+                          MaterialPageRoute(
+                            builder:
+                                (_) => TransactionsHistoryPage(
+                                  isIncome: false,
+                                  onShowAnalysis:
+                                      () => key.currentState?.push(
+                                        MaterialPageRoute(
+                                          builder:
+                                              (_) => const AnalysisPage(
+                                                isIncome: false,
+                                              ),
+                                        ),
+                                      ),
+                                ),
+                          ),
+                        ),
                   ),
-                ),
-              ),
             ),
-          ),
-        ),
       ),
     );
   }
@@ -94,25 +102,31 @@ class AppRouterDelegate extends RouterDelegate<int>
       overrides: [isIncomeProvider.overrideWithValue(true)],
       child: Navigator(
         key: key,
-        onGenerateRoute: (_) => MaterialPageRoute(
-          builder: (_) => TransactionsPage(
-            isIncome: true,
-            onShowHistory: () => key.currentState?.push(
-              MaterialPageRoute(
-                builder: (_) => TransactionsHistoryPage(
-                  isIncome: true,
-                  onShowAnalysis: () => key.currentState?.push(
-                    MaterialPageRoute(
-                      builder: (_) => const AnalysisPage(
-                        isIncome: true,
-                      ),
-                    ),
+        onGenerateRoute:
+            (_) => MaterialPageRoute(
+              builder:
+                  (_) => TransactionsPage(
+                    isIncome: true,
+                    onShowHistory:
+                        () => key.currentState?.push(
+                          MaterialPageRoute(
+                            builder:
+                                (_) => TransactionsHistoryPage(
+                                  isIncome: true,
+                                  onShowAnalysis:
+                                      () => key.currentState?.push(
+                                        MaterialPageRoute(
+                                          builder:
+                                              (_) => const AnalysisPage(
+                                                isIncome: true,
+                                              ),
+                                        ),
+                                      ),
+                                ),
+                          ),
+                        ),
                   ),
-                ),
-              ),
             ),
-          ),
-        ),
       ),
     );
   }
@@ -130,32 +144,6 @@ class AppRouterDelegate extends RouterDelegate<int>
     _NavigationItem(iconAsset: 'assets/icons/articles.svg', label: 'Статьи'),
     _NavigationItem(iconAsset: 'assets/icons/settings.svg', label: 'Настройки'),
   ];
-
-  /// Build [NavigationBar] shortcut for [Scaffold].
-  Widget _buildNavigationBar(BuildContext context) {
-    return NavigationBar(
-      selectedIndex: _selectedIndex,
-      onDestinationSelected: _onItemTapped,
-      destinations: List.generate(_navItems.length, (int index) {
-        final _NavigationItem item = _navItems[index];
-
-        return NavigationDestination(
-          label: item.label,
-          icon: SvgPicture.asset(
-            item.iconAsset,
-            width: 24,
-            height: 24,
-            colorFilter: _selectedIndex == index
-                ? null
-                : ColorFilter.mode(
-                    context.colors.inactive,
-                    BlendMode.srcIn,
-                  ),
-          ),
-        );
-      }),
-    );
-  }
 
   /// Listeners notifier.
   void _onItemTapped(int index) {
@@ -176,7 +164,7 @@ class AppRouterDelegate extends RouterDelegate<int>
             child: _ScaffoldWithOfflineBanner(
               selectedIndex: _selectedIndex,
               tabs: _tabs,
-              navigationBar: _buildNavigationBar(context),
+              onItemTapped: _onItemTapped,
             ),
           ),
         ),
@@ -189,12 +177,12 @@ class AppRouterDelegate extends RouterDelegate<int>
 class _ScaffoldWithOfflineBanner extends ConsumerWidget {
   final int selectedIndex;
   final List<Widget> tabs;
-  final Widget navigationBar;
+  final ValueChanged<int> onItemTapped;
 
   const _ScaffoldWithOfflineBanner({
     required this.selectedIndex,
     required this.tabs,
-    required this.navigationBar,
+    required this.onItemTapped,
   });
 
   @override
@@ -216,15 +204,38 @@ class _ScaffoldWithOfflineBanner extends ConsumerWidget {
             error: (e, __) => _buildErrorBanner(e.toString()),
           ),
           // Main content
-          Expanded(
-            child: IndexedStack(
-              index: selectedIndex,
-              children: tabs,
-            ),
-          ),
+          Expanded(child: IndexedStack(index: selectedIndex, children: tabs)),
         ],
       ),
-      bottomNavigationBar: navigationBar,
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: selectedIndex,
+        onDestinationSelected: (index) {
+          if (ref.read(hapticsProvider)) {
+            HapticFeedback.lightImpact();
+          }
+          onItemTapped(index);
+        },
+        destinations: List.generate(AppRouterDelegate._navItems.length, (
+          index,
+        ) {
+          final item = AppRouterDelegate._navItems[index];
+          return NavigationDestination(
+            label: item.label,
+            icon: SvgPicture.asset(
+              item.iconAsset,
+              width: 24,
+              height: 24,
+              colorFilter:
+                  selectedIndex == index
+                      ? null
+                      : ColorFilter.mode(
+                        context.colors.inactive,
+                        BlendMode.srcIn,
+                      ),
+            ),
+          );
+        }),
+      ),
     );
   }
 
@@ -236,11 +247,7 @@ class _ScaffoldWithOfflineBanner extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.wifi_off,
-            color: Colors.white,
-            size: 16,
-          ),
+          Icon(Icons.wifi_off, color: Colors.white, size: 16),
           const SizedBox(width: 8),
           Text(
             'Режим офлайн',
@@ -262,11 +269,7 @@ class _ScaffoldWithOfflineBanner extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.warning,
-            color: Colors.white,
-            size: 16,
-          ),
+          Icon(Icons.warning, color: Colors.white, size: 16),
           const SizedBox(width: 8),
           Text(
             errMessage,

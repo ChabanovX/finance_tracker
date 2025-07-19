@@ -88,3 +88,18 @@ class _ColorPicker extends ConsumerWidget {
     );
   }
 }
+
+class _HapticsSwitcher extends ConsumerWidget {
+  const _HapticsSwitcher({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final enabled = ref.watch(hapticsProvider);
+    final notifier = ref.watch(hapticsProvider.notifier);
+
+    return Switch(
+      value: enabled,
+      onChanged: notifier.set,
+    );
+  }
+}
