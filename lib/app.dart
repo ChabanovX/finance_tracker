@@ -34,7 +34,7 @@ class _MainAppState extends ConsumerState<MainApp> {
     final isSystem = ref.watch(isSystemModeProvider);
     final tintColor = ref
         .watch(tintColorProvider)
-        .maybeWhen(data: (c) => c, orElse: () => context.colors.accent);
+        .maybeWhen(data: (c) => c, orElse: () => AppColors.kAccent);
 
     return RouterErrorHandler(
       routerDelegate: _routerDelegate,
