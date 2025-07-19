@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yndx_homework/features/settings/providers.dart';
@@ -13,14 +15,26 @@ class MainApp extends ConsumerStatefulWidget {
   ConsumerState<MainApp> createState() => _MainAppState();
 }
 
-class _MainAppState extends ConsumerState<MainApp> {
+class _MainAppState extends ConsumerState<MainApp> with WidgetsBindingObserver {
   late final AppRouterDelegate _routerDelegate;
+  bool _isBlurred = false;
 
   @override
   void initState() {
     // Log.info('Current network state: ${ref.read(networkStateProvider)}');
     super.initState();
     _routerDelegate = AppRouterDelegate();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
+      setState(() => _isBlurred = true);
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() => _isBlurred = false);
+    }
   }
 
   @override
@@ -38,13 +52,24 @@ class _MainAppState extends ConsumerState<MainApp> {
 
     return RouterErrorHandler(
       routerDelegate: _routerDelegate,
-      child: MaterialApp.router(
-        title: 'Finance Tracker',
-        theme: buildAppTheme(tintColor),
-        darkTheme: buildAppDarkTheme(tintColor),
-        themeMode: isSystem ? ThemeMode.system : ThemeMode.light,
-        debugShowCheckedModeBanner: false,
-        routerDelegate: _routerDelegate,
+      child: Stack(
+        children: [
+          MaterialApp.router(
+            title: 'Finance Tracker',
+            theme: buildAppTheme(tintColor),
+            darkTheme: buildAppDarkTheme(tintColor),
+            themeMode: isSystem ? ThemeMode.system : ThemeMode.light,
+            debugShowCheckedModeBanner: false,
+            routerDelegate: _routerDelegate,
+          ),
+          if (_isBlurred)
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: Container(color: Colors.transparent),
+              ),
+            ),
+        ],
       ),
     );
   }
