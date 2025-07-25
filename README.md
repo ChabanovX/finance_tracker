@@ -1,16 +1,39 @@
 # Finance Tracker
 
-Finance Tracker is a Flutter application for managing personal income and expenses. It was built as a sample project using Riverpod for state management and ObjectBox as a local database.
+Finance Tracker is a full featured Flutter application used for tracking personal expenses and income. It showcases a modular feature-first architecture built with Riverpod and ObjectBox. A custom animated pie chart package is also included.
 
 ## Features
 
-- Record expenses and income with custom categories.
-- View today's transactions and edit or delete them.
-- Track transaction history with date range filters and sorting.
-- Analyze spending with an animated pie chart grouped by categories.
-- Maintain account balance and visualize it using charts.
-- Browse helpful finance articles with fuzzy search.
-- Works completely offline using ObjectBox and seeded mock data.
+- Add, edit and delete income or expense transactions with custom categories.
+- Browse today's transactions and view history with flexible date filters and sorting.
+- Analyze spending using an animated pie chart grouped by category.
+- Monitor account balance over time using charts.
+- Biometric or PIN-code authentication protects your data.
+- Helpful finance articles with fuzzy search.
+- Theme customization with dynamic accent colors.
+- Works completely offline thanks to ObjectBox local storage seeded with mock data.
+
+## Architecture
+
+The project follows a feature-first layout. Each feature exposes its own `data`, `domain` and `presentation` layers through Riverpod providers.
+
+```text
+lib/
+  core/        # navigation, network and theming
+  features/
+    account/
+    articles/
+    auth/
+    balance/
+    settings/
+    transactions/
+  shared/      # reusable data sources and widgets
+  util/        # helpers such as logging
+packages/
+  animated_pie_chart/  # local chart widget package
+```
+
+Repositories abstract local and remote data sources. Riverpod manages dependency injection and state. ObjectBox acts as the offline-first database, so the app functions without network connectivity.
 
 ## Getting Started
 
@@ -21,7 +44,7 @@ Finance Tracker is a Flutter application for managing personal income and expens
    flutter pub get
    ```
 
-3. Generate the necessary files (freezed, JSON serialization and ObjectBox bindings):
+3. Generate freezed, JSON serialization and ObjectBox bindings:
 
    ```bash
    dart run build_runner build --delete-conflicting-outputs
@@ -33,21 +56,8 @@ Finance Tracker is a Flutter application for managing personal income and expens
    flutter run
    ```
 
-The project contains a small local package in `packages/animated_pie_chart` providing the animated chart used on the analysis screen.
-
-## Project Structure (deprecated)
-
-```
-lib/
-  data/       # Repositories and local ObjectBox data sources
-  domain/     # Domain models and repository interfaces
-  presentation/  # UI widgets and Riverpod providers
-  util/       # Helpers such as navigation and logging
-packages/animated_pie_chart  # Local chart package
-```
-
-Mock data for categories, articles and transactions can be found in `lib/data/datasources/mock_data.dart` and is inserted when the database is first created.
+Mock data for categories, articles and transactions is inserted on first launch from `lib/shared/data/datasources/mock_data.dart`.
 
 ## License
 
-This project is provided for educational purposes and does not include any production-ready financial advice.
+This project is provided for educational purposes and does not include production-ready financial advice.
