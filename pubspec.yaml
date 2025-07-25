@@ -45,6 +45,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^3.0.6
+  golden_toolkit: ^0.15.0
   json_serializable: ^6.9.5
   mocktail: ^1.0.4
   objectbox_generator: any
