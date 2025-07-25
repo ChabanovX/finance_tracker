@@ -2,6 +2,21 @@
 
 Finance Tracker is a full featured Flutter application used for tracking personal expenses and income. It showcases a modular feature-first architecture built with Riverpod and ObjectBox. A custom animated pie chart package is also included.
 
+![app](pics/intro.png)
+
+## Analysis
+
+![analysis](pics/analysis.png)
+
+## Settings
+
+![settings](pics/settings.png)
+
+## Useful Features
+
+![features](pics/feat.png)
+
+
 ## Features
 
 - Add, edit and delete income or expense transactions with custom categories.
