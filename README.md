@@ -4,15 +4,9 @@ Finance Tracker is a full featured Flutter application used for tracking persona
 
 ![app](pics/intro.png)
 
-## Analysis
-
 ![analysis](pics/analysis.png)
 
-## Settings
-
 ![settings](pics/settings.png)
-
-## Useful Features
 
 ![features](pics/feat.png)
 
