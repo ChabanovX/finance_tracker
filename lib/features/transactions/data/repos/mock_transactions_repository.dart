@@ -3,7 +3,6 @@
 import 'package:yndx_homework/shared/data/datasources/mock_data.dart';
 import 'package:yndx_homework/features/transactions/domain/models/transaction.dart';
 import 'package:yndx_homework/features/transactions/domain/repos/transactions_repository.dart';
-import 'package:yndx_homework/util/log.dart';
 
 class MockTransactionsRepository implements ITransactionsRepository {
   /// Duration of fake async call.
@@ -12,7 +11,7 @@ class MockTransactionsRepository implements ITransactionsRepository {
   @override
   Future<List<Transaction>> getTransactions() async {
     await Future.delayed(_ioDuration);
-    return mockTransactions;
+    return [];
   }
 
   @override
@@ -22,43 +21,44 @@ class MockTransactionsRepository implements ITransactionsRepository {
     int accountId,
   ) async {
     await Future.delayed(_ioDuration);
-    return mockTransactions
-        .where(
-          // Inclusive Boundaries
-          (t) =>
-              !t.transactionDate.isBefore(start) &&
-              !t.transactionDate.isAfter(end),
-        )
-        .toList();
+    // return mockTransactions
+    //     .where(
+    //       // Inclusive Boundaries
+    //       (t) =>
+    //           !t.transactionDate.isBefore(start) &&
+    //           !t.transactionDate.isAfter(end),
+    //     )
+    //     .toList();
+    return [];
   }
 
   @override
   Future<void> updateTransaction(Transaction transaction) async {
     await Future.delayed(_ioDuration);
-    final index = mockTransactions.indexWhere((t) => t.id == transaction.id);
-    if (index != -1) {
-      mockTransactions[index] = transaction;
-      // Log.info('Transaction updated: ${transaction.id}');
-    }
+    // final index = mockTransactions.indexWhere((t) => t.id == transaction.id);
+    // if (index != -1) {
+    //   mockTransactions[index] = transaction;
+    // Log.info('Transaction updated: ${transaction.id}');
+    return;
   }
 
   @override
   Future<void> addTransaction(Transaction transaction) async {
-    await Future.delayed(_ioDuration);
-    // Create transaction with unique ID
-    final newTransaction = transaction.copyWith(
-      id: DateTime.now().millisecondsSinceEpoch,
-    );
-    mockTransactions.add(newTransaction);
-    print('Transaction added: ${newTransaction.id}');
+    // await Future.delayed(_ioDuration);
+    // // Create transaction with unique ID
+    // final newTransaction = transaction.copyWith(
+    //   id: DateTime.now().millisecondsSinceEpoch,
+    // );
+    // mockTransactions.add(newTransaction);
+    // print('Transaction added: ${newTransaction.id}');
   }
 
   @override
   Future<void> deleteTransaction(int transactionId) async {
-    final index = mockTransactions.indexWhere((t) => t.id == transactionId);
-    if (index != -1) {
-      mockTransactions.removeAt(index);
-    }
-    print('Transaction removed: $transactionId');
+    // final index = mockTransactions.indexWhere((t) => t.id =`= transactionId);
+    // if (index != -1) {
+    //   mockTransactions.removeAt(index);
+    // }
+    // print('Transaction removed: $transactionId');`
   }
 }
