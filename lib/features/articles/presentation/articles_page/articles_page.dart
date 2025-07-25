@@ -13,7 +13,7 @@ class ArticlesPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncArticles = ref.watch(filteredArticlesProvider);
     return Scaffold(
-      appBar: DefaultAppBar(title: 'Мои статьи'),
+      appBar: DefaultAppBar(title: 'My Articles'),
       body: Column(
         children: [
           Container(
@@ -25,11 +25,10 @@ class ArticlesPage extends ConsumerWidget {
                 Expanded(
                   child: TextField(
                     decoration: const InputDecoration(
-                      labelText: 'Найти статью',
+                      labelText: 'Find an Article',
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
                     ),
-
                     onChanged:
                         (value) =>
                             ref

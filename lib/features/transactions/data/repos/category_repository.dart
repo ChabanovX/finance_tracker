@@ -18,34 +18,37 @@ class CategoryRepository implements ICategoryRepository {
     this._networkClient,
   );
 
+  /// On the backend currently problem with categories.
+  /// Hence, local ones will be used there.
+  /// TODO: change when backend fixes.
   @override
   Future<List<Category>> getAllCategories() async {
-    try {
-      // Check if we need to sync
-      final lastSync = await _localDataSource.getLastSyncTime();
-      final shouldSync =
-          lastSync == null ||
-          DateTime.now().difference(lastSync) > _cacheExpiration;
+    // try {
+    //   // Check if we need to sync
+    //   final lastSync = await _localDataSource.getLastSyncTime();
+    //   final shouldSync =
+    //       lastSync == null ||
+    //       DateTime.now().difference(lastSync) > _cacheExpiration;
 
-      // Try to fetch from remote if we should sync and we're online
-      if (shouldSync && await _networkClient.isConnected) {
-        try {
-          final remoteCategories = await _remoteDataSource.getAllCategories();
+    //   // Try to fetch from remote if we should sync and we're online
+    //   if (shouldSync && await _networkClient.isConnected) {
+    //     try {
+    //       final remoteCategories = await _remoteDataSource.getAllCategories();
 
-          // Update local storage
-          await _localDataSource.clearCategories();
-          await _localDataSource.saveCategories(remoteCategories);
-          await _localDataSource.setLastSyncTime(DateTime.now());
+    //       // Update local storage
+    //       await _localDataSource.clearCategories();
+    //       await _localDataSource.saveCategories(remoteCategories);
+    //       await _localDataSource.setLastSyncTime(DateTime.now());
 
-          return remoteCategories;
-        } catch (e) {
-          // Network error, fall back to local data
-          Log.error('Failed to sync categories: $runtimeType', error: e);
-        }
-      }
-    } catch (e) {
-      Log.error('Error in getAllCategories: $runtimeType', error: e);
-    }
+    //       return remoteCategories;
+    //     } catch (e) {
+    //       // Network error, fall back to local data
+    //       Log.error('Failed to sync categories: $runtimeType', error: e);
+    //     }
+    //   }
+    // } catch (e) {
+    //   Log.error('Error in getAllCategories: $runtimeType', error: e);
+    // }
     // Return local data
     return await _localDataSource.getAllCategories();
   }

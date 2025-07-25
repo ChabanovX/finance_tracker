@@ -15,7 +15,7 @@ class _BalanceHeader extends ConsumerWidget {
           onTap: onEdit,
           child: DefaultHeaderListTile(
             leading: Row(
-              children: const [Text('💰'), SizedBox(width: 16), Text('Баланс')],
+              children: const [Text('💰'), SizedBox(width: 16), Text('Balance')],
             ),
             trailing: Row(
               children: [
@@ -64,7 +64,7 @@ class _BalanceHeader extends ConsumerWidget {
             }
           },
           child: DefaultHeaderListTile(
-            leading: const Text('Валюта'),
+            leading: const Text('Currency'),
             trailing: Row(
               children: [
                 Text(balance.currency.toString()),
@@ -118,10 +118,10 @@ class _ChartModeSwitch extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: SegmentedButton<ChartMode>(
         segments: const <ButtonSegment<ChartMode>>[
-          ButtonSegment<ChartMode>(value: ChartMode.day, label: Text('Дни')),
+          ButtonSegment<ChartMode>(value: ChartMode.day, label: Text('Days')),
           ButtonSegment<ChartMode>(
             value: ChartMode.month,
-            label: Text('Месяцы'),
+            label: Text('Months'),
           ),
         ],
         selected: <ChartMode>{mode},

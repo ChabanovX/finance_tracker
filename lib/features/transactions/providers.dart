@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:yndx_homework/features/balance/providers.dart';
 import 'package:yndx_homework/features/transactions/domain/models/category.dart';
 import 'package:yndx_homework/features/transactions/domain/models/transaction.dart';
 import 'package:yndx_homework/shared/providers/repository_providers.dart';

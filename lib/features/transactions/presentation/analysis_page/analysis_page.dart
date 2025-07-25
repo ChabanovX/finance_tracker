@@ -35,18 +35,18 @@ class AnalysisPage extends ConsumerWidget {
     final asyncTxsCategories = ref.watch(transactionsByCategoryProvider);
 
     return Scaffold(
-      appBar: AppBar(backgroundColor: bg, title: Text('Анализ')),
+      appBar: AppBar(backgroundColor: bg, title: Text('Analysis')),
       body: Column(
         children: [
           _DateTile(
-            label: 'Период: начало',
+            label: 'Range: start',
             date: txRange.start,
             onTap: () => _pickStart(context, ref, txRange.start),
             backgroundColor: bg,
           ),
           Divider(height: 1),
           _DateTile(
-            label: 'Период: конец',
+            label: 'Range: end',
             date: txRange.end,
             onTap: () => _pickEnd(context, ref, txRange.end),
             backgroundColor: bg,
@@ -54,7 +54,7 @@ class AnalysisPage extends ConsumerWidget {
           Divider(height: 1),
           DefaultHeaderListTile(
             backgroundColor: bg,
-            leading: Text('Сумма'),
+            leading: Text('Amount'),
             trailing: Text(txsTotal.isLoading ? 'loading...' : '${txsTotal.value}₽'),
           ),
           Divider(height: 1),

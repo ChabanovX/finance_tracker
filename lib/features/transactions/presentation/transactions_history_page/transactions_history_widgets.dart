@@ -46,11 +46,11 @@ class _SortTile extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ListTile(
-                    title: const Text('По дате'),
+                    title: const Text('Date'),
                     onTap: () => Navigator.pop(ctx, SortByEnum.date),
                   ),
                   ListTile(
-                    title: const Text('По сумме'),
+                    title: const Text('Amount'),
                     onTap: () => Navigator.pop(ctx, SortByEnum.amount),
                   ),
                 ],
@@ -59,8 +59,8 @@ class _SortTile extends StatelessWidget {
         if (result != null) onChange(result);
       },
       child: DefaultHeaderListTile(
-        leading: const Text('Сортировка'),
-        trailing: Text(sortBy == SortByEnum.date ? 'По дате' : 'По сумме'),
+        leading: const Text('Sort by'),
+        trailing: Text(sortBy == SortByEnum.date ? 'Date' : 'Amount'),
       ),
     );
   }

@@ -15,18 +15,18 @@ class SettingsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: DefaultAppBar(title: 'Настройки'),
+      appBar: DefaultAppBar(title: 'Settings'),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _SettingsTile(title: 'Системная тема', trailing: _Switcher()),
+            _SettingsTile(title: 'Enable system theme', trailing: _Switcher()),
             const Divider(height: 1),
-            _SettingsTile(title: 'Основной цвет', trailing: _ColorPicker()),
+            _SettingsTile(title: 'App Color', trailing: _ColorPicker()),
             const Divider(height: 1),
-            _SettingsTile(title: 'Хаптики', trailing: _HapticsSwitcher()),
+            _SettingsTile(title: 'Haptics', trailing: _HapticsSwitcher()),
             const Divider(height: 1),
             _SettingsTile(
-              title: 'Код пароль',
+              title: 'Password',
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -38,9 +38,9 @@ class SettingsPage extends ConsumerWidget {
             const Divider(height: 1),
             _SettingsTile(title: 'FaceID/TouchID', trailing: _BiometricSwitcher(),),
             const Divider(height: 1),
-            _SettingsTile(title: 'Язык', trailing: _LanguagePicker(),),
+            _SettingsTile(title: 'Language', trailing: _LanguagePicker(),),
             const Divider(height: 1),
-            _SettingsTile(title: 'О программе', onPressed: () {}),
+            _SettingsTile(title: 'About', onPressed: () {}),
             const Divider(height: 1),
           ],
         ),

@@ -1,5 +1,6 @@
 import 'package:yndx_homework/features/transactions/domain/repos/category_local_datasource.dart';
 import 'package:yndx_homework/shared/data/datasources/local/sync_metadata_entity.dart';
+import 'package:yndx_homework/shared/data/datasources/mock_data.dart';
 
 import '../../../../shared/data/datasources/local/mappers.dart';
 import '../../../../shared/data/datasources/local/objectbox.dart';
@@ -12,9 +13,13 @@ class CategoryObjectBoxRepository implements ICategoriesLocalDataSource {
 
   CategoryObjectBoxRepository(this._ob);
 
+
+  /// Currently problems with categories, mocked ones are used.
+  /// TODO: change when fixed.
   @override
   Future<List<Category>> getAllCategories() async {
-    return _ob.categoryBox.getAll().map((e) => e.toDomain()).toList();
+    return mockCategories;
+    // return _ob.categoryBox.getAll().map((e) => e.toDomain()).toList();
   }
 
   @override

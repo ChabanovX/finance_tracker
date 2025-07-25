@@ -35,7 +35,7 @@ class TransactionsHistoryPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: DefaultAppBar(
-        title: isIncome ? 'История доходов' : 'История расходов',
+        title: isIncome ? 'Incomes History' : 'Expenses History',
         actions: [
           asyncSorted.when(
             data:
@@ -55,13 +55,13 @@ class TransactionsHistoryPage extends ConsumerWidget {
       body: Column(
         children: [
           _DateTile(
-            label: 'Начало',
+            label: 'Start',
             date: range.start,
             onTap: () => _pickStart(context, ref, range.start),
           ),
           const Divider(height: 1),
           _DateTile(
-            label: 'Конец',
+            label: 'End',
             date: range.end,
             onTap: () => _pickEnd(context, ref, range.end),
           ),
@@ -72,7 +72,7 @@ class TransactionsHistoryPage extends ConsumerWidget {
           ),
           const Divider(height: 1),
           DefaultHeaderListTile(
-            leading: Text('Сумма'),
+            leading: Text('Sum'),
             trailing: Text(total.isLoading ? 'Loading...' : '${total.value!} ₽'),
           ),
           Expanded(

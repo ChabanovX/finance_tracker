@@ -21,7 +21,7 @@ class BalancePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: DefaultAppBar(
-        title: 'Мой счет',
+        title: 'My Balance',
         actions: [
           IconButton(
             onPressed: () => _showBalanceEditor(context: context, ref: ref),

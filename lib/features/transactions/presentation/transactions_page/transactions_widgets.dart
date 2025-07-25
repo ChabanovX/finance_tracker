@@ -14,7 +14,7 @@ class _TransactionsList extends StatelessWidget {
       children: [
         DefaultHeaderListTile(
           key: ValueKey(total),
-          leading: Text('Всего'),
+          leading: Text('Total'),
           trailing: Text('${total.toString()} ₽'),
         ),
         const Divider(height: 1),

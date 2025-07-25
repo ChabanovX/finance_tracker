@@ -89,7 +89,7 @@ class TransactionsPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: DefaultAppBar(
-        title: isIncome ? 'Доходы сегодня' : 'Расходы сегодня',
+        title: isIncome ? 'Incomes Today' : 'Expenses Today',
         actions: [
           IconButton(
             onPressed: onShowHistory,

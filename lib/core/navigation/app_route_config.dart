@@ -140,11 +140,20 @@ class AppRouterDelegate extends RouterDelegate<int>
 
   /// Shortcut labels for [NavigationDestination].
   static const List<_NavigationItem> _navItems = [
-    _NavigationItem(iconAsset: 'assets/icons/expenses.svg', labelKey: 'nav_expenses'),
-    _NavigationItem(iconAsset: 'assets/icons/incomes.svg', labelKey: 'nav_incomes'),
-    _NavigationItem(iconAsset: 'assets/icons/account.svg', labelKey: 'nav_account'),
-    _NavigationItem(iconAsset: 'assets/icons/articles.svg', labelKey: 'nav_articles'),
-    _NavigationItem(iconAsset: 'assets/icons/settings.svg', labelKey: 'nav_settings'),
+    _NavigationItem(
+      iconAsset: 'assets/icons/expenses.svg',
+      labelKey: 'Expenses',
+    ),
+    _NavigationItem(iconAsset: 'assets/icons/incomes.svg', labelKey: 'Incomes'),
+    _NavigationItem(iconAsset: 'assets/icons/account.svg', labelKey: 'Balance'),
+    _NavigationItem(
+      iconAsset: 'assets/icons/articles.svg',
+      labelKey: 'Articles',
+    ),
+    _NavigationItem(
+      iconAsset: 'assets/icons/settings.svg',
+      labelKey: 'Settings',
+    ),
   ];
 
   /// Listeners notifier.
@@ -229,7 +238,10 @@ class _ScaffoldWithOfflineBanner extends ConsumerWidget {
               height: 24,
               colorFilter:
                   selectedIndex == index
-                      ? null
+                      ? ColorFilter.mode(
+                        context.colors.accent,
+                        BlendMode.srcIn,
+                      )
                       : ColorFilter.mode(
                         context.colors.inactive,
                         BlendMode.srcIn,

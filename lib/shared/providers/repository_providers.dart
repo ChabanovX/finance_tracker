@@ -3,6 +3,7 @@ import 'package:yndx_homework/features/account/data/repos/account_remote_ds.dart
 import 'package:yndx_homework/features/account/data/repos/account_repository.dart';
 import 'package:yndx_homework/features/transactions/data/repos/category_remote_ds.dart';
 import 'package:yndx_homework/features/transactions/data/repos/category_repository.dart';
+import 'package:yndx_homework/features/transactions/data/repos/mock_category_repository.dart';
 import 'package:yndx_homework/features/transactions/data/repos/transactions_remote_ds.dart';
 import 'package:yndx_homework/features/transactions/data/repos/transactions_repository.dart';
 import 'package:yndx_homework/features/transactions/domain/repos/category_local_datasource.dart';

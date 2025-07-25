@@ -113,7 +113,7 @@ class Balance extends _$Balance {
 
   void toggleVisibility() => state = state.copyWith(visible: !state.visible);
 
-  late final StreamSubscription<AccelerometerEvent> _accelSub;
+  late StreamSubscription<AccelerometerEvent> _accelSub;
   ShakeDetector? _shakeDetector;
 
   void _handleAccel(AccelerometerEvent e) {

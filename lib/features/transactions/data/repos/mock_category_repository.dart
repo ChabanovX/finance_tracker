@@ -5,7 +5,7 @@ import 'package:yndx_homework/features/transactions/domain/repos/category_reposi
 class MockCategoryRepository implements ICategoryRepository {
   /// Duration of fake async call.
   static const _ioDuration = Duration(milliseconds: 500);
-  final domains = mockCategories.map((e) => e.toDomain()).toList();
+  // final domains = mockCategories.map((e) => e.toDomain()).toList();
   
   @override
   Future<List<Category>> getAllCategories() {
