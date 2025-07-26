@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:yndx_homework/core/network/backup_manager.dart';
 import 'package:yndx_homework/core/network/network_client.dart';
 import 'package:yndx_homework/features/transactions/data/models/mappers.dart';
 import 'package:yndx_homework/features/transactions/data/models/remote/transaction_request_dto.dart';
@@ -86,18 +85,6 @@ class TransactionsRemoteDataSource implements ITransactionsRemoteDataSource {
   Future<void> deleteTransaction(int transactionId) async {
     try {
       await _networkClient.dio.delete('/transactions/$transactionId');
-    } on DioException catch (e) {
-      throw _handleError(e);
-    }
-  }
-
-  @override
-  Future<void> syncOperations(List<BackupOperation> operations) async {
-    try {
-      await _networkClient.dio.post(
-        '/transactions/sync',
-        data: {'operations': operations.map((op) => op.toJson()).toList()},
-      );
     } on DioException catch (e) {
       throw _handleError(e);
     }

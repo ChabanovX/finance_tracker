@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yndx_homework/features/settings/providers.dart';
-import 'package:yndx_homework/l10n/app_localizations.dart';
 
 import 'core/navigation/app_route_config.dart' show AppRouterDelegate;
 import 'core/theme/app_theme.dart';
