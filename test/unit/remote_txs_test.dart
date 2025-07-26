@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:yndx_homework/core/network/backup_manager.dart';
+
 import 'package:yndx_homework/core/network/network_client.dart';
 import 'package:yndx_homework/features/account/domain/models/account.dart';
 import 'package:yndx_homework/features/transactions/data/models/mappers.dart';
@@ -12,8 +12,6 @@ import 'package:yndx_homework/features/transactions/domain/models/transaction.da
 class _FakeNetClient extends Mock implements NetworkClient {}
 
 class _FakeDio extends Mock implements Dio {}
-
-class _FakeBackupOp extends Mock implements BackupOperation {}
 
 void main() {
   late _FakeNetClient _fakeNetworkClient;
