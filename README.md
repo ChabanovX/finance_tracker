@@ -69,4 +69,4 @@ Mock data for categories, articles and transactions is inserted on first launch 
 
 ## License
 
-This project is provided for educational purposes and does not include production-ready financial advice.
+This project does not include production-ready financial advice.
